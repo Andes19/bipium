@@ -108,10 +108,10 @@
                 <label>⚡ Статус проекта</label>
                 <div class="status-option">
                     <label>
-                        <input type="radio" name="status" value="Проект работает" checked> 🟢 Проект работает
+                        <input type="radio" name="status" value="1" checked> 🟢 Проект работает
                     </label>
                     <label>
-                        <input type="radio" name="status" value="Проект закончился"> 🔴 Проект закончился
+                        <input type="radio" name="status" value="2"> 🔴 Проект закончился
                     </label>
                 </div>
             </div>
@@ -179,14 +179,7 @@
             const radioStatus = document.querySelectorAll('input[name="status"]');
             for (const radio of radioStatus) {
                 if (radio.checked) {
-                    // Преобразуем текст статуса в 1 или 2
-                    if (radio.value === "Проект работает") {
-                        selectedStatus = "1";
-                    } else if (radio.value === "Проект закончился") {
-                        selectedStatus = "2";
-                    } else {
-                        selectedStatus = radio.value; // на всякий случай
-                    }
+                    selectedStatus = radio.value;
                     break;
                 }
             }
