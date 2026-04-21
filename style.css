@@ -143,51 +143,49 @@ textarea {
 .status-group > label {
     margin-bottom: 16px;
     font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    font-size: 0.95rem;
+    color: #1e293b;
+    display: block;
 }
 
 .status-option {
     display: flex;
     gap: 32px;
     flex-wrap: wrap;
-    align-items: center;
     justify-content: center;
 }
 
 .status-option label {
-    flex: 1;
-    min-width: 160px;
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    justify-content: center;
-    gap: 12px;
+    gap: 10px;
     background: white;
-    padding: 12px 20px;
-    border-radius: 60px;
+    padding: 10px 24px;
+    border-radius: 50px;
     border: 1.5px solid #e2e8f0;
     font-weight: 500;
     cursor: pointer;
-    transition: all 0.2s;
-    text-align: center;
+    transition: all 0.2s ease;
+    margin: 0;
 }
 
 .status-option label:hover {
     border-color: #3b82f6;
-    transform: translateY(-1px);
+    background: #f1f5f9;
 }
 
 .status-option input[type="radio"] {
     width: 18px;
     height: 18px;
     margin: 0;
+    accent-color: #3b82f6;
+    cursor: pointer;
 }
 
 .status-option label:has(input:checked) {
     border-color: #3b82f6;
-    background: linear-gradient(135deg, #eef2ff 0%, #ffffff 100%);
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+    background: #eef2ff;
+    box-shadow: 0 2px 6px rgba(59, 130, 246, 0.2);
 }
 
 input[type="radio"] {
