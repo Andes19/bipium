@@ -131,6 +131,7 @@ textarea {
     min-height: 80px;
 }
 
+/* Улучшенные стили для статусов */
 .status-group {
     background: #f8fafc;
     padding: 16px 20px;
@@ -139,23 +140,51 @@ textarea {
     border: 1px solid #e2edff;
 }
 
-.status-group label:first-child {
-    margin-bottom: 12px;
+.status-group > label {
+    margin-bottom: 14px;
+    font-weight: 600;
+    display: block;
 }
 
 .status-option {
     display: flex;
-    gap: 20px;
+    gap: 32px;
     flex-wrap: wrap;
+    align-items: center;
 }
 
 .status-option label {
-    font-weight: normal;
-    margin-bottom: 0;
-    cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 10px;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 8px 16px;
+    background: white;
+    border-radius: 40px;
+    border: 1.5px solid #e2e8f0;
+    transition: all 0.2s;
+    margin-bottom: 0;
+}
+
+.status-option label:hover {
+    border-color: #3b82f6;
+    background: #f0f9ff;
+}
+
+.status-option input[type="radio"] {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    accent-color: #3b82f6;
+    cursor: pointer;
+}
+
+/* Если радио выбрано — подсвечиваем label */
+.status-option label:has(input:checked) {
+    border-color: #3b82f6;
+    background: #eff6ff;
+    box-shadow: 0 2px 8px rgba(59,130,246,0.15);
 }
 
 input[type="radio"] {
