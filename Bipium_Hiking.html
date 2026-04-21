@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Отправка данных по вебхуку</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9edf2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .card {
+            max-width: 600px;
+            width: 100%;
+            background: white;
+            border-radius: 32px;
+            box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            transition: transform 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+        }
+
+        .header {
+            background: #1a2a3a;
+            color: white;
+            padding: 28px 32px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+        }
+
+        .header p {
+            margin-top: 8px;
+            opacity: 0.8;
+            font-size: 0.95rem;
+        }
+
+        .form-container {
+            padding: 32px;
+        }
+
+        .field-group {
+            margin-bottom: 24px;
+        }
+
+        label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1f2a3e;
+            font-size: 0.9rem;
+        }
+
+        label i {
+            font-size: 1.2rem;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 16px;
+            font-size: 1rem;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 20px;
+            background: #fefefe;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .status-group {
+            background: #f8fafc;
+            padding: 16px 20px;
+            border-radius: 24px;
+            margin-bottom: 28px;
+            border: 1px solid #e2edff;
+        }
+
+        .status-option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+
+        .status-option label {
+            font-weight: normal;
+            margin-bottom: 0;
+            cursor: pointer;
+            gap: 6px;
+        }
+
+        input[type="radio"] {
+            width: auto;
+            margin-right: 4px;
+            accent-color: #3b82f6;
+        }
+
+        button {
+            width: 100%;
+            background: #1e293b;
+            color: white;
+            border: none;
+            padding: 14px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background: #0f172a;
+            transform: scale(0.98);
+        }
+
+        .message {
+            margin-top: 20px;
+            padding: 12px;
+            border-radius: 28px;
+            text-align: center;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+
+        .success {
+            background: #dcfce7;
+            color: #15803d;
+            border-left: 4px solid #22c55e;
+        }
+
+        .error {
+            background: #fee2e2;
+            color: #b91c1c;
+            border-left: 4px solid #ef4444;
+        }
+
+        .info {
+            background: #eef2ff;
+            color: #1e3a8a;
+            font-size: 0.8rem;
+            margin-top: 16px;
+            text-align: center;
+        }
+
+        hr {
+            margin: 16px 0;
+            border: none;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .webhook-hint {
+            font-size: 0.75rem;
+            color: #4b5563;
+            margin-top: 6px;
+            text-align: center;
+        }
+
+        @media (max-width: 480px) {
+            .form-container {
+                padding: 24px;
+            }
+            .header h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="card">
+    <div class="header">
+        <h1>📋 Отправить данные</h1>
+        <p>Заполните поля — данные уйдут на Webhook</p>
+    </div>
+    <div class="form-container">
+        <form id="webhookForm">
+            <!-- Текстовые поля -->
+            <div class="field-group">
+                <label>👤 Имя</label>
+                <input type="text" id="name" name="name" placeholder="Иван Петров" required>
+            </div>
+
+            <div class="field-group">
+                <label>📧 Email</label>
+                <input type="email" id="email" name="email" placeholder="ivan@example.com" required>
+            </div>
+
+            <div class="field-group">
+                <label>💬 Сообщение / Комментарий</label>
+                <textarea id="message" name="message" placeholder="Ваше сообщение..."></textarea>
+            </div>
+
+            <!-- Статусное поле (радио-кнопки) -->
+            <div class="status-group">
+                <label>🔘 Статус (выберите)</label>
+                <div class="status-option">
+                    <label>
+                        <input type="radio" name="status" value="Новый клиент" checked> 🟢 Новый клиент
+                    </label>
+                    <label>
+                        <input type="radio" name="status" value="Постоянный"> 🔵 Постоянный
+                    </label>
+                    <label>
+                        <input type="radio" name="status" value="Требует звонка"> 🟠 Требует звонка
+                    </label>
+                </div>
+            </div>
+
+            <button type="submit" id="submitBtn">
+                ✈️ Отправить через Webhook
+            </button>
+        </form>
+
+        <div id="resultMessage" class="message" style="display: none;"></div>
+        <div class="info">
+            ⚡ Данные отправляются в JSON формате на указанный вебхук URL.<br>
+            <span style="font-size: 0.7rem;">(можно сменить URL в коде JavaScript)</span>
+        </div>
+        <div class="webhook-hint">
+            🔧 Текущий webhook (для теста): <span id="webhookDisplay">https://webhook.site/...</span>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ========== НАСТРОЙКА WEBHOOK ==========
+    // 🔁 Замените этот URL на ваш реальный вебхук
+    const WEBHOOK_URL = "https://webhook.site/6f8c9e3a-1234-4b5c-8d7e-9f0a1b2c3d4e";
+    
+    // Для отображения в подсказке (обрежем для красоты)
+    const displayUrl = WEBHOOK_URL.length > 40 ? WEBHOOK_URL.substring(0, 40) + "..." : WEBHOOK_URL;
+    document.getElementById("webhookDisplay").innerText = displayUrl;
+
+    // DOM элементы
+    const form = document.getElementById("webhookForm");
+    const submitBtn = document.getElementById("submitBtn");
+    const resultDiv = document.getElementById("resultMessage");
+
+    function showMessage(text, type) {
+        resultDiv.style.display = "block";
+        resultDiv.textContent = text;
+        resultDiv.className = `message ${type}`;
+        // Автоскрытие через 5 секунд
+        setTimeout(() => {
+            if (resultDiv.style.display === "block") {
+                resultDiv.style.opacity = "0";
+                setTimeout(() => {
+                    resultDiv.style.display = "none";
+                    resultDiv.style.opacity = "1";
+                }, 300);
+            }
+        }, 5000);
+    }
+
+    async function sendToWebhook(payload) {
+        try {
+            const response = await fetch(WEBHOOK_URL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(payload),
+            });
+
+            if (response.ok) {
+                showMessage(`✅ Успешно отправлено! Статус: ${response.status}`, "success");
+                return true;
+            } else {
+                showMessage(`❌ Ошибка сервера: ${response.status} ${response.statusText}`, "error");
+                return false;
+            }
+        } catch (error) {
+            console.error("Webhook error:", error);
+            showMessage(`⚠️ Ошибка сети: ${error.message}. Проверьте URL вебхука или подключение.`, "error");
+            return false;
+        }
+    }
+
+    form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        // Собираем данные
+        const name = document.getElementById("name").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const messageText = document.getElementById("message").value.trim();
+        
+        // Статус (выбранное радио)
+        let selectedStatus = "";
+        const radioStatus = document.querySelectorAll('input[name="status"]');
+        for (const radio of radioStatus) {
+            if (radio.checked) {
+                selectedStatus = radio.value;
+                break;
+            }
+        }
+
+        // Валидация обязательных полей
+        if (!name || !email) {
+            showMessage("Пожалуйста, заполните имя и email", "error");
+            return;
+        }
+
+        if (!email.includes("@") || !email.includes(".")) {
+            showMessage("Введите корректный email (пример: name@domain.com)", "error");
+            return;
+        }
+
+        // Формируем объект для отправки (можно расширить)
+        const payload = {
+            timestamp: new Date().toISOString(),
+            name: name,
+            email: email,
+            message: messageText || "(пусто)",
+            status: selectedStatus,
+            source: "одностраничный_сайт"
+        };
+
+        // Блокируем кнопку на время отправки
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = "⏳ Отправка...";
+        submitBtn.disabled = true;
+
+        const success = await sendToWebhook(payload);
+
+        // Возвращаем кнопку в исходное состояние
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+
+        // Если успешно — можно очистить форму (по желанию)
+        if (success) {
+            // Раскомментировать, если хотите очищать поля после отправки:
+            // document.getElementById("name").value = "";
+            // document.getElementById("email").value = "";
+            // document.getElementById("message").value = "";
+            // Не сбрасываем статус — оставляем первый вариант по умолчанию
+        }
+    });
+</script>
+</body>
+</html>
