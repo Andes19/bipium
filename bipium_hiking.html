@@ -3,296 +3,135 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Отправка в Бипиум</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #e9edf2 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .card {
-            max-width: 550px;
-            width: 100%;
-            background: white;
-            border-radius: 32px;
-            box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.15);
-            overflow: hidden;
-        }
-
-        .header {
-            background: #1a2a3a;
-            color: white;
-            padding: 28px 32px;
-            text-align: center;
-        }
-
-        .header h1 {
-            font-size: 1.8rem;
-            font-weight: 600;
-        }
-
-        .header p {
-            margin-top: 8px;
-            opacity: 0.8;
-            font-size: 0.95rem;
-        }
-
-        .form-container {
-            padding: 32px;
-        }
-
-        .field-group {
-            margin-bottom: 24px;
-        }
-
-        label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #1f2a3e;
-            font-size: 0.9rem;
-        }
-
-        input, textarea {
-            width: 100%;
-            padding: 12px 16px;
-            font-size: 1rem;
-            border: 1.5px solid #e2e8f0;
-            border-radius: 20px;
-            background: #fefefe;
-            transition: all 0.2s;
-            font-family: inherit;
-        }
-
-        input:focus, textarea:focus {
-            outline: none;
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
-        }
-
-        textarea {
-            resize: vertical;
-            min-height: 80px;
-        }
-
-        .status-group {
-            background: #f8fafc;
-            padding: 16px 20px;
-            border-radius: 24px;
-            margin-bottom: 28px;
-            border: 1px solid #e2edff;
-        }
-
-        .status-group label:first-child {
-            margin-bottom: 12px;
-        }
-
-        .status-option {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .status-option label {
-            font-weight: normal;
-            margin-bottom: 0;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        input[type="radio"] {
-            width: auto;
-            margin-right: 4px;
-            accent-color: #3b82f6;
-        }
-
-        button {
-            width: 100%;
-            background: #1e293b;
-            color: white;
-            border: none;
-            padding: 14px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            border-radius: 40px;
-            cursor: pointer;
-            transition: all 0.2s;
-            margin-top: 10px;
-        }
-
-        button:hover {
-            background: #0f172a;
-            transform: scale(0.98);
-        }
-
-        button:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-
-        .message {
-            margin-top: 20px;
-            padding: 12px;
-            border-radius: 28px;
-            text-align: center;
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        .success {
-            background: #dcfce7;
-            color: #15803d;
-            border-left: 4px solid #22c55e;
-        }
-
-        .error {
-            background: #fee2e2;
-            color: #b91c1c;
-            border-left: 4px solid #ef4444;
-        }
-
-        .info {
-            background: #eef2ff;
-            color: #1e3a8a;
-            font-size: 0.75rem;
-            margin-top: 16px;
-            text-align: center;
-            padding: 10px;
-            border-radius: 16px;
-        }
-    </style>
+    <title>Заполнить базу — Бипиум Hiking</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="card">
-    <div class="header">
-        <h1>🏔️ Bipium Hiking</h1>
-        <p>Заполните форму — данные уйдут в базу</p>
+
+    <div class="header-nav">
+        <a href="index.html" class="logo">🏔️ <span>Бипиум</span> Hiking</a>
+        <div class="nav-links">
+            <a href="index.html">Главная</a>
+            <a href="bipium_hiking.html" class="active">📝 Заполнить базу</a>
+        </div>
     </div>
-    <div class="form-container">
-        <div class="field-group">
-            <label>👤 Имя</label>
-            <input type="text" id="name" placeholder="Введите имя" required>
-        </div>
 
-        <div class="field-group">
-            <label>💬 Сообщение / Комментарий</label>
-            <textarea id="message" placeholder="Ваше сообщение..."></textarea>
+    <div class="container">
+        <div class="page-header">
+            <h1>📋 Заполнить базу данных</h1>
+            <p>Заполните форму — данные уйдут в Бипиум</p>
         </div>
+        <div class="content">
+            
+            <div class="field-group">
+                <label>👤 Имя</label>
+                <input type="text" id="name" placeholder="Введите имя" required>
+            </div>
 
-        <div class="status-group">
-            <label>🔘 Статус</label>
-            <div class="status-option">
-                <label>
-                    <input type="radio" name="status" value="Новый клиент" checked> 🟢 Новый клиент
-                </label>
-                <label>
-                    <input type="radio" name="status" value="Постоянный"> 🔵 Постоянный
-                </label>
-                <label>
-                    <input type="radio" name="status" value="Требует звонка"> 🟠 Требует звонка
-                </label>
+            <div class="field-group">
+                <label>💬 Сообщение / Комментарий</label>
+                <textarea id="message" placeholder="Ваше сообщение..."></textarea>
+            </div>
+
+            <div class="status-group">
+                <label>🔘 Статус</label>
+                <div class="status-option">
+                    <label>
+                        <input type="radio" name="status" value="Новый клиент" checked> 🟢 Новый клиент
+                    </label>
+                    <label>
+                        <input type="radio" name="status" value="Постоянный"> 🔵 Постоянный
+                    </label>
+                    <label>
+                        <input type="radio" name="status" value="Требует звонка"> 🟠 Требует звонка
+                    </label>
+                </div>
+            </div>
+
+            <button type="button" id="submitBtn">✈️ Отправить</button>
+
+            <div id="resultMessage" class="message" style="display: none;"></div>
+            <div class="info">
+                ⚡ Данные отправляются защищённо через Google Apps Script → Бипиум
             </div>
         </div>
-
-        <button type="button" id="submitBtn">✈️ Отправить</button>
-
-        <div id="resultMessage" class="message" style="display: none;"></div>
-        <div class="info">
-            ⚡ Данные отправляются защищённо через Google Apps Script → Бипиум
-        </div>
     </div>
-</div>
 
-<script>
-    // ========== ВАШ URL ОТ GOOGLE APPS SCRIPT ==========
-    const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbwlC_Dw08KQu7wKnl3so8G6E3Zd77MeSOX5ag3xpgWrak3iHxUpZbu8zCmMYoNqhFdm/exec";
-    
-    const submitBtn = document.getElementById("submitBtn");
-    const resultDiv = document.getElementById("resultMessage");
-    
-    function showMessage(text, type) {
-        resultDiv.style.display = "block";
-        resultDiv.textContent = text;
-        resultDiv.className = `message ${type}`;
-        setTimeout(() => {
-            resultDiv.style.display = "none";
-        }, 5000);
-    }
-    
-    async function sendToWebhook(payload) {
-        try {
-            const response = await fetch(WEBHOOK_URL, {
-                method: "POST",
-                mode: "no-cors",  // Важно! Обходит CORS
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(payload),
-            });
-            
-            // При mode: "no-cors" мы не можем прочитать ответ
-            // Поэтому просто показываем успех
-            showMessage("✅ Отправлено! Данные переданы в систему.", "success");
-            return true;
-            
-        } catch (error) {
-            console.error("Ошибка:", error);
-            showMessage("⚠️ Ошибка при отправке. Попробуйте ещё раз.", "error");
-            return false;
-        }
-    }
-    
-    submitBtn.addEventListener("click", async () => {
-        const name = document.getElementById("name").value.trim();
-        const messageText = document.getElementById("message").value.trim();
+    <script>
+        // ========== ВАШ URL ОТ GOOGLE APPS SCRIPT ==========
+        const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbwlC_Dw08KQu7wKnl3so8G6E3Zd77MeSOX5ag3xpgWrak3iHxUpZbu8zCmMYoNqhFdm/exec";
         
-        let selectedStatus = "";
-        const radioStatus = document.querySelectorAll('input[name="status"]');
-        for (const radio of radioStatus) {
-            if (radio.checked) {
-                selectedStatus = radio.value;
-                break;
+        const submitBtn = document.getElementById("submitBtn");
+        const resultDiv = document.getElementById("resultMessage");
+        
+        function showMessage(text, type) {
+            resultDiv.style.display = "block";
+            resultDiv.textContent = text;
+            resultDiv.className = `message ${type}`;
+            setTimeout(() => {
+                resultDiv.style.display = "none";
+            }, 5000);
+        }
+        
+        async function sendToWebhook(payload) {
+            try {
+                const response = await fetch(WEBHOOK_URL, {
+                    method: "POST",
+                    mode: "no-cors",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(payload),
+                });
+                
+                showMessage("✅ Отправлено! Данные переданы в систему.", "success");
+                return true;
+                
+            } catch (error) {
+                console.error("Ошибка:", error);
+                showMessage("⚠️ Ошибка при отправке. Попробуйте ещё раз.", "error");
+                return false;
             }
         }
         
-        if (!name) {
-            showMessage("Пожалуйста, введите имя", "error");
-            return;
-        }
-        
-        const payload = {
-            timestamp: new Date().toISOString(),
-            name: name,
-            message: messageText || "(пусто)",
-            status: selectedStatus,
-        };
-        
-        const originalText = submitBtn.innerHTML;
-        submitBtn.innerHTML = "⏳ Отправка...";
-        submitBtn.disabled = true;
-        
-        await sendToWebhook(payload);
-        
-        submitBtn.innerHTML = originalText;
-        submitBtn.disabled = false;
-        
-        // Очищаем поля (опционально)
-        document.getElementById("name").value = "";
-        document.getElementById("message").value = "";
-    });
-</script>
+        submitBtn.addEventListener("click", async () => {
+            const name = document.getElementById("name").value.trim();
+            const messageText = document.getElementById("message").value.trim();
+            
+            let selectedStatus = "";
+            const radioStatus = document.querySelectorAll('input[name="status"]');
+            for (const radio of radioStatus) {
+                if (radio.checked) {
+                    selectedStatus = radio.value;
+                    break;
+                }
+            }
+            
+            if (!name) {
+                showMessage("Пожалуйста, введите имя", "error");
+                return;
+            }
+            
+            const payload = {
+                timestamp: new Date().toISOString(),
+                name: name,
+                message: messageText || "(пусто)",
+                status: selectedStatus,
+            };
+            
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = "⏳ Отправка...";
+            submitBtn.disabled = true;
+            
+            await sendToWebhook(payload);
+            
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+            
+            document.getElementById("name").value = "";
+            document.getElementById("message").value = "";
+        });
+    </script>
+
 </body>
 </html>
