@@ -298,17 +298,19 @@
                 },
                 body: JSON.stringify(payload),
             });
-
-            if (response.ok) {
-                showMessage(`✅ Успешно отправлено! Статус: ${response.status}`, "success");
+            
+            const result = await response.json();
+            
+            if (result.success) {
+                showMessage(`✅ Успешно отправлено!`, "success");
                 return true;
             } else {
-                showMessage(`❌ Ошибка сервера: ${response.status} ${response.statusText}`, "error");
+                showMessage(`❌ Ошибка: ${result.error || "неизвестная ошибка"}`, "error");
                 return false;
             }
         } catch (error) {
-            console.error("Webhook error:", error);
-            showMessage(`⚠️ Ошибка сети: ${error.message}. Проверьте URL вебхука или подключение.`, "error");
+            console.error("Ошибка:", error);
+            showMessage(`⚠️ Ошибка: ${error.message}`, "error");
             return false;
         }
     }
