@@ -210,7 +210,7 @@
         <p>Заполните поля — данные уйдут на Webhook</p>
     </div>
     <div class="form-container">
-        <form id="webhookForm">
+        <form id="webhookForm" onsubmit="event.preventDefault(); return false;">
             <!-- Текстовые поля -->
             <div class="field-group">
                 <label>👤 Имя</label>
@@ -261,34 +261,24 @@
 
 <script>
     // ========== НАСТРОЙКА WEBHOOK ==========
-    // 🔁 Замените этот URL на ваш реальный вебхук
-    const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbwlC_Dw08KQu7wKnl3so8G6E3Zd77MeSOX5ag3xpgWrak3iHxUpZbu8zCmMYoNqhFdm/exec");
+    const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbwlC_Dw08KQu7wKnl3so8G6E3Zd77MeSOX5ag3xpgWrak3iHxUpZbu8zCmMYoNqhFdm/exec";  // Вставьте ваш URL
     
-    // Для отображения в подсказке (обрежем для красоты)
-    const displayUrl = WEBHOOK_URL.length > 40 ? WEBHOOK_URL.substring(0, 40) + "..." : WEBHOOK_URL;
-    document.getElementById("webhookDisplay").innerText = displayUrl;
-
-    // DOM элементы
     const form = document.getElementById("webhookForm");
-    const submitBtn = document.getElementById("submitBtn");
     const resultDiv = document.getElementById("resultMessage");
-
+    
     function showMessage(text, type) {
         resultDiv.style.display = "block";
         resultDiv.textContent = text;
         resultDiv.className = `message ${type}`;
-        // Автоскрытие через 5 секунд
         setTimeout(() => {
-            if (resultDiv.style.display === "block") {
-                resultDiv.style.opacity = "0";
-                setTimeout(() => {
-                    resultDiv.style.display = "none";
-                    resultDiv.style.opacity = "1";
-                }, 300);
-            }
+            resultDiv.style.opacity = "0";
+            setTimeout(() => {
+                resultDiv.style.display = "none";
+                resultDiv.style.opacity = "1";
+            }, 300);
         }, 5000);
     }
-
+    
     async function sendToWebhook(payload) {
         try {
             const response = await fetch(WEBHOOK_URL, {
@@ -301,7 +291,7 @@
             
             const result = await response.json();
             
-            if (result.success) {
+            if (result.success === true || response.ok) {
                 showMessage(`✅ Успешно отправлено!`, "success");
                 return true;
             } else {
@@ -314,16 +304,14 @@
             return false;
         }
     }
-
+    
     form.addEventListener("submit", async (event) => {
         event.preventDefault();
-
-        // Собираем данные
+        
         const name = document.getElementById("name").value.trim();
         const email = document.getElementById("email").value.trim();
         const messageText = document.getElementById("message").value.trim();
         
-        // Статус (выбранное радио)
         let selectedStatus = "";
         const radioStatus = document.querySelectorAll('input[name="status"]');
         for (const radio of radioStatus) {
@@ -332,19 +320,17 @@
                 break;
             }
         }
-
-        // Валидация обязательных полей
+        
         if (!name || !email) {
             showMessage("Пожалуйста, заполните имя и email", "error");
             return;
         }
-
+        
         if (!email.includes("@") || !email.includes(".")) {
-            showMessage("Введите корректный email (пример: name@domain.com)", "error");
+            showMessage("Введите корректный email", "error");
             return;
         }
-
-        // Формируем объект для отправки (можно расширить)
+        
         const payload = {
             timestamp: new Date().toISOString(),
             name: name,
@@ -353,26 +339,16 @@
             status: selectedStatus,
             source: "одностраничный_сайт"
         };
-
-        // Блокируем кнопку на время отправки
+        
+        const submitBtn = document.getElementById("submitBtn");
         const originalText = submitBtn.innerHTML;
         submitBtn.innerHTML = "⏳ Отправка...";
         submitBtn.disabled = true;
-
-        const success = await sendToWebhook(payload);
-
-        // Возвращаем кнопку в исходное состояние
+        
+        await sendToWebhook(payload);
+        
         submitBtn.innerHTML = originalText;
         submitBtn.disabled = false;
-
-        // Если успешно — можно очистить форму (по желанию)
-        if (success) {
-            // Раскомментировать, если хотите очищать поля после отправки:
-            // document.getElementById("name").value = "";
-            // document.getElementById("email").value = "";
-            // document.getElementById("message").value = "";
-            // Не сбрасываем статус — оставляем первый вариант по умолчанию
-        }
     });
 </script>
 </body>
