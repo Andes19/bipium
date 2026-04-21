@@ -3,8 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Заполнить базу — Бипиум</title>
+    <title>Культурные походы — Бипиум</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Дополнительные стили для этой страницы */
+        .field-group input, .field-group textarea {
+            width: 100%;
+        }
+        .field-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        @media (max-width: 600px) {
+            .field-row {
+                grid-template-columns: 1fr;
+            }
+        }
+        .cost-field {
+            font-size: 1rem;
+        }
+        .help-text {
+            font-size: 0.7rem;
+            color: #6b7280;
+            margin-top: 4px;
+        }
+    </style>
 </head>
 <body>
 
@@ -12,47 +36,92 @@
         <a href="index.html" class="logo">🏔️ <span>Бипиум</span></a>
         <div class="nav-links">
             <a href="index.html">Главная</a>
-            <a href="bipium_hiking.html" class="active">📝 Заполнить базу</a>
+            <a href="bipium_hiking.html" class="active">📝 Культурные походы</a>
         </div>
     </div>
 
     <div class="container">
         <div class="page-header">
-            <h1>📋 Заполнить базу данных</h1>
-            <p>Заполните форму — данные уйдут в Бипиум</p>
+            <h1>🏕️ Культурные походы</h1>
+            <p>Заполните информацию о походе или мероприятии</p>
         </div>
         <div class="content">
             
+            <!-- Название -->
             <div class="field-group">
-                <label>👤 Имя</label>
-                <input type="text" id="name" placeholder="Введите имя" required>
+                <label>📌 Название *</label>
+                <input type="text" id="title" placeholder="Например: Поход к водопаду Айгыр" required>
             </div>
 
-            <div class="field-group">
-                <label>💬 Сообщение / Комментарий</label>
-                <textarea id="message" placeholder="Ваше сообщение..."></textarea>
+            <!-- Локация и Адрес в две колонки -->
+            <div class="field-row">
+                <div class="field-group">
+                    <label>📍 Локация</label>
+                    <input type="text" id="location" placeholder="Регион, район">
+                </div>
+                <div class="field-group">
+                    <label>🏠 Адрес</label>
+                    <input type="text" id="address" placeholder="Точный адрес или ориентир">
+                </div>
             </div>
 
+            <!-- Дата проведения и Стоимость -->
+            <div class="field-row">
+                <div class="field-group">
+                    <label>📅 Дата проведения</label>
+                    <input type="date" id="date">
+                </div>
+                <div class="field-group">
+                    <label>💰 Стоимость</label>
+                    <input type="text" id="cost" placeholder="Например: 1500 ₽ или Бесплатно">
+                </div>
+            </div>
+
+            <!-- Сайт -->
+            <div class="field-group">
+                <label>🌐 Сайт</label>
+                <input type="url" id="website" placeholder="https://example.com">
+            </div>
+
+            <!-- Описание -->
+            <div class="field-group">
+                <label>📝 Описание</label>
+                <textarea id="description" rows="4" placeholder="Подробное описание похода, маршрута, культурной программы..."></textarea>
+            </div>
+
+            <!-- Разведчики -->
+            <div class="field-group">
+                <label>🔍 Разведчики</label>
+                <input type="text" id="scouts" placeholder="Кто проводил разведку (ФИО или команда)">
+                <div class="help-text">Укажите, кто исследовал маршрут</div>
+            </div>
+
+            <!-- Фото/видеоотчёт -->
+            <div class="field-group">
+                <label>📸 Фото/видеоотчёт</label>
+                <input type="text" id="media" placeholder="Ссылка на фотоальбом, видео или облачное хранилище">
+                <div class="help-text">Ссылка на Google Drive, YouTube, Яндекс.Диск и т.д.</div>
+            </div>
+
+            <!-- Статусное поле -->
             <div class="status-group">
-                <label>🔘 Статус</label>
+                <label>⚡ Статус проекта</label>
                 <div class="status-option">
                     <label>
-                        <input type="radio" name="status" value="Новый клиент" checked> 🟢 Новый клиент
+                        <input type="radio" name="status" value="Проект работает" checked> 🟢 Проект работает
                     </label>
                     <label>
-                        <input type="radio" name="status" value="Постоянный"> 🔵 Постоянный
-                    </label>
-                    <label>
-                        <input type="radio" name="status" value="Требует звонка"> 🟠 Требует звонка
+                        <input type="radio" name="status" value="Проект закончился"> 🔴 Проект закончился
                     </label>
                 </div>
             </div>
 
-            <button type="button" id="submitBtn">✈️ Отправить</button>
+            <button type="button" id="submitBtn">✈️ Отправить в Бипиум</button>
 
             <div id="resultMessage" class="message" style="display: none;"></div>
             <div class="info">
-                ⚡ Данные отправляются защищённо через Google Apps Script → Бипиум
+                ⚡ Данные отправляются защищённо через Google Apps Script → Бипиум<br>
+                <span style="font-size: 0.7rem;">Поля, отмеченные *, обязательны для заполнения</span>
             </div>
         </div>
     </div>
@@ -84,7 +153,7 @@
                     body: JSON.stringify(payload),
                 });
                 
-                showMessage("✅ Отправлено! Данные переданы в систему.", "success");
+                showMessage("✅ Отправлено! Данные переданы в Бипиум.", "success");
                 return true;
                 
             } catch (error) {
@@ -95,8 +164,16 @@
         }
         
         submitBtn.addEventListener("click", async () => {
-            const name = document.getElementById("name").value.trim();
-            const messageText = document.getElementById("message").value.trim();
+            // Собираем все поля
+            const title = document.getElementById("title").value.trim();
+            const location = document.getElementById("location").value.trim();
+            const address = document.getElementById("address").value.trim();
+            const date = document.getElementById("date").value;
+            const cost = document.getElementById("cost").value.trim();
+            const website = document.getElementById("website").value.trim();
+            const description = document.getElementById("description").value.trim();
+            const scouts = document.getElementById("scouts").value.trim();
+            const media = document.getElementById("media").value.trim();
             
             let selectedStatus = "";
             const radioStatus = document.querySelectorAll('input[name="status"]');
@@ -107,16 +184,26 @@
                 }
             }
             
-            if (!name) {
-                showMessage("Пожалуйста, введите имя", "error");
+            // Проверка обязательного поля
+            if (!title) {
+                showMessage("Пожалуйста, заполните название похода", "error");
                 return;
             }
             
+            // Формируем payload для отправки
             const payload = {
                 timestamp: new Date().toISOString(),
-                name: name,
-                message: messageText || "(пусто)",
+                title: title,
+                location: location || "",
+                address: address || "",
+                date: date || "",
+                cost: cost || "",
+                website: website || "",
+                description: description || "",
+                scouts: scouts || "",
+                media: media || "",
                 status: selectedStatus,
+                source: "Бипиум_Культурные_походы"
             };
             
             const originalText = submitBtn.innerHTML;
@@ -128,8 +215,18 @@
             submitBtn.innerHTML = originalText;
             submitBtn.disabled = false;
             
-            document.getElementById("name").value = "";
-            document.getElementById("message").value = "";
+            // Очищаем форму после отправки (опционально)
+            document.getElementById("title").value = "";
+            document.getElementById("location").value = "";
+            document.getElementById("address").value = "";
+            document.getElementById("date").value = "";
+            document.getElementById("cost").value = "";
+            document.getElementById("website").value = "";
+            document.getElementById("description").value = "";
+            document.getElementById("scouts").value = "";
+            document.getElementById("media").value = "";
+            // Статус сбрасывается на первый вариант по умолчанию
+            document.querySelector('input[name="status"][value="Проект работает"]').checked = true;
         });
     </script>
 
