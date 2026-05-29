@@ -2,46 +2,630 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>О нас - Bipium Hiking</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>ТЗ на подбор материалов</title>
     <style>
-        body {
-            font-family: system-ui, sans-serif;
-            background: #f5f7fa;
+        * {
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            box-sizing: border-box;
         }
+
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e9edf2 100%);
+            min-height: 100vh;
+            padding: 30px 20px;
+        }
+
         .container {
-            max-width: 800px;
+            max-width: 900px;
+            width: 100%;
             margin: 0 auto;
+        }
+
+        .card {
             background: white;
-            padding: 30px;
             border-radius: 32px;
-            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.15);
-        }
-        nav {
-            text-align: center;
-            padding: 15px;
-            background: #1a2a3a;
+            box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
             margin-bottom: 20px;
-            border-radius: 40px;
         }
-        nav a {
+
+        .header {
+            background: linear-gradient(135deg, #1a2a3a 0%, #0f1a24 100%);
             color: white;
-            margin: 0 15px;
-            text-decoration: none;
+            padding: 28px 32px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+        }
+
+        .header p {
+            margin-top: 8px;
+            opacity: 0.8;
+            font-size: 0.95rem;
+        }
+
+        .form-container {
+            padding: 32px;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #1a2a3a;
+            margin: 24px 0 16px 0;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .section-title:first-of-type {
+            margin-top: 0;
+        }
+
+        .field-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1f2a3e;
+            font-size: 0.9rem;
+        }
+
+        label .hint {
+            font-weight: normal;
+            color: #6c757d;
+            font-size: 0.8rem;
+            margin-left: 5px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 16px;
+            font-size: 0.95rem;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 16px;
+            background: #fefefe;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .mode-switch {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 24px;
+            margin-bottom: 30px;
+            border: 1px solid #e2edff;
+        }
+
+        .mode-switch h3 {
+            margin-bottom: 15px;
+            color: #1a2a3a;
+            font-size: 1.1rem;
+        }
+
+        .mode-buttons {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .mode-btn {
+            flex: 1;
+            min-width: 180px;
+            padding: 12px 20px;
+            border: 2px solid #cbd5e1;
+            background: white;
+            border-radius: 40px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .mode-btn.active {
+            background: #1e293b;
+            border-color: #1e293b;
+            color: white;
+        }
+
+        .mode-btn:first-child.active {
+            background: #1e293b;
+        }
+
+        .mode-btn:hover:not(.active) {
+            border-color: #3b82f6;
+            background: #eff6ff;
+        }
+
+        .form-section {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .form-section.active-section {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .row-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        button {
+            width: 100%;
+            background: #1e293b;
+            color: white;
+            border: none;
+            padding: 14px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background: #0f172a;
+            transform: scale(0.98);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .message {
+            margin-top: 20px;
+            padding: 12px;
+            border-radius: 28px;
+            text-align: center;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .success {
+            background: #dcfce7;
+            color: #15803d;
+            border-left: 4px solid #22c55e;
+        }
+
+        .error {
+            background: #fee2e2;
+            color: #b91c1c;
+            border-left: 4px solid #ef4444;
+        }
+
+        .info {
+            background: #eef2ff;
+            color: #1e3a8a;
+            font-size: 0.75rem;
+            margin-top: 16px;
+            text-align: center;
+            padding: 10px;
+            border-radius: 16px;
+        }
+
+        @media (max-width: 640px) {
+            .form-container {
+                padding: 20px;
+            }
+            .row-2 {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            .mode-buttons {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
 <body>
-    <nav>
-        <a href="index.html">📝 Главная (Форма)</a>
-        <a href="about.html">ℹ️ О нас</a>
-    </nav>
-    <div class="container">
-        <h1>🏔️ О проекте Bipium Hiking</h1>
-        <p>Этот сайт создан для удобного сбора заявок и отправки их в Бипиум через Google Apps Script.</p>
-        <p>Страницы работают на бесплатном хостинге GitHub Pages.</p>
-        <p><a href="index.html">⬅️ Вернуться к форме отправки</a></p>
+<div class="container">
+    <div class="card">
+        <div class="header">
+            <h1>📋 Техническое задание</h1>
+            <p>На подбор материалов</p>
+        </div>
+        <div class="form-container">
+            <!-- ШАПКА ТЗ (всегда видна) -->
+            <div class="section-title">📌 Основная информация</div>
+            
+            <div class="row-2">
+                <div class="field-group">
+                    <label>📅 Дата задания</label>
+                    <input type="date" id="task_date">
+                </div>
+                <div class="field-group">
+                    <label>🏗️ Проект <span class="hint">Например, Музей Крыма и Новороссии</span></label>
+                    <input type="text" id="project" placeholder="Введите название проекта">
+                </div>
+            </div>
+
+            <div class="row-2">
+                <div class="field-group">
+                    <label>👥 Потребитель</label>
+                    <select id="consumer">
+                        <option value="">-- Выберите --</option>
+                        <option value="Редакция">Редакция</option>
+                        <option value="Отдел контента">Отдел контента</option>
+                        <option value="Другое">Другое</option>
+                    </select>
+                </div>
+                <div class="field-group">
+                    <label>✍️ Автор ТЗ <span class="hint">К кому обращаться с вопросами</span></label>
+                    <input type="text" id="author" placeholder="ФИО, должность">
+                </div>
+            </div>
+
+            <div class="row-2">
+                <div class="field-group">
+                    <label>🏛️ Зал</label>
+                    <input type="text" id="hall" placeholder="Название зала">
+                </div>
+                <div class="field-group">
+                    <label>🖼️ Экспонат <span class="hint">Например, Ротонда с проекциями</span></label>
+                    <input type="text" id="exhibit" placeholder="Название экспоната">
+                </div>
+            </div>
+
+            <div class="field-group">
+                <label>🔢 Код контента <span class="hint">Например, C712</span></label>
+                <input type="text" id="content_code" placeholder="Введите код контента">
+            </div>
+
+            <!-- ПЕРЕКЛЮЧАТЕЛЬ РЕЖИМОВ -->
+            <div class="mode-switch">
+                <h3>🔄 Тип работы</h3>
+                <div class="mode-buttons">
+                    <div class="mode-btn active" data-mode="search">🔍 Подбор материалов</div>
+                    <div class="mode-btn" data-mode="audit">✅ Аудит материалов</div>
+                </div>
+            </div>
+
+            <!-- РАЗДЕЛ: ПОДБОР МАТЕРИАЛОВ -->
+            <div id="searchSection" class="form-section active-section">
+                <div class="section-title">🔍 Подбор материалов</div>
+                <div class="section-title" style="font-size: 1.1rem;">🛠️ Техническая информация</div>
+                
+                <div class="row-2">
+                    <div class="field-group">
+                        <label>Вид использования в контенте</label>
+                        <select id="use_type_search">
+                            <option value="Полиграфия">Полиграфия</option>
+                            <option value="Мультимедиа">Мультимедиа</option>
+                        </select>
+                    </div>
+                    <div class="field-group">
+                        <label>Сколько примерно нужно материалов</label>
+                        <select id="amount_search">
+                            <option value="минимум">Минимум</option>
+                            <option value="оптимум">Оптимум</option>
+                            <option value="максимум">Максимум</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row-2">
+                    <div class="field-group">
+                        <label>Ориентация</label>
+                        <select id="orientation_search">
+                            <option value="вертикальная">Вертикальная</option>
+                            <option value="горизонтальная">Горизонтальная</option>
+                            <option value="не важно" selected>Не важно</option>
+                        </select>
+                    </div>
+                    <div class="field-group">
+                        <label>Цветность</label>
+                        <select id="color_search">
+                            <option value="ЧБ">Ч/Б</option>
+                            <option value="цветное">Цветное</option>
+                            <option value="не важно" selected>Не важно</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row-2">
+                    <div class="field-group">
+                        <label>Нужны материалы в хайрезах</label>
+                        <select id="highres_search">
+                            <option value="да">Да, нужны</option>
+                            <option value="нет">Нет</option>
+                            <option value="не важно" selected>Не важно</option>
+                        </select>
+                    </div>
+                    <div class="field-group">
+                        <label>Согласование с историками</label>
+                        <select id="historians_search">
+                            <option value="Не требуется" selected>Не требуется</option>
+                            <option value="Требуется">Требуется</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="field-group">
+                    <label>📁 Тип материалов <span class="hint">Фото, видео, аудио, рисунки, хроника, реконструкция и т.д.</span></label>
+                    <input type="text" id="material_type_search" placeholder="Например: фото, видео">
+                </div>
+
+                <div class="section-title" style="font-size: 1.1rem;">📖 Смысловая информация</div>
+
+                <div class="field-group">
+                    <label>📅 Исторический период <span class="hint">Например: С 1860 по 1918 года</span></label>
+                    <input type="text" id="historical_period" placeholder="Укажите период">
+                </div>
+
+                <div class="field-group">
+                    <label>🎯 Тематика нужных материалов</label>
+                    <textarea id="topics" rows="3" placeholder="Например:&#10;- Пляжи Ялты того времени&#10;- Набережная Ялты&#10;- Известные Ялтинские санатории"></textarea>
+                </div>
+
+                <div class="field-group">
+                    <label>🎭 Драматургия <span class="hint">Что нужно передать, какая атмосфера</span></label>
+                    <textarea id="dramaturgy" rows="4" placeholder="Например: подберите фотографии, отражающие отдых в Ялте до революции..."></textarea>
+                </div>
+
+                <div class="field-group">
+                    <label>🔗 Ссылка на референсы</label>
+                    <input type="url" id="references" placeholder="https://...">
+                </div>
+
+                <div class="section-title" style="font-size: 1.1rem;">⏰ Сроки</div>
+
+                <div class="row-2">
+                    <div class="field-group">
+                        <label>Срок сдачи подбора</label>
+                        <input type="date" id="deadline_search">
+                    </div>
+                    <div class="field-group">
+                        <label>Срок согласований (редакторы)</label>
+                        <input type="date" id="deadline_editors">
+                    </div>
+                </div>
+
+                <div class="field-group">
+                    <label>Срок согласований (историки)</label>
+                    <input type="date" id="deadline_historians">
+                </div>
+            </div>
+
+            <!-- РАЗДЕЛ: АУДИТ МАТЕРИАЛОВ -->
+            <div id="auditSection" class="form-section">
+                <div class="section-title">✅ Аудит материалов</div>
+                <div class="section-title" style="font-size: 1.1rem;">🛠️ Техническая информация</div>
+
+                <div class="row-2">
+                    <div class="field-group">
+                        <label>Вид использования в контенте</label>
+                        <select id="use_type_audit">
+                            <option value="Полиграфия">Полиграфия</option>
+                            <option value="Мультимедиа">Мультимедиа</option>
+                        </select>
+                    </div>
+                    <div class="field-group">
+                        <label>Нужны материалы в хайрезах</label>
+                        <select id="highres_audit">
+                            <option value="да">Да, нужны</option>
+                            <option value="нет">Нет</option>
+                            <option value="не важно" selected>Не важно</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row-2">
+                    <div class="field-group">
+                        <label>Согласование с историками</label>
+                        <select id="historians_audit">
+                            <option value="Не требуется" selected>Не требуется</option>
+                            <option value="Требуется">Требуется</option>
+                        </select>
+                    </div>
+                    <div class="field-group">
+                        <label>📁 Тип материалов <span class="hint">Фото, видео, аудио, рисунки и т.д.</span></label>
+                        <input type="text" id="material_type_audit" placeholder="Например: фото, видео">
+                    </div>
+                </div>
+
+                <div class="field-group">
+                    <label>🔗 Ссылка на подобранные материалы</label>
+                    <input type="url" id="materials_link" placeholder="https://...">
+                </div>
+
+                <div class="section-title" style="font-size: 1.1rem;">📦 В каком виде нужен конечный результат?</div>
+
+                <div class="field-group">
+                    <select id="result_format">
+                        <option value="">-- Выберите --</option>
+                        <option value="Вид в БД (выгрузка — публичный)">Вид в БД (выгрузка — публичный)</option>
+                        <option value="Вид в БД (ссылка для авторизованного доступа)">Вид в БД (ссылка для авторизованного доступа)</option>
+                        <option value="Ссылка на папку в облачном хранилище">Ссылка на папку в облачном хранилище</option>
+                        <option value="Таблица с комментариями">Таблица с комментариями</option>
+                    </select>
+                </div>
+
+                <div class="field-group">
+                    <label>📝 Любые другие примечания</label>
+                    <textarea id="notes" rows="3" placeholder="Дополнительная информация..."></textarea>
+                </div>
+            </div>
+
+            <button type="button" id="submitBtn">✈️ Отправить ТЗ</button>
+            <div id="resultMessage" class="message" style="display: none;"></div>
+            <div class="info">
+                ⚡ Заполните все поля. Данные будут отправлены на вебхук.<br>
+                <span style="font-size: 0.7rem;">🔧 Вебхук пока не настроен (заглушка)</span>
+            </div>
+        </div>
     </div>
+</div>
+
+<script>
+    // ========== ВЕБХУК (ПОКА ЗАГЛУШКА) ==========
+    // 🔁 Здесь будет ваш URL вебхука
+    const WEBHOOK_URL = "";  // <-- СЮДА ВСТАВИТЬ ССЫЛКУ НА ВЕБХУК
+
+    // Переключение режимов
+    const modeBtns = document.querySelectorAll('.mode-btn');
+    const searchSection = document.getElementById('searchSection');
+    const auditSection = document.getElementById('auditSection');
+    let currentMode = 'search'; // 'search' или 'audit'
+
+    modeBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            modeBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            if (btn.dataset.mode === 'search') {
+                currentMode = 'search';
+                searchSection.classList.add('active-section');
+                auditSection.classList.remove('active-section');
+            } else {
+                currentMode = 'audit';
+                searchSection.classList.remove('active-section');
+                auditSection.classList.add('active-section');
+            }
+        });
+    });
+
+    const submitBtn = document.getElementById('submitBtn');
+    const resultDiv = document.getElementById('resultMessage');
+
+    function showMessage(text, type) {
+        resultDiv.style.display = "block";
+        resultDiv.textContent = text;
+        resultDiv.className = `message ${type}`;
+        setTimeout(() => {
+            resultDiv.style.display = "none";
+        }, 5000);
+    }
+
+    function collectData() {
+        // Общая шапка (всегда собирается)
+        const baseData = {
+            task_date: document.getElementById('task_date').value,
+            project: document.getElementById('project').value,
+            consumer: document.getElementById('consumer').value,
+            author: document.getElementById('author').value,
+            hall: document.getElementById('hall').value,
+            exhibit: document.getElementById('exhibit').value,
+            content_code: document.getElementById('content_code').value,
+            work_type: currentMode === 'search' ? 'Подбор материалов' : 'Аудит материалов',
+            timestamp: new Date().toISOString()
+        };
+
+        if (currentMode === 'search') {
+            return {
+                ...baseData,
+                // Техническая информация
+                use_type: document.getElementById('use_type_search').value,
+                amount: document.getElementById('amount_search').value,
+                orientation: document.getElementById('orientation_search').value,
+                color: document.getElementById('color_search').value,
+                highres: document.getElementById('highres_search').value,
+                historians: document.getElementById('historians_search').value,
+                material_type: document.getElementById('material_type_search').value,
+                // Смысловая информация
+                historical_period: document.getElementById('historical_period').value,
+                topics: document.getElementById('topics').value,
+                dramaturgy: document.getElementById('dramaturgy').value,
+                references: document.getElementById('references').value,
+                // Сроки
+                deadline_search: document.getElementById('deadline_search').value,
+                deadline_editors: document.getElementById('deadline_editors').value,
+                deadline_historians: document.getElementById('deadline_historians').value
+            };
+        } else {
+            return {
+                ...baseData,
+                use_type: document.getElementById('use_type_audit').value,
+                highres: document.getElementById('highres_audit').value,
+                historians: document.getElementById('historians_audit').value,
+                material_type: document.getElementById('material_type_audit').value,
+                materials_link: document.getElementById('materials_link').value,
+                result_format: document.getElementById('result_format').value,
+                notes: document.getElementById('notes').value
+            };
+        }
+    }
+
+    async function sendToWebhook(payload) {
+        // Если вебхук не настроен
+        if (!WEBHOOK_URL) {
+            showMessage("⚠️ Вебхук ещё не настроен. Данные не отправлены (режим заглушки).", "error");
+            console.log("Данные для отправки (заглушка):", payload);
+            return false;
+        }
+
+        try {
+            const response = await fetch(WEBHOOK_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(payload),
+            });
+            showMessage("✅ ТЗ успешно отправлено!", "success");
+            return true;
+        } catch (error) {
+            console.error("Ошибка:", error);
+            showMessage("⚠️ Ошибка при отправке. Попробуйте ещё раз.", "error");
+            return false;
+        }
+    }
+
+    submitBtn.addEventListener("click", async () => {
+        // Проверка обязательных полей шапки
+        const project = document.getElementById('project').value.trim();
+        const author = document.getElementById('author').value.trim();
+        
+        if (!project) {
+            showMessage("Пожалуйста, заполните поле «Проект»", "error");
+            return;
+        }
+        if (!author) {
+            showMessage("Пожалуйста, заполните поле «Автор ТЗ»", "error");
+            return;
+        }
+
+        const payload = collectData();
+        
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = "⏳ Отправка...";
+        submitBtn.disabled = true;
+
+        await sendToWebhook(payload);
+
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+    });
+</script>
 </body>
 </html>
