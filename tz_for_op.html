@@ -8,6 +8,14 @@
 </head>
 <body>
 
+<div class="header-nav">
+    <a href="index.html" class="logo">🏔️ <span>Bipium</span> Hiking</a>
+    <div class="nav-links">
+        <a href="index.html">Главная</a>
+        <a href="tz_for_op.html" class="active">ТЗ</a>
+    </div>
+</div>
+
 <div class="container">
     <div class="page-header">
         <h1>📋 Техническое задание</h1>
@@ -126,8 +134,8 @@
                     </select>
                 </div>
                 <div class="field-group">
-                    <label>Согласование с историками</label>
-                    <select id="historians_search">
+                    <label>Согласование с экспертами</label>
+                    <select id="experts_search">
                         <option value="Не требуется" selected>Не требуется</option>
                         <option value="Требуется">Требуется</option>
                     </select>
@@ -182,8 +190,8 @@
 
             <div class="row-2">
                 <div class="field-group">
-                    <label>Согласование с историками</label>
-                    <select id="historians_audit">
+                    <label>Согласование с экспертами</label>
+                    <select id="experts_audit">
                         <option value="Не требуется" selected>Не требуется</option>
                         <option value="Требуется">Требуется</option>
                     </select>
@@ -237,8 +245,8 @@
         </div>
 
         <div class="field-group">
-            <label>Срок согласований (историки)</label>
-            <input type="date" id="deadline_historians">
+            <label>Срок согласований (эксперты)</label>
+            <input type="date" id="deadline_experts">
         </div>
 
         <button type="button" class="submit-btn" id="submitBtn">✈️ Отправить ТЗ</button>
@@ -303,7 +311,7 @@
             notes: document.getElementById('notes').value,
             deadline_search: document.getElementById('deadline_search').value,
             deadline_editors: document.getElementById('deadline_editors').value,
-            deadline_historians: document.getElementById('deadline_historians').value,
+            deadline_experts: document.getElementById('deadline_experts').value,
             timestamp: new Date().toISOString()
         };
 
@@ -315,7 +323,7 @@
                 orientation: document.getElementById('orientation_search').value,
                 color: document.getElementById('color_search').value,
                 highres: document.getElementById('highres_search').value,
-                historians: document.getElementById('historians_search').value,
+                experts: document.getElementById('experts_search').value,
                 material_type: document.getElementById('material_type_search').value,
                 historical_period: document.getElementById('historical_period').value,
                 topics: document.getElementById('topics').value,
@@ -326,7 +334,7 @@
                 ...baseData,
                 use_type: document.getElementById('use_type_audit').value,
                 highres: document.getElementById('highres_audit').value,
-                historians: document.getElementById('historians_audit').value,
+                experts: document.getElementById('experts_audit').value,
                 material_type: document.getElementById('material_type_audit').value,
                 materials_link: document.getElementById('materials_link').value
             };
