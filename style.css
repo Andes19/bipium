@@ -62,7 +62,7 @@ body {
     background: #3b82f6;
 }
 
-/* Контейнер для контента */
+/* Контейнер для контента (общий) */
 .container {
     max-width: 900px;
     margin: 0 auto;
@@ -70,6 +70,11 @@ body {
     border-radius: 32px;
     box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.15);
     overflow: hidden;
+}
+
+/* Для главной страницы — контейнер может быть уже */
+.container-narrow {
+    max-width: 700px;
 }
 
 /* Заголовок страницы */
@@ -96,7 +101,55 @@ body {
     padding: 32px;
 }
 
-/* Стили для формы */
+/* ========== СТИЛИ ДЛЯ ГЛАВНОЙ СТРАНИЦЫ ========== */
+.welcome-text {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #334155;
+    margin-bottom: 20px;
+}
+
+.feature-list {
+    list-style: none;
+    margin-top: 20px;
+}
+
+.feature-list li {
+    padding: 10px 0;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.feature-list li:before {
+    content: "✓";
+    color: #22c55e;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.button-link {
+    display: inline-block;
+    background: #3b82f6;
+    color: white;
+    text-decoration: none;
+    padding: 12px 28px;
+    border-radius: 40px;
+    font-weight: 600;
+    margin-top: 20px;
+    transition: all 0.2s;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.button-link:hover {
+    background: #2563eb;
+    transform: translateY(-2px);
+}
+
+/* ========== СТИЛИ ДЛЯ СТРАНИЦЫ ТЗ ========== */
 .field-group {
     margin-bottom: 20px;
 }
@@ -143,7 +196,6 @@ select {
     background: white;
 }
 
-/* Секции и заголовки */
 .section-title {
     font-size: 1.3rem;
     font-weight: 600;
@@ -166,7 +218,6 @@ select {
     border-bottom: 1.5px solid #e2e8f0;
 }
 
-/* Переключатель режимов */
 .mode-switch {
     background: #f8fafc;
     padding: 20px;
@@ -212,7 +263,6 @@ select {
     background: #eff6ff;
 }
 
-/* Переключаемые секции */
 .form-section {
     display: none;
     animation: fadeIn 0.3s ease;
@@ -227,14 +277,12 @@ select {
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* Сетка для двух колонок */
 .row-2 {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 20px;
 }
 
-/* Кнопка отправки */
 .submit-btn {
     width: 100%;
     background: #1e293b;
@@ -259,7 +307,6 @@ select {
     cursor: not-allowed;
 }
 
-/* Сообщения */
 .message {
     margin-top: 20px;
     padding: 12px;
@@ -291,7 +338,6 @@ select {
     border-radius: 16px;
 }
 
-/* Стили для статусных полей */
 .status-group {
     background: #f8fafc;
     padding: 20px 24px;
@@ -366,5 +412,12 @@ select {
     .status-option label {
         padding: 8px 18px;
         font-size: 0.85rem;
+    }
+    .header-nav {
+        flex-direction: column;
+        text-align: center;
+    }
+    .page-header h1 {
+        font-size: 1.5rem;
     }
 }
