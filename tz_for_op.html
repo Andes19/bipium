@@ -8,26 +8,15 @@
 </head>
 <body>
 
-<!-- Шапка с навигацией (если нужна, можно раскомментировать и добавить ссылки)
-<div class="header-nav">
-    <a href="index.html" class="logo">🏔️ <span>Bipium</span> Hiking</a>
-    <div class="nav-links">
-        <a href="index.html">Главная</a>
-        <a href="tz_for_op.html" class="active">ТЗ</a>
-    </div>
-</div>
--->
-
 <div class="container">
     <div class="page-header">
         <h1>📋 Техническое задание</h1>
         <p>На подбор материалов</p>
     </div>
     <div class="content">
-        <!-- ОСНОВНАЯ ИНФОРМАЦИЯ (всегда видна) -->
+        <!-- ОСНОВНАЯ ИНФОРМАЦИЯ -->
         <div class="section-title">📌 Основная информация</div>
         
-        <!-- Тема ТЗ - первым пунктом -->
         <div class="field-group">
             <label>🏷️ Тема ТЗ <span class="hint">Например, Отдыхающие Ялты</span></label>
             <input type="text" id="topic" placeholder="Введите тему технического задания">
@@ -166,11 +155,6 @@
                 <label>🎭 Драматургия <span class="hint">Что нужно передать, какая атмосфера</span></label>
                 <textarea id="dramaturgy" rows="4" placeholder="Например: подберите фотографии, отражающие отдых в Ялте до революции..."></textarea>
             </div>
-
-            <div class="field-group">
-                <label>🔗 Ссылка на референсы</label>
-                <input type="url" id="references" placeholder="https://...">
-            </div>
         </div>
 
         <!-- РАЗДЕЛ: АУДИТ МАТЕРИАЛОВ -->
@@ -216,7 +200,7 @@
             </div>
         </div>
 
-        <!-- В КАКОМ ВИДЕ НУЖЕН РЕЗУЛЬТАТ (перед сроками) -->
+        <!-- ПОДВАЛ: результат + референсы + сроки -->
         <div class="section-title">📦 В каком виде нужен конечный результат?</div>
         
         <div class="field-group">
@@ -229,12 +213,16 @@
             </select>
         </div>
 
-        <div class="field-group" id="notesGroup" style="display: none;">
+        <div class="field-group">
+            <label>🔗 Ссылка на референсы</label>
+            <input type="url" id="references" placeholder="https://...">
+        </div>
+
+        <div class="field-group">
             <label>📝 Любые другие примечания</label>
             <textarea id="notes" rows="3" placeholder="Дополнительная информация..."></textarea>
         </div>
 
-        <!-- СРОКИ (всегда виден) -->
         <div class="section-title">⏰ Сроки</div>
         
         <div class="row-2">
@@ -263,10 +251,8 @@
 </div>
 
 <script>
-    // ========== ВЕБХУК (ПОКА ЗАГЛУШКА) ==========
-    const WEBHOOK_URL = "";  // Сюда вставить ссылку на вебхук
+    const WEBHOOK_URL = "";
 
-    // Переключение режимов
     const modeBtns = document.querySelectorAll('.mode-btn');
     const searchSection = document.getElementById('searchSection');
     const auditSection = document.getElementById('auditSection');
@@ -313,6 +299,7 @@
             content_code: document.getElementById('content_code').value,
             work_type: currentMode === 'search' ? 'Подбор материалов' : 'Аудит материалов',
             result_format: document.getElementById('result_format').value,
+            references: document.getElementById('references').value,
             notes: document.getElementById('notes').value,
             deadline_search: document.getElementById('deadline_search').value,
             deadline_editors: document.getElementById('deadline_editors').value,
@@ -332,8 +319,7 @@
                 material_type: document.getElementById('material_type_search').value,
                 historical_period: document.getElementById('historical_period').value,
                 topics: document.getElementById('topics').value,
-                dramaturgy: document.getElementById('dramaturgy').value,
-                references: document.getElementById('references').value
+                dramaturgy: document.getElementById('dramaturgy').value
             };
         } else {
             return {
