@@ -37,7 +37,7 @@ body {
 .logo span {
     color: #60a5fa;
 }
- 
+
 .nav-links {
     display: flex;
     gap: 10px;
@@ -129,6 +129,7 @@ body {
     font-size: 1.2rem;
 }
 
+/* ========== КНОПКИ ========== */
 .button-link {
     display: inline-block;
     background: #3b82f6;
@@ -142,11 +143,33 @@ body {
     border: none;
     cursor: pointer;
     font-size: 1rem;
+    text-align: center;
 }
 
 .button-link:hover {
     background: #2563eb;
     transform: translateY(-2px);
+    color: white;
+    text-decoration: none;
+}
+
+.submit-button-main {
+    width: 100%;
+    background: #1e293b;
+    color: white;
+    border: none;
+    padding: 14px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 40px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 10px;
+}
+
+.submit-button-main:hover {
+    background: #0f172a;
+    transform: scale(0.98);
 }
 
 /* ========== СТИЛИ ДЛЯ СТРАНИЦЫ ТЗ ========== */
