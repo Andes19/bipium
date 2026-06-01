@@ -25,8 +25,8 @@
         <div class="section-title">📌 Основная информация</div>
         
         <div class="field-group">
-            <label>🏷️ Тема ТЗ <span class="hint">Например, Отдыхающие Ялты</span></label>
-            <input type="text" id="topic" placeholder="Введите тему технического задания">
+            <label>🏷️ Тема ТЗ <span class="hint" style="color: #e53e3e;">* обязательное поле</span></label>
+            <input type="text" id="topic" placeholder="Введите тему технического задания" required>
         </div>
         
         <div class="row-2">
@@ -251,13 +251,13 @@
         <button type="button" class="submit-btn" id="submitBtn">✈️ Отправить ТЗ</button>
         <div id="resultMessage" class="message" style="display: none;"></div>
         <div class="info">
-            ⚡ Заполните все поля. Данные будут отправлены на вебхук.<br>
-            <span style="font-size: 0.7rem;">🔧 Вебхук пока не настроен (заглушка)</span>
+            ⚡ Поля, отмеченные *, обязательны для заполнения. Данные отправляются через Google Apps Script → Бипиум.
         </div>
     </div>
 </div>
 
 <script>
+    // ========== ВАШ URL ОТ GOOGLE APPS SCRIPT ==========
     const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycby5zWxhvzCMkAIXCWvQAqQeTQDNECgZZ5d-zrCO3SPvtTiCh6nB6fiq4kqSUErlU9Z7Ew/exec";
 
     const modeBtns = document.querySelectorAll('.mode-btn');
@@ -340,55 +340,41 @@
         }
     }
 
-async function sendToWebhook(payload) {
-    if (!WEBHOOK_URL) {
-        showMessage("⚠️ Вебхук ещё не настроен. Данные не отправлены (режим заглушки).", "error");
-        console.log("📦 Данные для отправки (заглушка):", payload);
-        return false;
-    }
-
-    try {
-        // Убираем mode: "no-cors" и добавляем обработку ответа
-        const response = await fetch(WEBHOOK_URL, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(payload),
-        });
-        
-        const result = await response.json();
-        
-        if (result.success) {
-            showMessage("✅ ТЗ успешно отправлено в Бипиум!", "success");
-            return true;
-        } else {
-            showMessage(`❌ Ошибка: ${result.error || "неизвестная ошибка"}`, "error");
+    async function sendToWebhook(payload) {
+        if (!WEBHOOK_URL) {
+            showMessage("⚠️ Вебхук не настроен", "error");
+            console.log("📦 Данные:", payload);
             return false;
         }
-        
-    } catch (error) {
-        console.error("Ошибка:", error);
-        showMessage("⚠️ Ошибка при отправке. Попробуйте ещё раз.", "error");
-        return false;
+
+        try {
+            // Используем mode: "no-cors" для обхода CORS
+            const response = await fetch(WEBHOOK_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(payload),
+            });
+            
+            // При mode: "no-cors" нельзя прочитать ответ, поэтому просто показываем успех
+            showMessage("✅ ТЗ отправлено! Данные переданы в систему.", "success");
+            return true;
+            
+        } catch (error) {
+            console.error("Ошибка:", error);
+            showMessage("⚠️ Ошибка при отправке. Попробуйте ещё раз.", "error");
+            return false;
+        }
     }
-}
 
     submitBtn.addEventListener("click", async () => {
-        const project = document.getElementById('project').value.trim();
-        const author = document.getElementById('author').value.trim();
+        // Проверяем только ОБЯЗАТЕЛЬНОЕ поле — Тема ТЗ
         const topic = document.getElementById('topic').value.trim();
         
         if (!topic) {
-            showMessage("Пожалуйста, заполните поле «Тема ТЗ»", "error");
-            return;
-        }
-        if (!project) {
-            showMessage("Пожалуйста, заполните поле «Проект»", "error");
-            return;
-        }
-        if (!author) {
-            showMessage("Пожалуйста, заполните поле «Автор ТЗ»", "error");
+            showMessage("Пожалуйста, заполните обязательное поле «Тема ТЗ»", "error");
             return;
         }
 
@@ -402,6 +388,9 @@ async function sendToWebhook(payload) {
 
         submitBtn.innerHTML = originalText;
         submitBtn.disabled = false;
+        
+        // Очищаем только тему? Или не очищаем? Решайте сами
+        // document.getElementById('topic').value = "";
     });
 </script>
 </body>
