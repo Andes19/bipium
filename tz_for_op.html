@@ -340,28 +340,39 @@
         }
     }
 
-    async function sendToWebhook(payload) {
-        if (!WEBHOOK_URL) {
-            showMessage("⚠️ Вебхук ещё не настроен. Данные не отправлены (режим заглушки).", "error");
-            console.log("📦 Данные для отправки (заглушка):", payload);
-            return false;
-        }
-
-        try {
-            await fetch(WEBHOOK_URL, {
-                method: "POST",
-                mode: "no-cors",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload),
-            });
-            showMessage("✅ ТЗ успешно отправлено!", "success");
-            return true;
-        } catch (error) {
-            console.error("Ошибка:", error);
-            showMessage("⚠️ Ошибка при отправке. Попробуйте ещё раз.", "error");
-            return false;
-        }
+async function sendToWebhook(payload) {
+    if (!WEBHOOK_URL) {
+        showMessage("⚠️ Вебхук ещё не настроен. Данные не отправлены (режим заглушки).", "error");
+        console.log("📦 Данные для отправки (заглушка):", payload);
+        return false;
     }
+
+    try {
+        // Убираем mode: "no-cors" и добавляем обработку ответа
+        const response = await fetch(WEBHOOK_URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            showMessage("✅ ТЗ успешно отправлено в Бипиум!", "success");
+            return true;
+        } else {
+            showMessage(`❌ Ошибка: ${result.error || "неизвестная ошибка"}`, "error");
+            return false;
+        }
+        
+    } catch (error) {
+        console.error("Ошибка:", error);
+        showMessage("⚠️ Ошибка при отправке. Попробуйте ещё раз.", "error");
+        return false;
+    }
+}
 
     submitBtn.addEventListener("click", async () => {
         const project = document.getElementById('project').value.trim();
