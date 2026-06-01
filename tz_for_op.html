@@ -313,29 +313,31 @@
             deadline_experts: document.getElementById('deadline_experts').value,
             timestamp: new Date().toISOString()
         };
-
+    
         if (currentMode === 'search') {
             return {
                 ...baseData,
-                use_type: document.getElementById('use_type_search').value,
-                amount: document.getElementById('amount_search').value,
-                orientation: document.getElementById('orientation_search').value,
-                color: document.getElementById('color_search').value,
-                highres: document.getElementById('highres_search').value,
-                experts: document.getElementById('experts_search').value,
-                material_type: document.getElementById('material_type_search').value,
-                historical_period: document.getElementById('historical_period').value,
-                topics: document.getElementById('topics').value,
-                dramaturgy: document.getElementById('dramaturgy').value
+                // Поля с префиксом search_
+                search_use_type: document.getElementById('use_type_search').value,
+                search_amount: document.getElementById('amount_search').value,
+                search_orientation: document.getElementById('orientation_search').value,
+                search_color: document.getElementById('color_search').value,
+                search_highres: document.getElementById('highres_search').value,
+                search_experts: document.getElementById('experts_search').value,
+                search_material_type: document.getElementById('material_type_search').value,
+                search_historical_period: document.getElementById('historical_period').value,
+                search_topics: document.getElementById('topics').value,
+                search_dramaturgy: document.getElementById('dramaturgy').value
             };
         } else {
             return {
                 ...baseData,
-                use_type: document.getElementById('use_type_audit').value,
-                highres: document.getElementById('highres_audit').value,
-                experts: document.getElementById('experts_audit').value,
-                material_type: document.getElementById('material_type_audit').value,
-                materials_link: document.getElementById('materials_link').value
+                // Поля с префиксом audit_
+                audit_use_type: document.getElementById('use_type_audit').value,
+                audit_highres: document.getElementById('highres_audit').value,
+                audit_experts: document.getElementById('experts_audit').value,
+                audit_material_type: document.getElementById('material_type_audit').value,
+                audit_materials_link: document.getElementById('materials_link').value
             };
         }
     }
