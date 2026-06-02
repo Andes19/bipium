@@ -6,6 +6,25 @@
     <title>ТЗ на подбор материалов</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    <style>
+        /* Дополнительные стили для читаемости подсказок */
+        .page-header .info {
+            background: rgba(255,255,255,0.15) !important;
+            color: white !important;
+        }
+        .page-header .info strong {
+            color: white !important;
+        }
+        .hint, label .hint {
+            color: #94a3b8 !important;
+            font-weight: normal;
+            font-size: 0.8rem;
+            margin-left: 5px;
+        }
+        .field-group label {
+            color: #1f2a3e;
+        }
+    </style>
 </head>
 <body>
 
@@ -20,7 +39,7 @@
     <div class="page-header">
         <h1>📋 Техническое задание</h1>
         <p>На подбор материалов</p>
-        <div class="info" style="background: rgba(255,255,255,0.15); margin-top: 12px; padding: 8px; border-radius: 12px;">
+        <div class="info" style="background: rgba(255,255,255,0.15); margin-top: 12px; padding: 10px 15px; border-radius: 12px; color: white; font-size: 0.9rem;">
             📌 <strong>Подбор</strong> — поиск фото, изо, видео и аудио материалов для различных проектов.<br>
             📌 <strong>Аудит</strong> — проверка на возможность правомерного использования материалов в проекте
         </div>
@@ -173,7 +192,7 @@
 
             <div class="field-group">
                 <label>🎭 Драматургия <span class="hint">Что нужно передать, какая атмосфера</span></label>
-                <textarea id="dramaturgy" rows="5" placeholder="Например: подберите фотографии, отражающие отдых в Ялте до революции. Они должны передавать атмосферу радостного курорта на берегу моря. Люди на фотографиях должны быть расслаблены, с улыбками на лицах.&#10;&#10;Цель — создать контент, вызывающий ассоциации с радостной и беззаботной атмосферой отдыха в дореволюционной Ялте."></textarea>
+                <textarea id="dramaturgy" rows="5" placeholder="Например: подберите фотографии, отражающие отдых в Ялте до революции..."></textarea>
             </div>
         </div>
 
@@ -223,12 +242,25 @@
                 <label>🔗 Ссылка на подобранные материалы</label>
                 <input type="url" id="materials_link" placeholder="https://...">
             </div>
+            
+            <!-- ЗАГОЛОВОК ДЛЯ АУДИТА -->
+            <div class="section-title" id="auditResultTitle">📦 В каком виде нужен конечный результат?</div>
+            
+            <div class="field-group" id="auditResultGroup">
+                <select id="result_format_audit">
+                    <option value="">-- Выберите --</option>
+                    <option value="Вид в БД (выгрузка — публичный)">Вид в БД (выгрузка — публичный)</option>
+                    <option value="Вид в БД (ссылка для авторизованного доступа)">Вид в БД (ссылка для авторизованного доступа)</option>
+                    <option value="Ссылка на папку в облачном хранилище">Ссылка на папку в облачном хранилище</option>
+                    <option value="Таблица с комментариями">Таблица с комментариями</option>
+                </select>
+            </div>
         </div>
 
-        <!-- ПОДВАЛ: результат + референсы + сроки -->
+        <!-- ПОДВАЛ: результат + референсы + сроки (видно всегда, но для Подбора) -->
         <div class="section-title" id="referencesTitle">📦 В каком виде нужен конечный результат?</div>
         
-        <div class="field-group">
+        <div class="field-group" id="resultFormatGroup">
             <select id="result_format">
                 <option value="">-- Выберите --</option>
                 <option value="Вид в БД (выгрузка — публичный)">Вид в БД (выгрузка — публичный)</option>
@@ -286,15 +318,20 @@
     const auditSection = document.getElementById('auditSection');
     const referencesGroup = document.getElementById('referencesGroup');
     const referencesTitle = document.getElementById('referencesTitle');
+    const resultFormatGroup = document.getElementById('resultFormatGroup');
     let currentMode = 'search';
 
     function toggleReferencesField() {
         if (currentMode === 'audit') {
-            referencesGroup.style.display = 'none';
-            referencesTitle.style.display = 'none';
+            // Для аудита: скрываем общие поля результата и референсы
+            if (referencesGroup) referencesGroup.style.display = 'none';
+            if (referencesTitle) referencesTitle.style.display = 'none';
+            if (resultFormatGroup) resultFormatGroup.style.display = 'none';
         } else {
-            referencesGroup.style.display = 'block';
-            referencesTitle.style.display = 'block';
+            // Для подбора: показываем общие поля результата и референсы
+            if (referencesGroup) referencesGroup.style.display = 'block';
+            if (referencesTitle) referencesTitle.style.display = 'block';
+            if (resultFormatGroup) resultFormatGroup.style.display = 'block';
         }
     }
 
@@ -344,8 +381,6 @@
             exhibit: getValueOrEmpty('exhibit'),
             content_code: getValueOrEmpty('content_code'),
             work_type: currentMode === 'search' ? 'Подбор материалов' : 'Аудит материалов',
-            result_format: getValueOrEmpty('result_format'),
-            references: getValueOrEmpty('references'),
             notes: getValueOrEmpty('notes'),
             deadline_search: getValueOrEmpty('deadline_search'),
             deadline_editors: getValueOrEmpty('deadline_editors'),
@@ -356,6 +391,8 @@
         if (currentMode === 'search') {
             return {
                 ...baseData,
+                result_format: getValueOrEmpty('result_format'),
+                references: getValueOrEmpty('references'),
                 search_use_type: getValueOrEmpty('use_type_search'),
                 search_amount: getValueOrEmpty('amount_search'),
                 search_orientation: getValueOrEmpty('orientation_search'),
@@ -370,6 +407,7 @@
         } else {
             return {
                 ...baseData,
+                result_format: getValueOrEmpty('result_format_audit'),
                 audit_use_type: getValueOrEmpty('use_type_audit'),
                 audit_highres: getValueOrEmpty('highres_audit'),
                 audit_experts: getValueOrEmpty('experts_audit'),
@@ -396,7 +434,6 @@
         }
 
         try {
-            // Отправляем вместе с токеном Turnstile
             const response = await fetch(WEBHOOK_URL, {
                 method: "POST",
                 mode: "no-cors",
@@ -468,11 +505,12 @@
             selectValid = validateRequiredSelect('color_search', 'Цветность') && selectValid;
             selectValid = validateRequiredSelect('highres_search', 'Нужны материалы в хайрезах') && selectValid;
             selectValid = validateRequiredSelect('experts_search', 'Согласование с экспертами') && selectValid;
+            selectValid = validateRequiredSelect('result_format', 'В каком виде нужен конечный результат') && selectValid;
         } else {
             selectValid = validateRequiredSelect('use_type_audit', 'Вид использования в контенте') && selectValid;
             selectValid = validateRequiredSelect('highres_audit', 'Нужны материалы в хайрезах') && selectValid;
             selectValid = validateRequiredSelect('experts_audit', 'Согласование с экспертами') && selectValid;
-            selectValid = validateRequiredSelect('result_format', 'В каком виде нужен конечный результат') && selectValid;
+            selectValid = validateRequiredSelect('result_format_audit', 'В каком виде нужен конечный результат') && selectValid;
         }
 
         if (!selectValid) return;
