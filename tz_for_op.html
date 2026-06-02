@@ -187,12 +187,12 @@
 
             <div class="field-group">
                 <label>🎯 Тематика нужных материалов</label>
-                <textarea id="topics" rows="5" placeholder="Например:&#10;- Пляжи Ялты того времени&#10;- Набережная Ялты&#10;- Известные Ялтинские санатории&#10;- Архитектура курорта&#10;- Повседневная жизнь отдыхающих"></textarea>
+                <textarea id="topics" rows="4" placeholder="Например:&#10;- Пляжи Ялты того времени&#10;- Набережная Ялты&#10;- Известные Ялтинские санатории"></textarea>
             </div>
 
             <div class="field-group">
                 <label>🎭 Драматургия <span class="hint">Что нужно передать, какая атмосфера</span></label>
-                <textarea id="dramaturgy" rows="5" placeholder="Например: подберите фотографии, отражающие отдых в Ялте до революции..."></textarea>
+                <textarea id="dramaturgy" rows="3" placeholder="Например: подберите фотографии, отражающие отдых в Ялте до революции..."></textarea>
             </div>
         </div>
 
@@ -299,7 +299,9 @@
         </div>
 
         <!-- Cloudflare Turnstile -->
-        <div class="cf-turnstile" data-sitekey="0x4AAAAAADdnWhFDC656qeAi" data-theme="light"></div>
+        <div style="display: flex; justify-content: center; margin: 10px 0;">
+            <div class="cf-turnstile" data-sitekey="0x4AAAAAADdnWhFDC656qeAi" data-theme="light"></div>
+        </div>
 
         <button type="button" class="submit-btn" id="submitBtn">✈️ Отправить ТЗ</button>
         <div id="resultMessage" class="message" style="display: none;"></div>
