@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>ТЗ на подбор материалов</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 <body>
 
@@ -19,24 +20,28 @@
     <div class="page-header">
         <h1>📋 Техническое задание</h1>
         <p>На подбор материалов</p>
+        <div class="info" style="background: rgba(255,255,255,0.15); margin-top: 12px; padding: 8px; border-radius: 12px;">
+            📌 <strong>Подбор</strong> — поиск фото, изо, видео и аудио материалов для различных проектов.<br>
+            📌 <strong>Аудит</strong> — проверка на возможность правомерного использования материалов в проекте
+        </div>
     </div>
     <div class="content">
         <!-- ОСНОВНАЯ ИНФОРМАЦИЯ -->
         <div class="section-title">📌 Основная информация</div>
         
         <div class="field-group">
-            <label>🏷️ Тема ТЗ <span class="hint" style="color: #e53e3e;">* обязательное поле</span></label>
+            <label>🏷️ Тема ТЗ <span style="color: #e53e3e;">*</span></label>
             <input type="text" id="topic" placeholder="Введите тему технического задания" required>
         </div>
         
         <div class="row-2">
             <div class="field-group">
-                <label>📅 Дата задания</label>
-                <input type="date" id="task_date">
+                <label>📅 Дата задания <span style="color: #e53e3e;">*</span></label>
+                <input type="date" id="task_date" required>
             </div>
             <div class="field-group">
-                <label>🏗️ Проект <span class="hint">Например, Музей Крыма и Новороссии</span></label>
-                <input type="text" id="project" placeholder="Введите название проекта">
+                <label>🏗️ Проект <span style="color: #e53e3e;">*</span> <span class="hint">Например, Музей Крыма и Новороссии</span></label>
+                <input type="text" id="project" placeholder="Введите название проекта" required>
             </div>
         </div>
 
@@ -51,8 +56,8 @@
                 </select>
             </div>
             <div class="field-group">
-                <label>✍️ Автор ТЗ <span class="hint">К кому обращаться с вопросами</span></label>
-                <input type="text" id="author" placeholder="ФИО, должность">
+                <label>✍️ Автор ТЗ <span style="color: #e53e3e;">*</span> <span class="hint">К кому обращаться с вопросами</span></label>
+                <input type="text" id="author" placeholder="ФИО, должность" required>
             </div>
         </div>
 
@@ -150,8 +155,8 @@
             </div>
 
             <div class="field-group">
-                <label>📁 Тип материалов <span class="hint">Фото, видео, аудио, рисунки, хроника, реконструкция и т.д.</span></label>
-                <input type="text" id="material_type_search" placeholder="Например: фото, видео">
+                <label>📁 Тип материалов <span style="color: #e53e3e;">*</span> <span class="hint">Фото, видео, аудио, рисунки, хроника, реконструкция и т.д.</span></label>
+                <input type="text" id="material_type_search" placeholder="Например: фото, видео" required>
             </div>
 
             <div class="section-subtitle">📖 Смысловая информация</div>
@@ -163,12 +168,12 @@
 
             <div class="field-group">
                 <label>🎯 Тематика нужных материалов</label>
-                <textarea id="topics" rows="5" placeholder="Например:&#10;- Пляжи Ялты того времени&#10;- Набережная Ялты&#10;- Известные Ялтинские санатории"></textarea>
+                <textarea id="topics" rows="5" placeholder="Например:&#10;- Пляжи Ялты того времени&#10;- Набережная Ялты&#10;- Известные Ялтинские санатории&#10;- Архитектура курорта&#10;- Повседневная жизнь отдыхающих"></textarea>
             </div>
 
             <div class="field-group">
                 <label>🎭 Драматургия <span class="hint">Что нужно передать, какая атмосфера</span></label>
-                <textarea id="dramaturgy" rows="5" placeholder="Например: подберите фотографии, отражающие отдых в Ялте до революции. Они должны передавать атмосферу радостного курорта на берегу моря. Люди на фотографиях должны быть расслаблены, с улыбками на лицах.&#10;Цель — создать контент, вызывающий ассоциации с радостной и беззаботной атмосферой отдыха в дореволюционной Ялте."></textarea>
+                <textarea id="dramaturgy" rows="5" placeholder="Например: подберите фотографии, отражающие отдых в Ялте до революции. Они должны передавать атмосферу радостного курорта на берегу моря. Люди на фотографиях должны быть расслаблены, с улыбками на лицах.&#10;&#10;Цель — создать контент, вызывающий ассоциации с радостной и беззаботной атмосферой отдыха в дореволюционной Ялте."></textarea>
             </div>
         </div>
 
@@ -209,8 +214,8 @@
                     </select>
                 </div>
                 <div class="field-group">
-                    <label>📁 Тип материалов <span class="hint">Фото, видео, аудио, рисунки и т.д.</span></label>
-                    <input type="text" id="material_type_audit" placeholder="Например: фото, видео">
+                    <label>📁 Тип материалов <span style="color: #e53e3e;">*</span> <span class="hint">Фото, видео, аудио, рисунки и т.д.</span></label>
+                    <input type="text" id="material_type_audit" placeholder="Например: фото, видео" required>
                 </div>
             </div>
 
@@ -261,10 +266,13 @@
             <input type="date" id="deadline_experts">
         </div>
 
+        <!-- Cloudflare Turnstile -->
+        <div class="cf-turnstile" data-sitekey="0x4AAAAAADdnWhFDC656qeAi" data-theme="light"></div>
+
         <button type="button" class="submit-btn" id="submitBtn">✈️ Отправить ТЗ</button>
         <div id="resultMessage" class="message" style="display: none;"></div>
         <div class="info">
-            ⚡ Поля, отмеченные *, обязательны для заполнения. Данные отправляются через Google Apps Script → Бипиум.
+            ⚡ Поля, отмеченные <span style="color: #e53e3e;">*</span>, обязательны для заполнения. Данные отправляются через Google Apps Script → Бипиум.
         </div>
     </div>
 </div>
@@ -321,8 +329,8 @@
     }
 
     function getValueOrEmpty(elementId) {
-        const value = document.getElementById(elementId)?.value;
-        return value && value !== "" ? value : "";
+        const element = document.getElementById(elementId);
+        return element ? element.value : "";
     }
 
     function collectData() {
@@ -380,7 +388,7 @@
         return true;
     }
 
-    async function sendToWebhook(payload) {
+    async function sendToWebhook(payload, turnstileToken) {
         if (!WEBHOOK_URL) {
             showMessage("⚠️ Вебхук не настроен", "error");
             console.log("📦 Данные:", payload);
@@ -388,13 +396,17 @@
         }
 
         try {
+            // Отправляем вместе с токеном Turnstile
             const response = await fetch(WEBHOOK_URL, {
                 method: "POST",
                 mode: "no-cors",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(payload),
+                body: JSON.stringify({
+                    turnstileToken: turnstileToken,
+                    formData: payload
+                }),
             });
             
             showMessage("✅ ТЗ отправлено! Данные переданы в систему.", "success");
@@ -408,10 +420,41 @@
     }
 
     submitBtn.addEventListener("click", async () => {
-        // Обязательное поле — Тема ТЗ
+        // Получаем токен Turnstile
+        const turnstileToken = document.querySelector('[name="cf-turnstile-response"]')?.value;
+        
+        if (!turnstileToken) {
+            showMessage("Пожалуйста, подтвердите, что вы не робот (капча)", "error");
+            return;
+        }
+
+        // Проверка обязательных полей
         const topic = document.getElementById('topic').value.trim();
+        const project = document.getElementById('project').value.trim();
+        const author = document.getElementById('author').value.trim();
+        const task_date = document.getElementById('task_date').value;
+        let materialType = currentMode === 'search' 
+            ? document.getElementById('material_type_search').value.trim()
+            : document.getElementById('material_type_audit').value.trim();
+        
         if (!topic) {
             showMessage("Пожалуйста, заполните обязательное поле «Тема ТЗ»", "error");
+            return;
+        }
+        if (!project) {
+            showMessage("Пожалуйста, заполните обязательное поле «Проект»", "error");
+            return;
+        }
+        if (!author) {
+            showMessage("Пожалуйста, заполните обязательное поле «Автор ТЗ»", "error");
+            return;
+        }
+        if (!task_date) {
+            showMessage("Пожалуйста, заполните обязательное поле «Дата задания»", "error");
+            return;
+        }
+        if (!materialType) {
+            showMessage("Пожалуйста, заполните обязательное поле «Тип материалов»", "error");
             return;
         }
 
@@ -440,10 +483,15 @@
         submitBtn.innerHTML = "⏳ Отправка...";
         submitBtn.disabled = true;
 
-        await sendToWebhook(payload);
+        await sendToWebhook(payload, turnstileToken);
 
         submitBtn.innerHTML = originalText;
         submitBtn.disabled = false;
+        
+        // Сброс Turnstile после отправки
+        if (typeof turnstile !== 'undefined') {
+            turnstile.reset();
+        }
     });
 
     // Инициализация
