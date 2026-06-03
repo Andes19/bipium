@@ -66,7 +66,7 @@
 
         <div class="row-2">
             <div class="field-group">
-                <label>👥 Потребитель</label>
+                <label>👥 Потребитель <span style="color: #e53e3e;">*</span></label>
                 <select id="consumer">
                     <option value="">-- Выберите --</option>
                     <option value="Редакция">Редакция</option>
@@ -112,7 +112,7 @@
             
             <div class="row-2">
                 <div class="field-group">
-                    <label>Вид использования в контенте</label>
+                    <label>Вид использования в контенте <span style="color: #e53e3e;">*</span></label>
                     <select id="use_type_search">
                         <option value="">-- Выберите --</option>
                         <option value="Полиграфия">Полиграфия</option>
@@ -122,7 +122,7 @@
                     </select>
                 </div>
                 <div class="field-group">
-                    <label>Сколько примерно нужно материалов</label>
+                    <label>Сколько примерно нужно материалов <span style="color: #e53e3e;">*</span></label>
                     <select id="amount_search">
                         <option value="">-- Выберите --</option>
                         <option value="Минимум 20">Минимум 20</option>
@@ -134,7 +134,7 @@
 
             <div class="row-2">
                 <div class="field-group">
-                    <label>Ориентация</label>
+                    <label>Ориентация <span style="color: #e53e3e;">*</span></label>
                     <select id="orientation_search">
                         <option value="">-- Выберите --</option>
                         <option value="вертикальная">Вертикальная</option>
@@ -143,7 +143,7 @@
                     </select>
                 </div>
                 <div class="field-group">
-                    <label>Цветность</label>
+                    <label>Цветность <span style="color: #e53e3e;">*</span></label>
                     <select id="color_search">
                         <option value="">-- Выберите --</option>
                         <option value="ЧБ">Ч/Б</option>
@@ -155,7 +155,7 @@
 
             <div class="row-2">
                 <div class="field-group">
-                    <label>Нужны материалы в хайрезах</label>
+                    <label>Нужны материалы в хайрезах <span style="color: #e53e3e;">*</span></label>
                     <select id="highres_search">
                         <option value="">-- Выберите --</option>
                         <option value="да">Да, нужны</option>
@@ -164,7 +164,7 @@
                     </select>
                 </div>
                 <div class="field-group">
-                    <label>Согласование с экспертами</label>
+                    <label>Согласование с экспертами <span style="color: #e53e3e;">*</span></label>
                     <select id="experts_search">
                         <option value="">-- Выберите --</option>
                         <option value="Не требуется">Не требуется</option>
@@ -187,12 +187,12 @@
 
             <div class="field-group">
                 <label>🎯 Тематика нужных материалов</label>
-                <textarea id="topics" rows="4" placeholder="Например:&#10;- Пляжи Ялты того времени&#10;- Набережная Ялты&#10;- Известные Ялтинские санатории"></textarea>
+                <textarea id="topics" rows="5" placeholder="Например:&#10;- Пляжи Ялты того времени&#10;- Набережная Ялты&#10;- Известные Ялтинские санатории&#10;- Архитектура курорта&#10;- Повседневная жизнь отдыхающих"></textarea>
             </div>
 
             <div class="field-group">
                 <label>🎭 Драматургия <span class="hint">Что нужно передать, какая атмосфера</span></label>
-                <textarea id="dramaturgy" rows="3" placeholder="Например: подберите фотографии, отражающие отдых в Ялте до революции..."></textarea>
+                <textarea id="dramaturgy" rows="5" placeholder="Например: подберите фотографии, отражающие отдых в Ялте до революции..."></textarea>
             </div>
         </div>
 
@@ -203,7 +203,7 @@
 
             <div class="row-2">
                 <div class="field-group">
-                    <label>Вид использования в контенте</label>
+                    <label>Вид использования в контенте <span style="color: #e53e3e;">*</span></label>
                     <select id="use_type_audit">
                         <option value="">-- Выберите --</option>
                         <option value="Полиграфия">Полиграфия</option>
@@ -213,7 +213,7 @@
                     </select>
                 </div>
                 <div class="field-group">
-                    <label>Нужны материалы в хайрезах</label>
+                    <label>Нужны материалы в хайрезах <span style="color: #e53e3e;">*</span></label>
                     <select id="highres_audit">
                         <option value="">-- Выберите --</option>
                         <option value="да">Да, нужны</option>
@@ -225,7 +225,7 @@
 
             <div class="row-2">
                 <div class="field-group">
-                    <label>Согласование с экспертами</label>
+                    <label>Согласование с экспертами <span style="color: #e53e3e;">*</span></label>
                     <select id="experts_audit">
                         <option value="">-- Выберите --</option>
                         <option value="Не требуется">Не требуется</option>
@@ -499,8 +499,9 @@
 
         // Валидация выпадающих списков
         let selectValid = true;
-        
+
         if (currentMode === 'search') {
+            selectValid = validateRequiredSelect('consumer', 'Потребитель') && selectValid;
             selectValid = validateRequiredSelect('use_type_search', 'Вид использования в контенте') && selectValid;
             selectValid = validateRequiredSelect('amount_search', 'Сколько примерно нужно материалов') && selectValid;
             selectValid = validateRequiredSelect('orientation_search', 'Ориентация') && selectValid;
@@ -509,6 +510,7 @@
             selectValid = validateRequiredSelect('experts_search', 'Согласование с экспертами') && selectValid;
             selectValid = validateRequiredSelect('result_format', 'В каком виде нужен конечный результат') && selectValid;
         } else {
+            selectValid = validateRequiredSelect('consumer', 'Потребитель') && selectValid;
             selectValid = validateRequiredSelect('use_type_audit', 'Вид использования в контенте') && selectValid;
             selectValid = validateRequiredSelect('highres_audit', 'Нужны материалы в хайрезах') && selectValid;
             selectValid = validateRequiredSelect('experts_audit', 'Согласование с экспертами') && selectValid;
