@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Техническое задание | Декорации и шкафы</title>
-    <!-- Google Fonts & modern reset -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
     <style>
         * {
@@ -20,22 +19,18 @@
             color: #0f172a;
         }
 
-        /* main container */
         .container {
             max-width: 1280px;
             margin: 0 auto;
         }
 
-        /* карточка */
         .form-card {
             background: #ffffff;
             border-radius: 32px;
             box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.02);
             overflow: hidden;
-            transition: all 0.2s ease;
         }
 
-        /* хедер с переключателем */
         .toggle-header {
             padding: 1.5rem 2rem 0.75rem 2rem;
             border-bottom: 1px solid #e9eef3;
@@ -71,9 +66,9 @@
             border: none;
             background: transparent;
             cursor: pointer;
-            transition: all 0.2s ease;
             font-family: 'Inter', sans-serif;
             color: #334155;
+            transition: all 0.2s ease;
         }
 
         .toggle-btn.active {
@@ -83,12 +78,10 @@
             border: 0.5px solid #e2e8f0;
         }
 
-        /* form content */
         .form-content {
             padding: 2rem 2rem 2rem 2rem;
         }
 
-        /* grid system */
         .form-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -111,12 +104,6 @@
             text-transform: uppercase;
             letter-spacing: 0.02em;
             color: #475569;
-        }
-
-        label .required-hint {
-            font-weight: 400;
-            font-size: 0.7rem;
-            color: #94a3b8;
         }
 
         input, select, textarea {
@@ -163,13 +150,6 @@
             accent-color: #2c3e5c;
         }
 
-        .inline-row {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
         .three-cols {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
@@ -178,12 +158,6 @@
 
         .hidden {
             display: none !important;
-        }
-
-        .divider {
-            height: 1px;
-            background: #ecf3fa;
-            margin: 1rem 0 1.5rem 0;
         }
 
         .submit-area {
@@ -202,9 +176,8 @@
             font-weight: 600;
             font-size: 0.95rem;
             cursor: pointer;
-            transition: 0.2s;
             font-family: 'Inter', sans-serif;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            transition: 0.2s;
         }
 
         .btn-submit:hover {
@@ -212,14 +185,17 @@
             transform: translateY(-1px);
         }
 
-        .color-row {
+        .secondary-text {
+            font-size: 0.75rem;
+            color: #5b6e8c;
+            margin-top: 0.25rem;
+        }
+
+        .inline-row {
             display: flex;
             gap: 1rem;
             align-items: center;
             flex-wrap: wrap;
-        }
-        .color-row .color-input {
-            flex: 1;
         }
 
         @media (max-width: 760px) {
@@ -241,20 +217,6 @@
                 gap: 0.75rem;
             }
         }
-
-        .secondary-text {
-            font-size: 0.75rem;
-            color: #5b6e8c;
-            margin-top: 0.25rem;
-        }
-
-        .badge {
-            background: #f8fafc;
-            border-radius: 12px;
-            padding: 0.2rem 0.6rem;
-            font-size: 0.7rem;
-            font-weight: 500;
-        }
     </style>
 </head>
 <body>
@@ -266,7 +228,7 @@
                 <button type="button" class="toggle-btn active" data-version="short">🏛️ Декорация (короткая версия)</button>
                 <button type="button" class="toggle-btn" data-version="full">🗄️ Шкафы для сувенирной продукции</button>
             </div>
-            <p class="secondary-text" style="margin-top: 0.6rem;">Заполните необходимые поля — данные никуда не отправляются, форма для демонстрации концепции</p>
+            <p class="secondary-text" style="margin-top: 0.6rem;">Заполните необходимые поля — данные никуда не отправляются, демо-макет</p>
         </div>
 
         <div class="form-content">
@@ -276,27 +238,27 @@
                     <div class="form-grid">
                         <div class="field-group full-width">
                             <label>Название проекта</label>
-                            <input type="text" placeholder="Например: Открытие фестиваля «Свет Луны»" value="Новогодняя ярмарка 2025">
+                            <input type="text" placeholder="Например: Открытие фестиваля «Свет Луны»">
                         </div>
                         <div class="field-group">
                             <label>Количество (в случае тиражирования)</label>
-                            <input type="text" placeholder="шт., комплектов" value="2 шт.">
+                            <input type="text" placeholder="шт., комплектов">
                         </div>
                         <div class="field-group">
                             <label>Адрес проведения мероприятия</label>
-                            <input type="text" placeholder="город, улица, площадка" value="Москва, ВДНХ, павильон 55">
+                            <input type="text" placeholder="город, улица, площадка">
                         </div>
                         <div class="field-group">
                             <label>Дата начала монтажа</label>
-                            <input type="date" value="2025-12-10">
+                            <input type="date">
                         </div>
                         <div class="field-group">
                             <label>Дата сдачи площадки</label>
-                            <input type="date" value="2025-12-15">
+                            <input type="date">
                         </div>
                         <div class="field-group">
                             <label>Дата демонтажа</label>
-                            <input type="date" value="2025-12-18">
+                            <input type="date">
                         </div>
                         <div class="field-group">
                             <label>Место размещения</label>
@@ -307,7 +269,7 @@
                         </div>
                         <div class="field-group">
                             <label>Площадь застройки (м²)</label>
-                            <input type="text" placeholder="например 12.5 м²" value="18 м²">
+                            <input type="text" placeholder="например 12.5 м²">
                         </div>
                         <div class="field-group">
                             <label>Наличие 3-D модели</label>
@@ -325,7 +287,7 @@
                         </div>
                         <div class="field-group full-width">
                             <label>Специальные требования и ограничения</label>
-                            <textarea placeholder="Ограничения по высоте, материалам, требования пожарной безопасности...">Использовать только экологичные материалы, высота конструкции не более 4 метров.</textarea>
+                            <textarea placeholder="Ограничения по высоте, материалам, требования пожарной безопасности..."></textarea>
                         </div>
                     </div>
                 </form>
@@ -337,15 +299,15 @@
                     <div class="form-grid">
                         <div class="field-group">
                             <label>Название проекта</label>
-                            <input type="text" placeholder="проект" value="Центральный сувенирный маркет">
+                            <input type="text" placeholder="Название проекта / заказчика">
                         </div>
                         <div class="field-group">
                             <label>Название изделия</label>
-                            <input type="text" placeholder="модель шкафа / стеллажа" value="Витрина «Ампир» с подсветкой">
+                            <input type="text" placeholder="модель шкафа / стеллажа">
                         </div>
                         <div class="field-group">
                             <label>Количество</label>
-                            <input type="text" placeholder="количество изделий" value="4 шт.">
+                            <input type="text" placeholder="количество изделий">
                         </div>
                         <div class="field-group">
                             <label>Место размещения</label>
@@ -355,13 +317,12 @@
                             </div>
                         </div>
 
-                        <!-- размеры Ш/В/Г -->
                         <div class="field-group full-width">
-                            <label>Размер (Ширина / Высота / Глубина) в мм или см</label>
+                            <label>Размер (Ширина / Высота / Глубина)</label>
                             <div class="three-cols">
-                                <input type="text" placeholder="Ширина" value="1200 мм">
-                                <input type="text" placeholder="Высота" value="2000 мм">
-                                <input type="text" placeholder="Глубина" value="450 мм">
+                                <input type="text" placeholder="Ширина, мм/см">
+                                <input type="text" placeholder="Высота, мм/см">
+                                <input type="text" placeholder="Глубина, мм/см">
                             </div>
                         </div>
 
@@ -380,7 +341,6 @@
                             </div>
                         </div>
 
-                        <!-- Наличие подсветки + динамические поля -->
                         <div class="field-group">
                             <label>Наличие подсветки</label>
                             <div class="radio-group" id="lightingRadioGroup">
@@ -389,7 +349,6 @@
                             </div>
                         </div>
 
-                        <!-- блок, зависящий от подсветки -->
                         <div id="lightingSettings" class="full-width">
                             <div class="form-grid" style="gap: 1.2rem;">
                                 <div class="field-group">
@@ -407,39 +366,35 @@
                                         <label class="radio-option"><input type="radio" name="powerType" value="mains"> К электросети</label>
                                     </div>
                                 </div>
-                                <!-- динамические поля для типа подключения -->
                                 <div id="autonomousFields" class="field-group">
                                     <label>Время автономной работы (до подзарядки)</label>
-                                    <input type="text" placeholder="например 8 часов" value="12 часов">
+                                    <input type="text" placeholder="например 12 часов">
                                 </div>
                                 <div id="mainsFields" class="field-group hidden">
-                                    <label>Длина кабеля (м) / Цвет кабеля</label>
+                                    <label>Параметры кабеля</label>
                                     <div class="inline-row" style="gap: 1rem;">
-                                        <input type="text" placeholder="Длина, м" value="5 м" style="flex:1">
-                                        <input type="text" placeholder="Цвет кабеля" value="Чёрный" style="flex:1">
+                                        <input type="text" placeholder="Длина кабеля (м)" style="flex:1">
+                                        <input type="text" placeholder="Цвет кабеля" style="flex:1">
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Цветовая схема -->
                         <div class="field-group">
                             <label>Цвет 1, корпус</label>
-                            <div class="color-row">
-                                <input type="text" class="color-input" placeholder="RAL / Pantone / описание" value="RAL 9010 (чистый белый)">
-                            </div>
+                            <input type="text" placeholder="RAL / Pantone / описание">
                         </div>
                         <div class="field-group">
                             <label>Цвет 2, торец</label>
-                            <input type="text" placeholder="цвет торцевых частей" value="Дуб сонома">
+                            <input type="text" placeholder="цвет торцевых частей">
                         </div>
                         <div class="field-group">
                             <label>Цвет 3, полки</label>
-                            <input type="text" placeholder="цвет внутренних полок" value="Серый графит">
+                            <input type="text" placeholder="цвет внутренних полок">
                         </div>
                         <div class="field-group">
                             <label>Цвет 4, брендинг</label>
-                            <input type="text" placeholder="цвет логотипа / нанесения" value="Золотой матовый">
+                            <input type="text" placeholder="цвет логотипа / нанесения">
                         </div>
 
                         <div class="field-group">
@@ -449,13 +404,12 @@
                                 <option selected>Полуматовая (40-60%)</option>
                                 <option>Матовая (5-30%)</option>
                             </select>
-                            <span class="secondary-text">Можно указать точный % в доп. поле</span>
-                            <input type="text" placeholder="или точный процент глянца" style="margin-top: 5px;" value="55%">
+                            <input type="text" placeholder="или точный процент глянца" style="margin-top: 6px;">
                         </div>
 
                         <div class="field-group full-width">
                             <label>Специальные требования и ограничения</label>
-                            <textarea placeholder="Доп. информация, крепления, влагостойкость, встроенные замки...">Усиленные замки, влагостойкое покрытие, обязательно наличие сертификатов</textarea>
+                            <textarea placeholder="Доп. информация, крепления, влагостойкость, встроенные замки..."></textarea>
                         </div>
                     </div>
                 </form>
@@ -469,7 +423,7 @@
 </div>
 
 <script>
-    // -------- Переключение между КОРОТКОЙ и ПОЛНОЙ версией ----------
+    // Переключение версий
     const shortDiv = document.getElementById('shortVersionForm');
     const fullDiv = document.getElementById('fullVersionForm');
     const toggleBtns = document.querySelectorAll('.toggle-btn');
@@ -482,25 +436,18 @@
             shortDiv.classList.add('hidden');
             fullDiv.classList.remove('hidden');
         }
-        // активация стилей кнопок
         toggleBtns.forEach(btn => {
             const btnVer = btn.getAttribute('data-version');
-            if (btnVer === version) {
-                btn.classList.add('active');
-            } else {
-                btn.classList.remove('active');
-            }
+            if (btnVer === version) btn.classList.add('active');
+            else btn.classList.remove('active');
         });
     }
 
     toggleBtns.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            const version = btn.getAttribute('data-version');
-            setActiveVersion(version);
-        });
+        btn.addEventListener('click', () => setActiveVersion(btn.getAttribute('data-version')));
     });
 
-    // ---------- ДИНАМИЧЕСКАЯ ЛОГИКА ДЛЯ ПОЛНОЙ ВЕРСИИ (подсветка + тип питания) ----------
+    // Динамика для полной версии (подсветка и тип питания)
     const lightingYesNo = document.querySelectorAll('input[name="hasLighting"]');
     const lightingSettingsDiv = document.getElementById('lightingSettings');
     const autonomousFields = document.getElementById('autonomousFields');
@@ -509,30 +456,17 @@
 
     function toggleLightingBlock() {
         let isLighting = false;
-        for (let radio of lightingYesNo) {
-            if (radio.checked && radio.value === 'yes') {
-                isLighting = true;
-                break;
-            }
-        }
+        for (let radio of lightingYesNo) if (radio.checked && radio.value === 'yes') isLighting = true;
         if (lightingSettingsDiv) {
-            if (isLighting) {
-                lightingSettingsDiv.classList.remove('hidden');
-            } else {
-                lightingSettingsDiv.classList.add('hidden');
-            }
+            if (isLighting) lightingSettingsDiv.classList.remove('hidden');
+            else lightingSettingsDiv.classList.add('hidden');
         }
     }
 
     function togglePowerDetailFields() {
         if (!autonomousFields || !mainsFields) return;
         let selectedType = null;
-        for (let radio of powerTypeRadios) {
-            if (radio.checked) {
-                selectedType = radio.value;
-                break;
-            }
-        }
+        for (let radio of powerTypeRadios) if (radio.checked) selectedType = radio.value;
         if (selectedType === 'autonomous') {
             autonomousFields.classList.remove('hidden');
             mainsFields.classList.add('hidden');
@@ -542,68 +476,33 @@
         }
     }
 
-    // добавляем обработчики для полной версии (если элементы существуют в доме)
     function bindFullVersionEvents() {
-        if (lightingYesNo.length) {
-            lightingYesNo.forEach(radio => radio.addEventListener('change', toggleLightingBlock));
-        }
-        if (powerTypeRadios.length) {
-            powerTypeRadios.forEach(radio => radio.addEventListener('change', togglePowerDetailFields));
-        }
-        // начальное состояние
+        if (lightingYesNo.length) lightingYesNo.forEach(r => r.addEventListener('change', toggleLightingBlock));
+        if (powerTypeRadios.length) powerTypeRadios.forEach(r => r.addEventListener('change', togglePowerDetailFields));
         toggleLightingBlock();
         togglePowerDetailFields();
     }
 
-    // наблюдение за появлением динамических элементов в полной версии (при переключении формы, но они уже есть)
-    // вызываем после загрузки
-    setTimeout(() => {
-        bindFullVersionEvents();
-    }, 0);
+    // Начальная инициализация
+    bindFullVersionEvents();
 
-    // также при переключении версии, чтобы реактивно подхватывать если полная версия только что стала видимой, 
-    // но события уже навешаны, всё ок. но из-за того что скрыто/показано, state уже задан.
-    // дополнительно: следим за кликами переключения и обновляем состояния на случай, если они сбились
+    // При переключении вкладки тоже проверяем (на случай, если скрытые поля не обновились)
     const observer = new MutationObserver(() => {
         if (!fullDiv.classList.contains('hidden')) {
-            // когда полная версия показана – перепроверяем видимость блоков
             toggleLightingBlock();
             togglePowerDetailFields();
         }
     });
     observer.observe(fullDiv, { attributes: true, attributeFilter: ['class'] });
-    observer.observe(shortDiv, { attributes: true, attributeFilter: ['class'] });
 
-    // кнопка демо-отправки (без вебхуков, просто алерт)
-    const demoBtn = document.getElementById('demoSubmitBtn');
-    demoBtn.addEventListener('click', (e) => {
+    // Демо-кнопка
+    document.getElementById('demoSubmitBtn').addEventListener('click', (e) => {
         e.preventDefault();
-        // определяем активная версия
-        let active = shortDiv.classList.contains('hidden') ? 'full' : 'short';
-        let message = '';
-        if (active === 'short') {
-            const projectName = document.querySelector('#shortVersionForm input[placeholder*="Название проекта"]')?.value || 'Не указано';
-            message = `✅ Демо-режим: ТЗ (декорация) для проекта «${projectName}» готово к печати.\n(Функция отправки отключена, только макет)`;
-        } else {
-            const projectFull = document.querySelector('#fullVersionForm input[placeholder*="проект"]')?.value || 'проект';
-            const itemName = document.querySelector('#fullVersionForm input[placeholder*="модель шкафа"]')?.value || 'изделие';
-            message = `✅ Демо-режим: ТЗ на шкафы/витрины для проекта «${projectFull}»\nИзделие: ${itemName}\n(Сохранение формы не реализовано, дизайн-концепт)`;
-        }
-        alert(message);
-    });
-
-    // небольшая стилистическая доводка: для полной версии при переключении автономный/сеть работаем с появлением
-    // встроим также обработку изменения инпутов при повторных кликах (уже есть)
-    // Дополнительно, если пользователь переключит тип питания после загрузки, повторная инициализация.
-    document.addEventListener('DOMContentLoaded', () => {
-        // фикс для мобильного вида
-        bindFullVersionEvents();
-        // если поля для полной версии пересоздадутся? не пересоздаются. всё стабильно
-        // дополнительно, при инициализации полной версии если подсветка выключена по умолчанию - скроем блок (сейчас стоит Да)
-        // Для чистоты: По умолчанию стоит "Да" у подсветки, значит lightingSettings должен быть видим. все ок.
-        // но проверим радиокнопки: сейчас "Да" выбрано, блок видим.
-        // и автономный выбран, показываем автономные поля, mains скрыт.
-        // дополнительная красота: для короткой формы переключение radio никакой доп логики не требует.
+        const active = shortDiv.classList.contains('hidden') ? 'full' : 'short';
+        let msg = active === 'short' 
+            ? '✅ Демо-режим: ТЗ (декорация) готово к просмотру.\n(Отправка не настроена)'
+            : '✅ Демо-режим: ТЗ на шкафы для сувенирной продукции.\n(Форма для демонстрации дизайна)';
+        alert(msg);
     });
 </script>
 </body>
