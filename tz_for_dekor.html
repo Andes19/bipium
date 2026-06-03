@@ -3,40 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Техническое задание | Декорации и шкафы</title>
+    <title>Техническое задание | Интеграция с Битрикс24</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             background: #f1f5f9;
             font-family: 'Inter', sans-serif;
             padding: 2rem 1rem;
             color: #0f172a;
         }
-
-        .container {
-            max-width: 1280px;
-            margin: 0 auto;
-        }
-
+        .container { max-width: 1280px; margin: 0 auto; }
         .form-card {
             background: #ffffff;
             border-radius: 32px;
             box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.02);
             overflow: hidden;
         }
-
         .toggle-header {
             padding: 1.5rem 2rem 0.75rem 2rem;
             border-bottom: 1px solid #e9eef3;
             background: #ffffff;
         }
-
         .toggle-header h1 {
             font-size: 1.75rem;
             font-weight: 600;
@@ -47,7 +35,6 @@
             color: transparent;
             margin-bottom: 1.25rem;
         }
-
         .toggle-group {
             display: flex;
             gap: 0.75rem;
@@ -57,7 +44,6 @@
             width: fit-content;
             margin-bottom: 0.5rem;
         }
-
         .toggle-btn {
             padding: 0.6rem 1.6rem;
             font-weight: 600;
@@ -70,34 +56,24 @@
             color: #334155;
             transition: all 0.2s ease;
         }
-
         .toggle-btn.active {
             background: #ffffff;
             color: #0f172a;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05), 0 1px 1px rgba(0, 0, 0, 0.02);
             border: 0.5px solid #e2e8f0;
         }
-
-        .form-content {
-            padding: 2rem 2rem 2rem 2rem;
-        }
-
+        .form-content { padding: 2rem 2rem 2rem 2rem; }
         .form-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 1.5rem 2rem;
         }
-
-        .full-width {
-            grid-column: span 2;
-        }
-
+        .full-width { grid-column: span 2; }
         .field-group {
             display: flex;
             flex-direction: column;
             gap: 0.5rem;
         }
-
         .field-group label {
             font-weight: 500;
             font-size: 0.85rem;
@@ -105,7 +81,6 @@
             letter-spacing: 0.02em;
             color: #475569;
         }
-
         input, select, textarea {
             font-family: 'Inter', sans-serif;
             padding: 0.8rem 1rem;
@@ -117,17 +92,11 @@
             outline: none;
             width: 100%;
         }
-
         input:focus, select:focus, textarea:focus {
             border-color: #94a3b8;
             box-shadow: 0 0 0 3px rgba(148, 163, 184, 0.2);
         }
-
-        textarea {
-            resize: vertical;
-            min-height: 85px;
-        }
-
+        textarea { resize: vertical; min-height: 85px; }
         .radio-group {
             display: flex;
             gap: 1.5rem;
@@ -135,7 +104,6 @@
             flex-wrap: wrap;
             margin-top: 0.25rem;
         }
-
         .radio-option {
             display: flex;
             align-items: center;
@@ -143,30 +111,22 @@
             font-weight: 400;
             font-size: 0.9rem;
         }
-
-        .radio-option input {
-            width: 18px;
-            height: 18px;
-            accent-color: #2c3e5c;
-        }
-
+        .radio-option input { width: 18px; height: 18px; accent-color: #2c3e5c; }
         .three-cols {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
             gap: 1rem;
         }
-
-        .hidden {
-            display: none !important;
-        }
-
+        .hidden { display: none !important; }
         .submit-area {
             margin-top: 2rem;
             text-align: right;
             border-top: 1px solid #ecf3fa;
             padding-top: 2rem;
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
         }
-
         .btn-submit {
             background: #1e2f41;
             color: white;
@@ -179,43 +139,46 @@
             font-family: 'Inter', sans-serif;
             transition: 0.2s;
         }
-
-        .btn-submit:hover {
-            background: #0f1e2c;
-            transform: translateY(-1px);
-        }
-
+        .btn-submit:hover { background: #0f1e2c; transform: translateY(-1px); }
         .secondary-text {
             font-size: 0.75rem;
             color: #5b6e8c;
             margin-top: 0.25rem;
         }
-
         .inline-row {
             display: flex;
             gap: 1rem;
             align-items: center;
             flex-wrap: wrap;
         }
-
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: #1e293b;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 24px;
+            font-weight: 500;
+            z-index: 1000;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
+            animation: slideIn 0.3s ease;
+        }
+        .toast.error { background: #b91c1c; }
+        .toast.success { background: #166534; }
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
         @media (max-width: 760px) {
-            .form-grid {
-                grid-template-columns: 1fr;
-                gap: 1.2rem;
-            }
-            .full-width {
-                grid-column: span 1;
-            }
-            .toggle-header {
-                padding: 1.2rem 1.2rem 0.5rem 1.2rem;
-            }
-            .form-content {
-                padding: 1.5rem;
-            }
-            .three-cols {
-                grid-template-columns: 1fr;
-                gap: 0.75rem;
-            }
+            .form-grid { grid-template-columns: 1fr; gap: 1.2rem; }
+            .full-width { grid-column: span 1; }
+            .toggle-header { padding: 1.2rem 1.2rem 0.5rem 1.2rem; }
+            .form-content { padding: 1.5rem; }
+            .three-cols { grid-template-columns: 1fr; gap: 0.75rem; }
+            .submit-area { flex-direction: column; }
+            .btn-submit { width: 100%; }
+            .toast { left: 1rem; right: 1rem; bottom: 1rem; text-align: center; }
         }
     </style>
 </head>
@@ -226,209 +189,223 @@
             <h1>📋 Техническое задание на производство</h1>
             <div class="toggle-group" id="versionToggle">
                 <button type="button" class="toggle-btn active" data-version="short">🏛️ Декорация (короткая версия)</button>
-                <button type="button" class="toggle-btn" data-version="full">🗄️ Декорация (полная версия)</button>
+                <button type="button" class="toggle-btn" data-version="full">🗄️ Шкафы для сувенирной продукции</button>
             </div>
-            <p class="secondary-text" style="margin-top: 0.6rem;">Заполните необходимые поля — данные никуда не отправляются, демо-макет</p>
+            <p class="secondary-text" style="margin-top: 0.6rem;">Заполните форму — при отправке будет создана задача в вашем Битрикс24</p>
         </div>
 
         <div class="form-content">
             <!-- КОРОТКАЯ ВЕРСИЯ (Декорация) -->
             <div id="shortVersionForm">
-                <form id="tzShortForm">
-                    <div class="form-grid">
-                        <div class="field-group full-width">
-                            <label>Название проекта</label>
-                            <input type="text" placeholder="Например: Открытие фестиваля «Свет Луны»">
-                        </div>
-                        <div class="field-group">
-                            <label>Количество (в случае тиражирования)</label>
-                            <input type="text" placeholder="шт., комплектов">
-                        </div>
-                        <div class="field-group">
-                            <label>Адрес проведения мероприятия</label>
-                            <input type="text" placeholder="город, улица, площадка">
-                        </div>
-                        <div class="field-group">
-                            <label>Дата начала монтажа</label>
-                            <input type="date">
-                        </div>
-                        <div class="field-group">
-                            <label>Дата сдачи площадки</label>
-                            <input type="date">
-                        </div>
-                        <div class="field-group">
-                            <label>Дата демонтажа</label>
-                            <input type="date">
-                        </div>
-                        <div class="field-group">
-                            <label>Место размещения</label>
-                            <div class="radio-group">
-                                <label class="radio-option"><input type="radio" name="shortPlacement" value="interior" checked> Интерьер</label>
-                                <label class="radio-option"><input type="radio" name="shortPlacement" value="exterior"> Экстерьер</label>
-                            </div>
-                        </div>
-                        <div class="field-group">
-                            <label>Площадь застройки (м²)</label>
-                            <input type="text" placeholder="например 12.5 м²">
-                        </div>
-                        <div class="field-group">
-                            <label>Наличие 3-D модели</label>
-                            <div class="radio-group">
-                                <label class="radio-option"><input type="radio" name="short3d" value="yes" checked> Да</label>
-                                <label class="radio-option"><input type="radio" name="short3d" value="no"> Нет</label>
-                            </div>
-                        </div>
-                        <div class="field-group">
-                            <label>Наличие бренд-бука</label>
-                            <div class="radio-group">
-                                <label class="radio-option"><input type="radio" name="shortBrandbook" value="yes"> Да</label>
-                                <label class="radio-option"><input type="radio" name="shortBrandbook" value="no" checked> Нет</label>
-                            </div>
-                        </div>
-                        <div class="field-group full-width">
-                            <label>Специальные требования и ограничения</label>
-                            <textarea placeholder="Ограничения по высоте, материалам, требования пожарной безопасности..."></textarea>
+                <div class="form-grid">
+                    <div class="field-group full-width">
+                        <label>Название проекта *</label>
+                        <input type="text" id="shortTitle" placeholder="Например: Открытие фестиваля «Свет Луны»">
+                    </div>
+                    <div class="field-group">
+                        <label>ID постановщика (creatorId) *</label>
+                        <input type="number" id="shortCreatorId" placeholder="Ваш ID в Битрикс24">
+                    </div>
+                    <div class="field-group">
+                        <label>ID исполнителя (responsibleId) *</label>
+                        <input type="number" id="shortResponsibleId" placeholder="ID сотрудника">
+                    </div>
+                    <div class="field-group">
+                        <label>Количество (в случае тиражирования)</label>
+                        <input type="text" id="shortQuantity" placeholder="шт., комплектов">
+                    </div>
+                    <div class="field-group">
+                        <label>Адрес проведения мероприятия</label>
+                        <input type="text" id="shortAddress" placeholder="город, улица, площадка">
+                    </div>
+                    <div class="field-group">
+                        <label>Дата начала монтажа</label>
+                        <input type="date" id="shortStartDate">
+                    </div>
+                    <div class="field-group">
+                        <label>Дата сдачи площадки</label>
+                        <input type="date" id="shortFinishDate">
+                    </div>
+                    <div class="field-group">
+                        <label>Дата демонтажа</label>
+                        <input type="date" id="shortDismantleDate">
+                    </div>
+                    <div class="field-group">
+                        <label>Место размещения</label>
+                        <div class="radio-group">
+                            <label class="radio-option"><input type="radio" name="shortPlacement" value="Интерьер" checked> Интерьер</label>
+                            <label class="radio-option"><input type="radio" name="shortPlacement" value="Экстерьер"> Экстерьер</label>
                         </div>
                     </div>
-                </form>
+                    <div class="field-group">
+                        <label>Площадь застройки (м²)</label>
+                        <input type="text" id="shortArea" placeholder="например 12.5 м²">
+                    </div>
+                    <div class="field-group">
+                        <label>Наличие 3-D модели</label>
+                        <div class="radio-group">
+                            <label class="radio-option"><input type="radio" name="short3d" value="Да" checked> Да</label>
+                            <label class="radio-option"><input type="radio" name="short3d" value="Нет"> Нет</label>
+                        </div>
+                    </div>
+                    <div class="field-group">
+                        <label>Наличие бренд-бука</label>
+                        <div class="radio-group">
+                            <label class="radio-option"><input type="radio" name="shortBrandbook" value="Да"> Да</label>
+                            <label class="radio-option"><input type="radio" name="shortBrandbook" value="Нет" checked> Нет</label>
+                        </div>
+                    </div>
+                    <div class="field-group full-width">
+                        <label>Специальные требования и ограничения</label>
+                        <textarea id="shortRequirements" placeholder="Ограничения по высоте, материалам, требования пожарной безопасности..."></textarea>
+                    </div>
+                </div>
             </div>
 
             <!-- ПОЛНАЯ ВЕРСИЯ (Шкафы для сувенирной продукции) -->
             <div id="fullVersionForm" class="hidden">
-                <form id="tzFullForm">
-                    <div class="form-grid">
-                        <div class="field-group">
-                            <label>Название проекта</label>
-                            <input type="text" placeholder="Название проекта / заказчика">
-                        </div>
-                        <div class="field-group">
-                            <label>Название изделия</label>
-                            <input type="text" placeholder="модель шкафа / стеллажа">
-                        </div>
-                        <div class="field-group">
-                            <label>Количество</label>
-                            <input type="text" placeholder="количество изделий">
-                        </div>
-                        <div class="field-group">
-                            <label>Место размещения</label>
-                            <div class="radio-group">
-                                <label class="radio-option"><input type="radio" name="fullPlacement" value="interior" checked> Интерьер</label>
-                                <label class="radio-option"><input type="radio" name="fullPlacement" value="exterior"> Экстерьер</label>
-                            </div>
-                        </div>
-
-                        <div class="field-group full-width">
-                            <label>Размер (Ширина / Высота / Глубина)</label>
-                            <div class="three-cols">
-                                <input type="text" placeholder="Ширина, мм/см">
-                                <input type="text" placeholder="Высота, мм/см">
-                                <input type="text" placeholder="Глубина, мм/см">
-                            </div>
-                        </div>
-
-                        <div class="field-group">
-                            <label>Наличие 3-D модели</label>
-                            <div class="radio-group">
-                                <label class="radio-option"><input type="radio" name="full3d" value="yes" checked> Да</label>
-                                <label class="radio-option"><input type="radio" name="full3d" value="no"> Нет</label>
-                            </div>
-                        </div>
-                        <div class="field-group">
-                            <label>Наличие векторного файла брендинга</label>
-                            <div class="radio-group">
-                                <label class="radio-option"><input type="radio" name="fullVectorBrand" value="yes"> Да</label>
-                                <label class="radio-option"><input type="radio" name="fullVectorBrand" value="no" checked> Нет</label>
-                            </div>
-                        </div>
-
-                        <div class="field-group">
-                            <label>Наличие подсветки</label>
-                            <div class="radio-group" id="lightingRadioGroup">
-                                <label class="radio-option"><input type="radio" name="hasLighting" value="yes" checked> Да</label>
-                                <label class="radio-option"><input type="radio" name="hasLighting" value="no"> Нет</label>
-                            </div>
-                        </div>
-
-                        <div id="lightingSettings" class="full-width">
-                            <div class="form-grid" style="gap: 1.2rem;">
-                                <div class="field-group">
-                                    <label>Световая температура подсветки</label>
-                                    <select>
-                                        <option value="warm">Тёплая (2000-3500 К)</option>
-                                        <option value="day" selected>Дневная (3500-5000 К)</option>
-                                        <option value="cold">Холодная (5500-7500 К)</option>
-                                    </select>
-                                </div>
-                                <div class="field-group">
-                                    <label>Тип электроподключения</label>
-                                    <div class="radio-group" id="powerTypeGroup">
-                                        <label class="radio-option"><input type="radio" name="powerType" value="autonomous" checked> Автономный</label>
-                                        <label class="radio-option"><input type="radio" name="powerType" value="mains"> К электросети</label>
-                                    </div>
-                                </div>
-                                <div id="autonomousFields" class="field-group">
-                                    <label>Время автономной работы (до подзарядки)</label>
-                                    <input type="text" placeholder="например 12 часов">
-                                </div>
-                                <div id="mainsFields" class="field-group hidden">
-                                    <label>Параметры кабеля</label>
-                                    <div class="inline-row" style="gap: 1rem;">
-                                        <input type="text" placeholder="Длина кабеля (м)" style="flex:1">
-                                        <input type="text" placeholder="Цвет кабеля" style="flex:1">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="field-group">
-                            <label>Цвет 1, корпус</label>
-                            <input type="text" placeholder="RAL / Pantone / описание">
-                        </div>
-                        <div class="field-group">
-                            <label>Цвет 2, торец</label>
-                            <input type="text" placeholder="цвет торцевых частей">
-                        </div>
-                        <div class="field-group">
-                            <label>Цвет 3, полки</label>
-                            <input type="text" placeholder="цвет внутренних полок">
-                        </div>
-                        <div class="field-group">
-                            <label>Цвет 4, брендинг</label>
-                            <input type="text" placeholder="цвет логотипа / нанесения">
-                        </div>
-
-                        <div class="field-group">
-                            <label>Степень глянца поверхности</label>
-                            <select>
-                                <option>Глянцевая (80-100%)</option>
-                                <option selected>Полуматовая (40-60%)</option>
-                                <option>Матовая (5-30%)</option>
-                            </select>
-                            <input type="text" placeholder="или точный процент глянца" style="margin-top: 6px;">
-                        </div>
-
-                        <div class="field-group full-width">
-                            <label>Специальные требования и ограничения</label>
-                            <textarea placeholder="Доп. информация, крепления, влагостойкость, встроенные замки..."></textarea>
+                <div class="form-grid">
+                    <div class="field-group">
+                        <label>Название проекта *</label>
+                        <input type="text" id="fullProjectName" placeholder="Название проекта / заказчика">
+                    </div>
+                    <div class="field-group">
+                        <label>Название изделия *</label>
+                        <input type="text" id="fullItemName" placeholder="модель шкафа / стеллажа">
+                    </div>
+                    <div class="field-group">
+                        <label>ID постановщика (creatorId) *</label>
+                        <input type="number" id="fullCreatorId" placeholder="Ваш ID в Битрикс24">
+                    </div>
+                    <div class="field-group">
+                        <label>ID исполнителя (responsibleId) *</label>
+                        <input type="number" id="fullResponsibleId" placeholder="ID сотрудника">
+                    </div>
+                    <div class="field-group">
+                        <label>Количество</label>
+                        <input type="text" id="fullQuantity" placeholder="количество изделий">
+                    </div>
+                    <div class="field-group">
+                        <label>Место размещения</label>
+                        <div class="radio-group">
+                            <label class="radio-option"><input type="radio" name="fullPlacement" value="Интерьер" checked> Интерьер</label>
+                            <label class="radio-option"><input type="radio" name="fullPlacement" value="Экстерьер"> Экстерьер</label>
                         </div>
                     </div>
-                </form>
+                    <div class="field-group full-width">
+                        <label>Размер (Ширина / Высота / Глубина)</label>
+                        <div class="three-cols">
+                            <input type="text" id="fullWidth" placeholder="Ширина, мм/см">
+                            <input type="text" id="fullHeight" placeholder="Высота, мм/см">
+                            <input type="text" id="fullDepth" placeholder="Глубина, мм/см">
+                        </div>
+                    </div>
+                    <div class="field-group">
+                        <label>Наличие 3-D модели</label>
+                        <div class="radio-group">
+                            <label class="radio-option"><input type="radio" name="full3d" value="Да" checked> Да</label>
+                            <label class="radio-option"><input type="radio" name="full3d" value="Нет"> Нет</label>
+                        </div>
+                    </div>
+                    <div class="field-group">
+                        <label>Наличие векторного файла брендинга</label>
+                        <div class="radio-group">
+                            <label class="radio-option"><input type="radio" name="fullVectorBrand" value="Да"> Да</label>
+                            <label class="radio-option"><input type="radio" name="fullVectorBrand" value="Нет" checked> Нет</label>
+                        </div>
+                    </div>
+                    <div class="field-group">
+                        <label>Наличие подсветки</label>
+                        <div class="radio-group" id="lightingRadioGroup">
+                            <label class="radio-option"><input type="radio" name="hasLighting" value="yes" checked> Да</label>
+                            <label class="radio-option"><input type="radio" name="hasLighting" value="no"> Нет</label>
+                        </div>
+                    </div>
+                    <div id="lightingSettings" class="full-width">
+                        <div class="form-grid" style="gap: 1.2rem;">
+                            <div class="field-group">
+                                <label>Световая температура подсветки</label>
+                                <select id="lightTemp">
+                                    <option value="Тёплая (2000-3500 К)">Тёплая (2000-3500 К)</option>
+                                    <option value="Дневная (3500-5000 К)" selected>Дневная (3500-5000 К)</option>
+                                    <option value="Холодная (5500-7500 К)">Холодная (5500-7500 К)</option>
+                                </select>
+                            </div>
+                            <div class="field-group">
+                                <label>Тип электроподключения</label>
+                                <div class="radio-group" id="powerTypeGroup">
+                                    <label class="radio-option"><input type="radio" name="powerType" value="Автономный" checked> Автономный</label>
+                                    <label class="radio-option"><input type="radio" name="powerType" value="К электросети"> К электросети</label>
+                                </div>
+                            </div>
+                            <div id="autonomousFields" class="field-group">
+                                <label>Время автономной работы (до подзарядки)</label>
+                                <input type="text" id="autonomousTime" placeholder="например 12 часов">
+                            </div>
+                            <div id="mainsFields" class="field-group hidden">
+                                <label>Параметры кабеля</label>
+                                <div class="inline-row" style="gap: 1rem;">
+                                    <input type="text" id="cableLength" placeholder="Длина кабеля (м)" style="flex:1">
+                                    <input type="text" id="cableColor" placeholder="Цвет кабеля" style="flex:1">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field-group">
+                        <label>Цвет 1, корпус</label>
+                        <input type="text" id="colorBody" placeholder="RAL / Pantone / описание">
+                    </div>
+                    <div class="field-group">
+                        <label>Цвет 2, торец</label>
+                        <input type="text" id="colorEdge" placeholder="цвет торцевых частей">
+                    </div>
+                    <div class="field-group">
+                        <label>Цвет 3, полки</label>
+                        <input type="text" id="colorShelves" placeholder="цвет внутренних полок">
+                    </div>
+                    <div class="field-group">
+                        <label>Цвет 4, брендинг</label>
+                        <input type="text" id="colorBranding" placeholder="цвет логотипа / нанесения">
+                    </div>
+                    <div class="field-group">
+                        <label>Степень глянца поверхности</label>
+                        <select id="glossLevel">
+                            <option>Глянцевая (80-100%)</option>
+                            <option selected>Полуматовая (40-60%)</option>
+                            <option>Матовая (5-30%)</option>
+                        </select>
+                        <input type="text" id="glossExact" placeholder="или точный процент глянца" style="margin-top: 6px;">
+                    </div>
+                    <div class="field-group full-width">
+                        <label>Специальные требования и ограничения</label>
+                        <textarea id="fullRequirements" placeholder="Доп. информация, крепления, влагостойкость, встроенные замки..."></textarea>
+                    </div>
+                </div>
             </div>
 
             <div class="submit-area">
-                <button class="btn-submit" id="demoSubmitBtn">📄 Сформировать ТЗ (демо-режим)</button>
+                <button class="btn-submit" id="demoSubmitBtn">📄 Создать задачу в Битрикс24</button>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    // Переключение версий
+    // ============================================================
+    // НАСТРОЙКА: ВСТАВЬТЕ ВАШ URL ВЕБХУКА ОТСЮДА
+    // Пример: https://ваш_портал.bitrix24.ru/rest/1/ваш_секретный_код/
+    // ============================================================
+    const BITRIX24_WEBHOOK_URL = 'https://ваш_портал.bitrix24.ru/rest/1/ваш_секретный_код/';
+    // ============================================================
+
+    // --- Переключение версий ---
     const shortDiv = document.getElementById('shortVersionForm');
     const fullDiv = document.getElementById('fullVersionForm');
     const toggleBtns = document.querySelectorAll('.toggle-btn');
+    let currentVersion = 'short';
 
     function setActiveVersion(version) {
+        currentVersion = version;
         if (version === 'short') {
             shortDiv.classList.remove('hidden');
             fullDiv.classList.add('hidden');
@@ -447,7 +424,7 @@
         btn.addEventListener('click', () => setActiveVersion(btn.getAttribute('data-version')));
     });
 
-    // Динамика для полной версии (подсветка и тип питания)
+    // --- Динамика для полной версии (подсветка) ---
     const lightingYesNo = document.querySelectorAll('input[name="hasLighting"]');
     const lightingSettingsDiv = document.getElementById('lightingSettings');
     const autonomousFields = document.getElementById('autonomousFields');
@@ -467,43 +444,165 @@
         if (!autonomousFields || !mainsFields) return;
         let selectedType = null;
         for (let radio of powerTypeRadios) if (radio.checked) selectedType = radio.value;
-        if (selectedType === 'autonomous') {
+        if (selectedType === 'Автономный') {
             autonomousFields.classList.remove('hidden');
             mainsFields.classList.add('hidden');
-        } else if (selectedType === 'mains') {
+        } else if (selectedType === 'К электросети') {
             autonomousFields.classList.add('hidden');
             mainsFields.classList.remove('hidden');
         }
     }
 
-    function bindFullVersionEvents() {
-        if (lightingYesNo.length) lightingYesNo.forEach(r => r.addEventListener('change', toggleLightingBlock));
-        if (powerTypeRadios.length) powerTypeRadios.forEach(r => r.addEventListener('change', togglePowerDetailFields));
-        toggleLightingBlock();
-        togglePowerDetailFields();
+    if (lightingYesNo.length) lightingYesNo.forEach(r => r.addEventListener('change', toggleLightingBlock));
+    if (powerTypeRadios.length) powerTypeRadios.forEach(r => r.addEventListener('change', togglePowerDetailFields));
+    toggleLightingBlock();
+    togglePowerDetailFields();
+
+    // --- Функция показа уведомлений ---
+    function showToast(message, isError = false) {
+        const existingToast = document.querySelector('.toast');
+        if (existingToast) existingToast.remove();
+        const toast = document.createElement('div');
+        toast.className = `toast ${isError ? 'error' : 'success'}`;
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 5000);
     }
 
-    // Начальная инициализация
-    bindFullVersionEvents();
-
-    // При переключении вкладки тоже проверяем (на случай, если скрытые поля не обновились)
-    const observer = new MutationObserver(() => {
-        if (!fullDiv.classList.contains('hidden')) {
-            toggleLightingBlock();
-            togglePowerDetailFields();
+    // --- Функция отправки задачи в Битрикс24 ---
+    async function createBitrixTask(taskTitle, taskDescription, creatorId, responsibleId) {
+        if (!BITRIX24_WEBHOOK_URL || BITRIX24_WEBHOOK_URL.includes('ваш_портал') || BITRIX24_WEBHOOK_URL.includes('ваш_секретный_код')) {
+            showToast('⚠️ Ошибка: не настроен URL вебхука. Укажите его в переменной BITRIX24_WEBHOOK_URL в коде страницы.', true);
+            return false;
         }
-    });
-    observer.observe(fullDiv, { attributes: true, attributeFilter: ['class'] });
+        if (!creatorId || !responsibleId) {
+            showToast('❌ Ошибка: укажите ID постановщика и исполнителя (цифровые ID сотрудников в Битрикс24)', true);
+            return false;
+        }
+        if (!taskTitle || taskTitle.trim() === '') {
+            showToast('❌ Ошибка: укажите название проекта / задачи', true);
+            return false;
+        }
 
-    // Демо-кнопка
-    document.getElementById('demoSubmitBtn').addEventListener('click', (e) => {
-        e.preventDefault();
-        const active = shortDiv.classList.contains('hidden') ? 'full' : 'short';
-        let msg = active === 'short' 
-            ? '✅ Демо-режим: ТЗ (декорация) готово к просмотру.\n(Отправка не настроена)'
-            : '✅ Демо-режим: ТЗ на шкафы для сувенирной продукции.\n(Форма для демонстрации дизайна)';
-        alert(msg);
-    });
-</script>
-</body>
-</html>
+        const url = `${BITRIX24_WEBHOOK_URL}tasks.task.add`;
+        const payload = {
+            fields: {
+                TITLE: taskTitle,
+                DESCRIPTION: taskDescription,
+                CREATED_BY: parseInt(creatorId),
+                RESPONSIBLE_ID: parseInt(responsibleId)
+            }
+        };
+
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const data = await response.json();
+            if (data.error) {
+                showToast(`❌ Ошибка Битрикс24: ${data.error_description || data.error}`, true);
+                console.error('Bitrix24 error:', data);
+                return false;
+            }
+            const taskId = data.result?.task?.id || data.result?.id;
+            showToast(`✅ Задача успешно создана! ID задачи: ${taskId}. Откройте Битрикс24.`);
+            return true;
+        } catch (err) {
+            showToast(`❌ Ошибка сети: ${err.message}`, true);
+            console.error(err);
+            return false;
+        }
+    }
+
+    // --- Сбор данных и создание задачи ---
+    document.getElementById('demoSubmitBtn').addEventListener('click', async () => {
+        let taskTitle = '';
+        let taskDescription = '';
+        let creatorId = '';
+        let responsibleId = '';
+
+        if (currentVersion === 'short') {
+            // Короткая версия (декорация)
+            const projectName = document.getElementById('shortTitle').value;
+            const quantity = document.getElementById('shortQuantity').value;
+            const address = document.getElementById('shortAddress').value;
+            const startDate = document.getElementById('shortStartDate').value;
+            const finishDate = document.getElementById('shortFinishDate').value;
+            const dismantleDate = document.getElementById('shortDismantleDate').value;
+            const placement = document.querySelector('input[name="shortPlacement"]:checked')?.value || '';
+            const area = document.getElementById('shortArea').value;
+            const has3d = document.querySelector('input[name="short3d"]:checked')?.value || '';
+            const hasBrandbook = document.querySelector('input[name="shortBrandbook"]:checked')?.value || '';
+            const requirements = document.getElementById('shortRequirements').value;
+
+            taskTitle = projectName ? `ТЗ: ${projectName}` : 'Техническое задание (декорация)';
+            creatorId = document.getElementById('shortCreatorId').value;
+            responsibleId = document.getElementById('shortResponsibleId').value;
+
+            taskDescription = `📋 Техническое задание на производство декорации\n\n`;
+            if (projectName) taskDescription += `🏷️ Проект: ${projectName}\n`;
+            if (quantity) taskDescription += `📦 Количество: ${quantity}\n`;
+            if (address) taskDescription += `📍 Адрес: ${address}\n`;
+            if (startDate) taskDescription += `📅 Монтаж с: ${startDate}\n`;
+            if (finishDate) taskDescription += `✅ Сдача площадки: ${finishDate}\n`;
+            if (dismantleDate) taskDescription += `🔨 Демонтаж: ${dismantleDate}\n`;
+            if (placement) taskDescription += `🏠 Место размещения: ${placement}\n`;
+            if (area) taskDescription += `📐 Площадь застройки: ${area}\n`;
+            if (has3d) taskDescription += `🖥️ 3D модель: ${has3d}\n`;
+            if (hasBrandbook) taskDescription += `📘 Бренд-бук: ${hasBrandbook}\n`;
+            if (requirements) taskDescription += `\n⚠️ Спецтребования:\n${requirements}\n`;
+        } 
+        else {
+            // Полная версия (шкафы)
+            const projectName = document.getElementById('fullProjectName').value;
+            const itemName = document.getElementById('fullItemName').value;
+            const quantity = document.getElementById('fullQuantity').value;
+            const placement = document.querySelector('input[name="fullPlacement"]:checked')?.value || '';
+            const width = document.getElementById('fullWidth').value;
+            const height = document.getElementById('fullHeight').value;
+            const depth = document.getElementById('fullDepth').value;
+            const has3d = document.querySelector('input[name="full3d"]:checked')?.value || '';
+            const hasVector = document.querySelector('input[name="fullVectorBrand"]:checked')?.value || '';
+            
+            // Подсветка
+            const hasLighting = document.querySelector('input[name="hasLighting"]:checked')?.value === 'yes' ? 'Да' : 'Нет';
+            const lightTemp = document.getElementById('lightTemp')?.value || '';
+            const powerType = document.querySelector('input[name="powerType"]:checked')?.value || '';
+            const autonomousTime = document.getElementById('autonomousTime')?.value || '';
+            const cableLength = document.getElementById('cableLength')?.value || '';
+            const cableColor = document.getElementById('cableColor')?.value || '';
+            
+            // Цвета
+            const colorBody = document.getElementById('colorBody').value;
+            const colorEdge = document.getElementById('colorEdge').value;
+            const colorShelves = document.getElementById('colorShelves').value;
+            const colorBranding = document.getElementById('colorBranding').value;
+            const glossLevel = document.getElementById('glossLevel').value;
+            const glossExact = document.getElementById('glossExact').value;
+            const requirements = document.getElementById('fullRequirements').value;
+
+            taskTitle = projectName ? `ТЗ: ${projectName} — ${itemName || 'шкаф'}` : `ТЗ на шкафы (${itemName || 'изделие'})`;
+            creatorId = document.getElementById('fullCreatorId').value;
+            responsibleId = document.getElementById('fullResponsibleId').value;
+
+            taskDescription = `🗄️ Техническое задание на производство шкафов для сувенирной продукции\n\n`;
+            if (projectName) taskDescription += `🏷️ Проект: ${projectName}\n`;
+            if (itemName) taskDescription += `📦 Изделие: ${itemName}\n`;
+            if (quantity) taskDescription += `🔢 Количество: ${quantity}\n`;
+            if (placement) taskDescription += `🏠 Размещение: ${placement}\n`;
+            if (width || height || depth) taskDescription += `📏 Размеры (Ш/В/Г): ${width || '?'} × ${height || '?'} × ${depth || '?'}\n`;
+            if (has3d) taskDescription += `🖥️ 3D-модель: ${has3d}\n`;
+            if (hasVector) taskDescription += `🎨 Векторный брендинг: ${hasVector}\n`;
+            if (hasLighting === 'Да') {
+                taskDescription += `💡 Подсветка: ${hasLighting}\n`;
+                if (lightTemp) taskDescription += `   🌡️ Температура: ${lightTemp}\n`;
+                if (powerType) taskDescription += `   🔌 Питание: ${powerType}\n`;
+                if (powerType === 'Автономный' && autonomousTime) taskDescription += `   ⏱️ Автономность: ${autonomousTime}\n`;
+                if (powerType === 'К электросети' && (cableLength || cableColor)) taskDescription += `   🔌 Кабель: ${cableLength || ''} ${cableColor ? `, цвет ${cableColor}` : ''}\n`;
+            } else {
+                taskDescription += `💡 Подсветка: нет\n`;
+            }
+            if (colorBody) taskDescription += `🎨 Цвет корпуса: ${colorBody}\n`;
+            if (colorEdge) taskDescription += `🎨 Цвет торца: ${
