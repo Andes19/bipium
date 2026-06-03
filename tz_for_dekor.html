@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Техническое задание | Интеграция с Битрикс24</title>
+    <title>Техническое задание | Декорация</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -186,10 +186,10 @@
 <div class="container">
     <div class="form-card">
         <div class="toggle-header">
-            <h1>📋 Техническое задание на производство</h1>
+            <h1>📋 Техническое задание на производство декорации</h1>
             <div class="toggle-group" id="versionToggle">
-                <button type="button" class="toggle-btn active" data-version="short">🏛️ Декорация (короткая версия)</button>
-                <button type="button" class="toggle-btn" data-version="full">🗄️ Шкафы для сувенирной продукции</button>
+                <button type="button" class="toggle-btn active" data-version="short">🎭 Короткая версия</button>
+                <button type="button" class="toggle-btn" data-version="full">🏛️ Полная версия</button>
             </div>
             <p class="secondary-text" style="margin-top: 0.6rem;">Заполните форму — при отправке будет создана задача в вашем Битрикс24</p>
         </div>
@@ -262,16 +262,12 @@
                 </div>
             </div>
 
-            <!-- ПОЛНАЯ ВЕРСИЯ (Шкафы для сувенирной продукции) -->
+            <!-- ПОЛНАЯ ВЕРСИЯ (Декорация) -->
             <div id="fullVersionForm" class="hidden">
                 <div class="form-grid">
-                    <div class="field-group">
+                    <div class="field-group full-width">
                         <label>Название проекта *</label>
-                        <input type="text" id="fullProjectName" placeholder="Название проекта / заказчика">
-                    </div>
-                    <div class="field-group">
-                        <label>Название изделия *</label>
-                        <input type="text" id="fullItemName" placeholder="модель шкафа / стеллажа">
+                        <input type="text" id="fullTitle" placeholder="Например: Открытие фестиваля «Свет Луны»">
                     </div>
                     <div class="field-group">
                         <label>ID постановщика (creatorId) *</label>
@@ -282,8 +278,24 @@
                         <input type="number" id="fullResponsibleId" placeholder="ID сотрудника">
                     </div>
                     <div class="field-group">
-                        <label>Количество</label>
-                        <input type="text" id="fullQuantity" placeholder="количество изделий">
+                        <label>Количество (в случае тиражирования)</label>
+                        <input type="text" id="fullQuantity" placeholder="шт., комплектов">
+                    </div>
+                    <div class="field-group">
+                        <label>Адрес проведения мероприятия</label>
+                        <input type="text" id="fullAddress" placeholder="город, улица, площадка">
+                    </div>
+                    <div class="field-group">
+                        <label>Дата начала монтажа</label>
+                        <input type="date" id="fullStartDate">
+                    </div>
+                    <div class="field-group">
+                        <label>Дата сдачи площадки</label>
+                        <input type="date" id="fullFinishDate">
+                    </div>
+                    <div class="field-group">
+                        <label>Дата демонтажа</label>
+                        <input type="date" id="fullDismantleDate">
                     </div>
                     <div class="field-group">
                         <label>Место размещения</label>
@@ -292,13 +304,9 @@
                             <label class="radio-option"><input type="radio" name="fullPlacement" value="Экстерьер"> Экстерьер</label>
                         </div>
                     </div>
-                    <div class="field-group full-width">
-                        <label>Размер (Ширина / Высота / Глубина)</label>
-                        <div class="three-cols">
-                            <input type="text" id="fullWidth" placeholder="Ширина, мм/см">
-                            <input type="text" id="fullHeight" placeholder="Высота, мм/см">
-                            <input type="text" id="fullDepth" placeholder="Глубина, мм/см">
-                        </div>
+                    <div class="field-group">
+                        <label>Площадь застройки (м²)</label>
+                        <input type="text" id="fullArea" placeholder="например 12.5 м²">
                     </div>
                     <div class="field-group">
                         <label>Наличие 3-D модели</label>
@@ -308,24 +316,42 @@
                         </div>
                     </div>
                     <div class="field-group">
-                        <label>Наличие векторного файла брендинга</label>
+                        <label>Наличие бренд-бука</label>
                         <div class="radio-group">
-                            <label class="radio-option"><input type="radio" name="fullVectorBrand" value="Да"> Да</label>
-                            <label class="radio-option"><input type="radio" name="fullVectorBrand" value="Нет" checked> Нет</label>
+                            <label class="radio-option"><input type="radio" name="fullBrandbook" value="Да"> Да</label>
+                            <label class="radio-option"><input type="radio" name="fullBrandbook" value="Нет" checked> Нет</label>
                         </div>
+                    </div>
+
+                    <!-- Дополнительные поля для полной версии -->
+                    <div class="field-group">
+                        <label>Тип декорации</label>
+                        <input type="text" id="fullDecorationType" placeholder="например: объёмная буква, фотозона, арка">
+                    </div>
+                    <div class="field-group">
+                        <label>Основной материал</label>
+                        <input type="text" id="fullMaterial" placeholder="ПВХ, пластик, металл, дерево...">
+                    </div>
+                    <div class="field-group">
+                        <label>Размеры (Ш × В × Г, мм/см)</label>
+                        <input type="text" id="fullDimensions" placeholder="1200×2000×450 мм">
+                    </div>
+                    <div class="field-group">
+                        <label>Вес конструкции (кг)</label>
+                        <input type="text" id="fullWeight" placeholder="максимальный вес">
                     </div>
                     <div class="field-group">
                         <label>Наличие подсветки</label>
-                        <div class="radio-group" id="lightingRadioGroup">
-                            <label class="radio-option"><input type="radio" name="hasLighting" value="yes" checked> Да</label>
-                            <label class="radio-option"><input type="radio" name="hasLighting" value="no"> Нет</label>
+                        <div class="radio-group" id="fullLightingRadioGroup">
+                            <label class="radio-option"><input type="radio" name="fullHasLighting" value="Да" checked> Да</label>
+                            <label class="radio-option"><input type="radio" name="fullHasLighting" value="Нет"> Нет</label>
                         </div>
                     </div>
-                    <div id="lightingSettings" class="full-width">
+                    <div id="fullLightingSettings" class="full-width">
                         <div class="form-grid" style="gap: 1.2rem;">
                             <div class="field-group">
                                 <label>Световая температура подсветки</label>
-                                <select id="lightTemp">
+                                <select id="fullLightTemp">
                                     <option value="Тёплая (2000-3500 К)">Тёплая (2000-3500 К)</option>
                                     <option value="Дневная (3500-5000 К)" selected>Дневная (3500-5000 К)</option>
                                     <option value="Холодная (5500-7500 К)">Холодная (5500-7500 К)</option>
@@ -333,52 +359,28 @@
                             </div>
                             <div class="field-group">
                                 <label>Тип электроподключения</label>
-                                <div class="radio-group" id="powerTypeGroup">
-                                    <label class="radio-option"><input type="radio" name="powerType" value="Автономный" checked> Автономный</label>
-                                    <label class="radio-option"><input type="radio" name="powerType" value="К электросети"> К электросети</label>
+                                <div class="radio-group" id="fullPowerTypeGroup">
+                                    <label class="radio-option"><input type="radio" name="fullPowerType" value="Автономный" checked> Автономный</label>
+                                    <label class="radio-option"><input type="radio" name="fullPowerType" value="К электросети"> К электросети</label>
                                 </div>
                             </div>
-                            <div id="autonomousFields" class="field-group">
+                            <div id="fullAutonomousFields" class="field-group">
                                 <label>Время автономной работы (до подзарядки)</label>
-                                <input type="text" id="autonomousTime" placeholder="например 12 часов">
+                                <input type="text" id="fullAutonomousTime" placeholder="например 12 часов">
                             </div>
-                            <div id="mainsFields" class="field-group hidden">
+                            <div id="fullMainsFields" class="field-group hidden">
                                 <label>Параметры кабеля</label>
                                 <div class="inline-row" style="gap: 1rem;">
-                                    <input type="text" id="cableLength" placeholder="Длина кабеля (м)" style="flex:1">
-                                    <input type="text" id="cableColor" placeholder="Цвет кабеля" style="flex:1">
+                                    <input type="text" id="fullCableLength" placeholder="Длина кабеля (м)" style="flex:1">
+                                    <input type="text" id="fullCableColor" placeholder="Цвет кабеля" style="flex:1">
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="field-group">
-                        <label>Цвет 1, корпус</label>
-                        <input type="text" id="colorBody" placeholder="RAL / Pantone / описание">
-                    </div>
-                    <div class="field-group">
-                        <label>Цвет 2, торец</label>
-                        <input type="text" id="colorEdge" placeholder="цвет торцевых частей">
-                    </div>
-                    <div class="field-group">
-                        <label>Цвет 3, полки</label>
-                        <input type="text" id="colorShelves" placeholder="цвет внутренних полок">
-                    </div>
-                    <div class="field-group">
-                        <label>Цвет 4, брендинг</label>
-                        <input type="text" id="colorBranding" placeholder="цвет логотипа / нанесения">
-                    </div>
-                    <div class="field-group">
-                        <label>Степень глянца поверхности</label>
-                        <select id="glossLevel">
-                            <option>Глянцевая (80-100%)</option>
-                            <option selected>Полуматовая (40-60%)</option>
-                            <option>Матовая (5-30%)</option>
-                        </select>
-                        <input type="text" id="glossExact" placeholder="или точный процент глянца" style="margin-top: 6px;">
-                    </div>
+
                     <div class="field-group full-width">
                         <label>Специальные требования и ограничения</label>
-                        <textarea id="fullRequirements" placeholder="Доп. информация, крепления, влагостойкость, встроенные замки..."></textarea>
+                        <textarea id="fullRequirements" placeholder="Ограничения по высоте, материалам, требования пожарной безопасности, крепления..."></textarea>
                     </div>
                 </div>
             </div>
@@ -425,38 +427,38 @@
     });
 
     // --- Динамика для полной версии (подсветка) ---
-    const lightingYesNo = document.querySelectorAll('input[name="hasLighting"]');
-    const lightingSettingsDiv = document.getElementById('lightingSettings');
-    const autonomousFields = document.getElementById('autonomousFields');
-    const mainsFields = document.getElementById('mainsFields');
-    const powerTypeRadios = document.querySelectorAll('input[name="powerType"]');
+    const fullLightingYesNo = document.querySelectorAll('input[name="fullHasLighting"]');
+    const fullLightingSettingsDiv = document.getElementById('fullLightingSettings');
+    const fullAutonomousFields = document.getElementById('fullAutonomousFields');
+    const fullMainsFields = document.getElementById('fullMainsFields');
+    const fullPowerTypeRadios = document.querySelectorAll('input[name="fullPowerType"]');
 
-    function toggleLightingBlock() {
+    function toggleFullLightingBlock() {
         let isLighting = false;
-        for (let radio of lightingYesNo) if (radio.checked && radio.value === 'yes') isLighting = true;
-        if (lightingSettingsDiv) {
-            if (isLighting) lightingSettingsDiv.classList.remove('hidden');
-            else lightingSettingsDiv.classList.add('hidden');
+        for (let radio of fullLightingYesNo) if (radio.checked && radio.value === 'Да') isLighting = true;
+        if (fullLightingSettingsDiv) {
+            if (isLighting) fullLightingSettingsDiv.classList.remove('hidden');
+            else fullLightingSettingsDiv.classList.add('hidden');
         }
     }
 
-    function togglePowerDetailFields() {
-        if (!autonomousFields || !mainsFields) return;
+    function toggleFullPowerDetailFields() {
+        if (!fullAutonomousFields || !fullMainsFields) return;
         let selectedType = null;
-        for (let radio of powerTypeRadios) if (radio.checked) selectedType = radio.value;
+        for (let radio of fullPowerTypeRadios) if (radio.checked) selectedType = radio.value;
         if (selectedType === 'Автономный') {
-            autonomousFields.classList.remove('hidden');
-            mainsFields.classList.add('hidden');
+            fullAutonomousFields.classList.remove('hidden');
+            fullMainsFields.classList.add('hidden');
         } else if (selectedType === 'К электросети') {
-            autonomousFields.classList.add('hidden');
-            mainsFields.classList.remove('hidden');
+            fullAutonomousFields.classList.add('hidden');
+            fullMainsFields.classList.remove('hidden');
         }
     }
 
-    if (lightingYesNo.length) lightingYesNo.forEach(r => r.addEventListener('change', toggleLightingBlock));
-    if (powerTypeRadios.length) powerTypeRadios.forEach(r => r.addEventListener('change', togglePowerDetailFields));
-    toggleLightingBlock();
-    togglePowerDetailFields();
+    if (fullLightingYesNo.length) fullLightingYesNo.forEach(r => r.addEventListener('change', toggleFullLightingBlock));
+    if (fullPowerTypeRadios.length) fullPowerTypeRadios.forEach(r => r.addEventListener('change', toggleFullPowerDetailFields));
+    toggleFullLightingBlock();
+    toggleFullPowerDetailFields();
 
     // --- Функция показа уведомлений ---
     function showToast(message, isError = false) {
@@ -541,7 +543,7 @@
             creatorId = document.getElementById('shortCreatorId').value;
             responsibleId = document.getElementById('shortResponsibleId').value;
 
-            taskDescription = `📋 Техническое задание на производство декорации\n\n`;
+            taskDescription = `📋 Техническое задание на производство декорации (короткая версия)\n\n`;
             if (projectName) taskDescription += `🏷️ Проект: ${projectName}\n`;
             if (quantity) taskDescription += `📦 Количество: ${quantity}\n`;
             if (address) taskDescription += `📍 Адрес: ${address}\n`;
@@ -555,46 +557,48 @@
             if (requirements) taskDescription += `\n⚠️ Спецтребования:\n${requirements}\n`;
         } 
         else {
-            // Полная версия (шкафы)
-            const projectName = document.getElementById('fullProjectName').value;
-            const itemName = document.getElementById('fullItemName').value;
+            // Полная версия (декорация)
+            const projectName = document.getElementById('fullTitle').value;
             const quantity = document.getElementById('fullQuantity').value;
+            const address = document.getElementById('fullAddress').value;
+            const startDate = document.getElementById('fullStartDate').value;
+            const finishDate = document.getElementById('fullFinishDate').value;
+            const dismantleDate = document.getElementById('fullDismantleDate').value;
             const placement = document.querySelector('input[name="fullPlacement"]:checked')?.value || '';
-            const width = document.getElementById('fullWidth').value;
-            const height = document.getElementById('fullHeight').value;
-            const depth = document.getElementById('fullDepth').value;
+            const area = document.getElementById('fullArea').value;
             const has3d = document.querySelector('input[name="full3d"]:checked')?.value || '';
-            const hasVector = document.querySelector('input[name="fullVectorBrand"]:checked')?.value || '';
-            
-            // Подсветка
-            const hasLighting = document.querySelector('input[name="hasLighting"]:checked')?.value === 'yes' ? 'Да' : 'Нет';
-            const lightTemp = document.getElementById('lightTemp')?.value || '';
-            const powerType = document.querySelector('input[name="powerType"]:checked')?.value || '';
-            const autonomousTime = document.getElementById('autonomousTime')?.value || '';
-            const cableLength = document.getElementById('cableLength')?.value || '';
-            const cableColor = document.getElementById('cableColor')?.value || '';
-            
-            // Цвета
-            const colorBody = document.getElementById('colorBody').value;
-            const colorEdge = document.getElementById('colorEdge').value;
-            const colorShelves = document.getElementById('colorShelves').value;
-            const colorBranding = document.getElementById('colorBranding').value;
-            const glossLevel = document.getElementById('glossLevel').value;
-            const glossExact = document.getElementById('glossExact').value;
+            const hasBrandbook = document.querySelector('input[name="fullBrandbook"]:checked')?.value || '';
+            const decorationType = document.getElementById('fullDecorationType').value;
+            const material = document.getElementById('fullMaterial').value;
+            const dimensions = document.getElementById('fullDimensions').value;
+            const weight = document.getElementById('fullWeight').value;
+            const hasLighting = document.querySelector('input[name="fullHasLighting"]:checked')?.value || '';
+            const lightTemp = document.getElementById('fullLightTemp')?.value || '';
+            const powerType = document.querySelector('input[name="fullPowerType"]:checked')?.value || '';
+            const autonomousTime = document.getElementById('fullAutonomousTime')?.value || '';
+            const cableLength = document.getElementById('fullCableLength')?.value || '';
+            const cableColor = document.getElementById('fullCableColor')?.value || '';
             const requirements = document.getElementById('fullRequirements').value;
 
-            taskTitle = projectName ? `ТЗ: ${projectName} — ${itemName || 'шкаф'}` : `ТЗ на шкафы (${itemName || 'изделие'})`;
+            taskTitle = projectName ? `ТЗ (полная): ${projectName}` : 'Техническое задание на декорацию (полная версия)';
             creatorId = document.getElementById('fullCreatorId').value;
             responsibleId = document.getElementById('fullResponsibleId').value;
 
-            taskDescription = `🗄️ Техническое задание на производство шкафов для сувенирной продукции\n\n`;
+            taskDescription = `🏛️ Техническое задание на производство декорации (полная версия)\n\n`;
             if (projectName) taskDescription += `🏷️ Проект: ${projectName}\n`;
-            if (itemName) taskDescription += `📦 Изделие: ${itemName}\n`;
-            if (quantity) taskDescription += `🔢 Количество: ${quantity}\n`;
-            if (placement) taskDescription += `🏠 Размещение: ${placement}\n`;
-            if (width || height || depth) taskDescription += `📏 Размеры (Ш/В/Г): ${width || '?'} × ${height || '?'} × ${depth || '?'}\n`;
-            if (has3d) taskDescription += `🖥️ 3D-модель: ${has3d}\n`;
-            if (hasVector) taskDescription += `🎨 Векторный брендинг: ${hasVector}\n`;
+            if (quantity) taskDescription += `📦 Количество: ${quantity}\n`;
+            if (address) taskDescription += `📍 Адрес: ${address}\n`;
+            if (startDate) taskDescription += `📅 Монтаж с: ${startDate}\n`;
+            if (finishDate) taskDescription += `✅ Сдача площадки: ${finishDate}\n`;
+            if (dismantleDate) taskDescription += `🔨 Демонтаж: ${dismantleDate}\n`;
+            if (placement) taskDescription += `🏠 Место размещения: ${placement}\n`;
+            if (area) taskDescription += `📐 Площадь застройки: ${area}\n`;
+            if (has3d) taskDescription += `🖥️ 3D модель: ${has3d}\n`;
+            if (hasBrandbook) taskDescription += `📘 Бренд-бук: ${hasBrandbook}\n`;
+            if (decorationType) taskDescription += `🎭 Тип декорации: ${decorationType}\n`;
+            if (material) taskDescription += `🧱 Основной материал: ${material}\n`;
+            if (dimensions) taskDescription += `📏 Размеры (Ш×В×Г): ${dimensions}\n`;
+            if (weight) taskDescription += `⚖️ Вес: ${weight} кг\n`;
             if (hasLighting === 'Да') {
                 taskDescription += `💡 Подсветка: ${hasLighting}\n`;
                 if (lightTemp) taskDescription += `   🌡️ Температура: ${lightTemp}\n`;
@@ -604,5 +608,11 @@
             } else {
                 taskDescription += `💡 Подсветка: нет\n`;
             }
-            if (colorBody) taskDescription += `🎨 Цвет корпуса: ${colorBody}\n`;
-            if (colorEdge) taskDescription += `🎨 Цвет торца: ${
+            if (requirements) taskDescription += `\n⚠️ Спецтребования:\n${requirements}\n`;
+        }
+
+        await createBitrixTask(taskTitle, taskDescription, creatorId, responsibleId);
+    });
+</script>
+</body>
+</html>
