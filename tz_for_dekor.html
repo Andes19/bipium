@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Техническое задание | Декорации и шкафы</title>
+    <!-- Google Fonts & modern reset -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #f1f5f9;
+            font-family: 'Inter', sans-serif;
+            padding: 2rem 1rem;
+            color: #0f172a;
+        }
+
+        /* main container */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        /* карточка */
+        .form-card {
+            background: #ffffff;
+            border-radius: 32px;
+            box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.02);
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+
+        /* хедер с переключателем */
+        .toggle-header {
+            padding: 1.5rem 2rem 0.75rem 2rem;
+            border-bottom: 1px solid #e9eef3;
+            background: #ffffff;
+        }
+
+        .toggle-header h1 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            background: linear-gradient(135deg, #1e293b, #2d3a4f);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 1.25rem;
+        }
+
+        .toggle-group {
+            display: flex;
+            gap: 0.75rem;
+            background: #f1f5f9;
+            padding: 0.5rem;
+            border-radius: 60px;
+            width: fit-content;
+            margin-bottom: 0.5rem;
+        }
+
+        .toggle-btn {
+            padding: 0.6rem 1.6rem;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border-radius: 40px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: 'Inter', sans-serif;
+            color: #334155;
+        }
+
+        .toggle-btn.active {
+            background: #ffffff;
+            color: #0f172a;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05), 0 1px 1px rgba(0, 0, 0, 0.02);
+            border: 0.5px solid #e2e8f0;
+        }
+
+        /* form content */
+        .form-content {
+            padding: 2rem 2rem 2rem 2rem;
+        }
+
+        /* grid system */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem 2rem;
+        }
+
+        .full-width {
+            grid-column: span 2;
+        }
+
+        .field-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .field-group label {
+            font-weight: 500;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            color: #475569;
+        }
+
+        label .required-hint {
+            font-weight: 400;
+            font-size: 0.7rem;
+            color: #94a3b8;
+        }
+
+        input, select, textarea {
+            font-family: 'Inter', sans-serif;
+            padding: 0.8rem 1rem;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            background: #ffffff;
+            font-size: 0.95rem;
+            transition: 0.2s;
+            outline: none;
+            width: 100%;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: #94a3b8;
+            box-shadow: 0 0 0 3px rgba(148, 163, 184, 0.2);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 85px;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-top: 0.25rem;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 400;
+            font-size: 0.9rem;
+        }
+
+        .radio-option input {
+            width: 18px;
+            height: 18px;
+            accent-color: #2c3e5c;
+        }
+
+        .inline-row {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .three-cols {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .divider {
+            height: 1px;
+            background: #ecf3fa;
+            margin: 1rem 0 1.5rem 0;
+        }
+
+        .submit-area {
+            margin-top: 2rem;
+            text-align: right;
+            border-top: 1px solid #ecf3fa;
+            padding-top: 2rem;
+        }
+
+        .btn-submit {
+            background: #1e2f41;
+            color: white;
+            border: none;
+            padding: 0.9rem 2.2rem;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: 'Inter', sans-serif;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .btn-submit:hover {
+            background: #0f1e2c;
+            transform: translateY(-1px);
+        }
+
+        .color-row {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .color-row .color-input {
+            flex: 1;
+        }
+
+        @media (max-width: 760px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 1.2rem;
+            }
+            .full-width {
+                grid-column: span 1;
+            }
+            .toggle-header {
+                padding: 1.2rem 1.2rem 0.5rem 1.2rem;
+            }
+            .form-content {
+                padding: 1.5rem;
+            }
+            .three-cols {
+                grid-template-columns: 1fr;
+                gap: 0.75rem;
+            }
+        }
+
+        .secondary-text {
+            font-size: 0.75rem;
+            color: #5b6e8c;
+            margin-top: 0.25rem;
+        }
+
+        .badge {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 0.2rem 0.6rem;
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="form-card">
+        <div class="toggle-header">
+            <h1>📋 Техническое задание на производство</h1>
+            <div class="toggle-group" id="versionToggle">
+                <button type="button" class="toggle-btn active" data-version="short">🏛️ Декорация (короткая версия)</button>
+                <button type="button" class="toggle-btn" data-version="full">🗄️ Шкафы для сувенирной продукции</button>
+            </div>
+            <p class="secondary-text" style="margin-top: 0.6rem;">Заполните необходимые поля — данные никуда не отправляются, форма для демонстрации концепции</p>
+        </div>
+
+        <div class="form-content">
+            <!-- КОРОТКАЯ ВЕРСИЯ (Декорация) -->
+            <div id="shortVersionForm">
+                <form id="tzShortForm">
+                    <div class="form-grid">
+                        <div class="field-group full-width">
+                            <label>Название проекта</label>
+                            <input type="text" placeholder="Например: Открытие фестиваля «Свет Луны»" value="Новогодняя ярмарка 2025">
+                        </div>
+                        <div class="field-group">
+                            <label>Количество (в случае тиражирования)</label>
+                            <input type="text" placeholder="шт., комплектов" value="2 шт.">
+                        </div>
+                        <div class="field-group">
+                            <label>Адрес проведения мероприятия</label>
+                            <input type="text" placeholder="город, улица, площадка" value="Москва, ВДНХ, павильон 55">
+                        </div>
+                        <div class="field-group">
+                            <label>Дата начала монтажа</label>
+                            <input type="date" value="2025-12-10">
+                        </div>
+                        <div class="field-group">
+                            <label>Дата сдачи площадки</label>
+                            <input type="date" value="2025-12-15">
+                        </div>
+                        <div class="field-group">
+                            <label>Дата демонтажа</label>
+                            <input type="date" value="2025-12-18">
+                        </div>
+                        <div class="field-group">
+                            <label>Место размещения</label>
+                            <div class="radio-group">
+                                <label class="radio-option"><input type="radio" name="shortPlacement" value="interior" checked> Интерьер</label>
+                                <label class="radio-option"><input type="radio" name="shortPlacement" value="exterior"> Экстерьер</label>
+                            </div>
+                        </div>
+                        <div class="field-group">
+                            <label>Площадь застройки (м²)</label>
+                            <input type="text" placeholder="например 12.5 м²" value="18 м²">
+                        </div>
+                        <div class="field-group">
+                            <label>Наличие 3-D модели</label>
+                            <div class="radio-group">
+                                <label class="radio-option"><input type="radio" name="short3d" value="yes" checked> Да</label>
+                                <label class="radio-option"><input type="radio" name="short3d" value="no"> Нет</label>
+                            </div>
+                        </div>
+                        <div class="field-group">
+                            <label>Наличие бренд-бука</label>
+                            <div class="radio-group">
+                                <label class="radio-option"><input type="radio" name="shortBrandbook" value="yes"> Да</label>
+                                <label class="radio-option"><input type="radio" name="shortBrandbook" value="no" checked> Нет</label>
+                            </div>
+                        </div>
+                        <div class="field-group full-width">
+                            <label>Специальные требования и ограничения</label>
+                            <textarea placeholder="Ограничения по высоте, материалам, требования пожарной безопасности...">Использовать только экологичные материалы, высота конструкции не более 4 метров.</textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- ПОЛНАЯ ВЕРСИЯ (Шкафы для сувенирной продукции) -->
+            <div id="fullVersionForm" class="hidden">
+                <form id="tzFullForm">
+                    <div class="form-grid">
+                        <div class="field-group">
+                            <label>Название проекта</label>
+                            <input type="text" placeholder="проект" value="Центральный сувенирный маркет">
+                        </div>
+                        <div class="field-group">
+                            <label>Название изделия</label>
+                            <input type="text" placeholder="модель шкафа / стеллажа" value="Витрина «Ампир» с подсветкой">
+                        </div>
+                        <div class="field-group">
+                            <label>Количество</label>
+                            <input type="text" placeholder="количество изделий" value="4 шт.">
+                        </div>
+                        <div class="field-group">
+                            <label>Место размещения</label>
+                            <div class="radio-group">
+                                <label class="radio-option"><input type="radio" name="fullPlacement" value="interior" checked> Интерьер</label>
+                                <label class="radio-option"><input type="radio" name="fullPlacement" value="exterior"> Экстерьер</label>
+                            </div>
+                        </div>
+
+                        <!-- размеры Ш/В/Г -->
+                        <div class="field-group full-width">
+                            <label>Размер (Ширина / Высота / Глубина) в мм или см</label>
+                            <div class="three-cols">
+                                <input type="text" placeholder="Ширина" value="1200 мм">
+                                <input type="text" placeholder="Высота" value="2000 мм">
+                                <input type="text" placeholder="Глубина" value="450 мм">
+                            </div>
+                        </div>
+
+                        <div class="field-group">
+                            <label>Наличие 3-D модели</label>
+                            <div class="radio-group">
+                                <label class="radio-option"><input type="radio" name="full3d" value="yes" checked> Да</label>
+                                <label class="radio-option"><input type="radio" name="full3d" value="no"> Нет</label>
+                            </div>
+                        </div>
+                        <div class="field-group">
+                            <label>Наличие векторного файла брендинга</label>
+                            <div class="radio-group">
+                                <label class="radio-option"><input type="radio" name="fullVectorBrand" value="yes"> Да</label>
+                                <label class="radio-option"><input type="radio" name="fullVectorBrand" value="no" checked> Нет</label>
+                            </div>
+                        </div>
+
+                        <!-- Наличие подсветки + динамические поля -->
+                        <div class="field-group">
+                            <label>Наличие подсветки</label>
+                            <div class="radio-group" id="lightingRadioGroup">
+                                <label class="radio-option"><input type="radio" name="hasLighting" value="yes" checked> Да</label>
+                                <label class="radio-option"><input type="radio" name="hasLighting" value="no"> Нет</label>
+                            </div>
+                        </div>
+
+                        <!-- блок, зависящий от подсветки -->
+                        <div id="lightingSettings" class="full-width">
+                            <div class="form-grid" style="gap: 1.2rem;">
+                                <div class="field-group">
+                                    <label>Световая температура подсветки</label>
+                                    <select>
+                                        <option value="warm">Тёплая (2000-3500 К)</option>
+                                        <option value="day" selected>Дневная (3500-5000 К)</option>
+                                        <option value="cold">Холодная (5500-7500 К)</option>
+                                    </select>
+                                </div>
+                                <div class="field-group">
+                                    <label>Тип электроподключения</label>
+                                    <div class="radio-group" id="powerTypeGroup">
+                                        <label class="radio-option"><input type="radio" name="powerType" value="autonomous" checked> Автономный</label>
+                                        <label class="radio-option"><input type="radio" name="powerType" value="mains"> К электросети</label>
+                                    </div>
+                                </div>
+                                <!-- динамические поля для типа подключения -->
+                                <div id="autonomousFields" class="field-group">
+                                    <label>Время автономной работы (до подзарядки)</label>
+                                    <input type="text" placeholder="например 8 часов" value="12 часов">
+                                </div>
+                                <div id="mainsFields" class="field-group hidden">
+                                    <label>Длина кабеля (м) / Цвет кабеля</label>
+                                    <div class="inline-row" style="gap: 1rem;">
+                                        <input type="text" placeholder="Длина, м" value="5 м" style="flex:1">
+                                        <input type="text" placeholder="Цвет кабеля" value="Чёрный" style="flex:1">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Цветовая схема -->
+                        <div class="field-group">
+                            <label>Цвет 1, корпус</label>
+                            <div class="color-row">
+                                <input type="text" class="color-input" placeholder="RAL / Pantone / описание" value="RAL 9010 (чистый белый)">
+                            </div>
+                        </div>
+                        <div class="field-group">
+                            <label>Цвет 2, торец</label>
+                            <input type="text" placeholder="цвет торцевых частей" value="Дуб сонома">
+                        </div>
+                        <div class="field-group">
+                            <label>Цвет 3, полки</label>
+                            <input type="text" placeholder="цвет внутренних полок" value="Серый графит">
+                        </div>
+                        <div class="field-group">
+                            <label>Цвет 4, брендинг</label>
+                            <input type="text" placeholder="цвет логотипа / нанесения" value="Золотой матовый">
+                        </div>
+
+                        <div class="field-group">
+                            <label>Степень глянца поверхности</label>
+                            <select>
+                                <option>Глянцевая (80-100%)</option>
+                                <option selected>Полуматовая (40-60%)</option>
+                                <option>Матовая (5-30%)</option>
+                            </select>
+                            <span class="secondary-text">Можно указать точный % в доп. поле</span>
+                            <input type="text" placeholder="или точный процент глянца" style="margin-top: 5px;" value="55%">
+                        </div>
+
+                        <div class="field-group full-width">
+                            <label>Специальные требования и ограничения</label>
+                            <textarea placeholder="Доп. информация, крепления, влагостойкость, встроенные замки...">Усиленные замки, влагостойкое покрытие, обязательно наличие сертификатов</textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="submit-area">
+                <button class="btn-submit" id="demoSubmitBtn">📄 Сформировать ТЗ (демо-режим)</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // -------- Переключение между КОРОТКОЙ и ПОЛНОЙ версией ----------
+    const shortDiv = document.getElementById('shortVersionForm');
+    const fullDiv = document.getElementById('fullVersionForm');
+    const toggleBtns = document.querySelectorAll('.toggle-btn');
+
+    function setActiveVersion(version) {
+        if (version === 'short') {
+            shortDiv.classList.remove('hidden');
+            fullDiv.classList.add('hidden');
+        } else {
+            shortDiv.classList.add('hidden');
+            fullDiv.classList.remove('hidden');
+        }
+        // активация стилей кнопок
+        toggleBtns.forEach(btn => {
+            const btnVer = btn.getAttribute('data-version');
+            if (btnVer === version) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+    }
+
+    toggleBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const version = btn.getAttribute('data-version');
+            setActiveVersion(version);
+        });
+    });
+
+    // ---------- ДИНАМИЧЕСКАЯ ЛОГИКА ДЛЯ ПОЛНОЙ ВЕРСИИ (подсветка + тип питания) ----------
+    const lightingYesNo = document.querySelectorAll('input[name="hasLighting"]');
+    const lightingSettingsDiv = document.getElementById('lightingSettings');
+    const autonomousFields = document.getElementById('autonomousFields');
+    const mainsFields = document.getElementById('mainsFields');
+    const powerTypeRadios = document.querySelectorAll('input[name="powerType"]');
+
+    function toggleLightingBlock() {
+        let isLighting = false;
+        for (let radio of lightingYesNo) {
+            if (radio.checked && radio.value === 'yes') {
+                isLighting = true;
+                break;
+            }
+        }
+        if (lightingSettingsDiv) {
+            if (isLighting) {
+                lightingSettingsDiv.classList.remove('hidden');
+            } else {
+                lightingSettingsDiv.classList.add('hidden');
+            }
+        }
+    }
+
+    function togglePowerDetailFields() {
+        if (!autonomousFields || !mainsFields) return;
+        let selectedType = null;
+        for (let radio of powerTypeRadios) {
+            if (radio.checked) {
+                selectedType = radio.value;
+                break;
+            }
+        }
+        if (selectedType === 'autonomous') {
+            autonomousFields.classList.remove('hidden');
+            mainsFields.classList.add('hidden');
+        } else if (selectedType === 'mains') {
+            autonomousFields.classList.add('hidden');
+            mainsFields.classList.remove('hidden');
+        }
+    }
+
+    // добавляем обработчики для полной версии (если элементы существуют в доме)
+    function bindFullVersionEvents() {
+        if (lightingYesNo.length) {
+            lightingYesNo.forEach(radio => radio.addEventListener('change', toggleLightingBlock));
+        }
+        if (powerTypeRadios.length) {
+            powerTypeRadios.forEach(radio => radio.addEventListener('change', togglePowerDetailFields));
+        }
+        // начальное состояние
+        toggleLightingBlock();
+        togglePowerDetailFields();
+    }
+
+    // наблюдение за появлением динамических элементов в полной версии (при переключении формы, но они уже есть)
+    // вызываем после загрузки
+    setTimeout(() => {
+        bindFullVersionEvents();
+    }, 0);
+
+    // также при переключении версии, чтобы реактивно подхватывать если полная версия только что стала видимой, 
+    // но события уже навешаны, всё ок. но из-за того что скрыто/показано, state уже задан.
+    // дополнительно: следим за кликами переключения и обновляем состояния на случай, если они сбились
+    const observer = new MutationObserver(() => {
+        if (!fullDiv.classList.contains('hidden')) {
+            // когда полная версия показана – перепроверяем видимость блоков
+            toggleLightingBlock();
+            togglePowerDetailFields();
+        }
+    });
+    observer.observe(fullDiv, { attributes: true, attributeFilter: ['class'] });
+    observer.observe(shortDiv, { attributes: true, attributeFilter: ['class'] });
+
+    // кнопка демо-отправки (без вебхуков, просто алерт)
+    const demoBtn = document.getElementById('demoSubmitBtn');
+    demoBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        // определяем активная версия
+        let active = shortDiv.classList.contains('hidden') ? 'full' : 'short';
+        let message = '';
+        if (active === 'short') {
+            const projectName = document.querySelector('#shortVersionForm input[placeholder*="Название проекта"]')?.value || 'Не указано';
+            message = `✅ Демо-режим: ТЗ (декорация) для проекта «${projectName}» готово к печати.\n(Функция отправки отключена, только макет)`;
+        } else {
+            const projectFull = document.querySelector('#fullVersionForm input[placeholder*="проект"]')?.value || 'проект';
+            const itemName = document.querySelector('#fullVersionForm input[placeholder*="модель шкафа"]')?.value || 'изделие';
+            message = `✅ Демо-режим: ТЗ на шкафы/витрины для проекта «${projectFull}»\nИзделие: ${itemName}\n(Сохранение формы не реализовано, дизайн-концепт)`;
+        }
+        alert(message);
+    });
+
+    // небольшая стилистическая доводка: для полной версии при переключении автономный/сеть работаем с появлением
+    // встроим также обработку изменения инпутов при повторных кликах (уже есть)
+    // Дополнительно, если пользователь переключит тип питания после загрузки, повторная инициализация.
+    document.addEventListener('DOMContentLoaded', () => {
+        // фикс для мобильного вида
+        bindFullVersionEvents();
+        // если поля для полной версии пересоздадутся? не пересоздаются. всё стабильно
+        // дополнительно, при инициализации полной версии если подсветка выключена по умолчанию - скроем блок (сейчас стоит Да)
+        // Для чистоты: По умолчанию стоит "Да" у подсветки, значит lightingSettings должен быть видим. все ок.
+        // но проверим радиокнопки: сейчас "Да" выбрано, блок видим.
+        // и автономный выбран, показываем автономные поля, mains скрыт.
+        // дополнительная красота: для короткой формы переключение radio никакой доп логики не требует.
+    });
+</script>
+</body>
+</html>
