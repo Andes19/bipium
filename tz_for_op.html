@@ -365,27 +365,28 @@
     const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycby5zWxhvzCMkAIXCWvQAqQeTQDNECgZZ5d-zrCO3SPvtTiCh6nB6fiq4kqSUErlU9Z7Ew/exec";
 
     // ========== УПРАВЛЕНИЕ ССЫЛКАМИ ==========
-    let refCounter = 1; // следующая доступная позиция (0 уже занята)
+    let refCounter = 1;
     const MAX_REFS = 5;
 
-    function updateRemoveButtons() {
+    window.updateRemoveButtons = function() {
         const refItems = document.querySelectorAll('.reference-item');
         refItems.forEach(item => {
             const btn = item.querySelector('.remove-ref-btn');
             if (refItems.length === 1) {
-                btn.style.display = 'none';
+                if (btn) btn.style.display = 'none';
             } else {
-                btn.style.display = 'block';
+                if (btn) btn.style.display = 'block';
             }
         });
     }
 
-    function addReferenceField() {
+    window.addReferenceField = function() {
         const container = document.getElementById('referencesContainer');
         const currentCount = document.querySelectorAll('.reference-item').length;
         
         if (currentCount >= MAX_REFS) {
-            document.getElementById('addRefBtn').disabled = true;
+            const addBtn = document.getElementById('addRefBtn');
+            if (addBtn) addBtn.disabled = true;
             return;
         }
         
@@ -404,31 +405,32 @@
             addBtn.disabled = true;
         }
         
-        updateRemoveButtons();
+        window.updateRemoveButtons();
     }
 
-    function removeReference(id) {
+    window.removeReference = function(id) {
         const item = document.getElementById(`ref_${id}`);
         if (item) {
             item.remove();
             const currentCount = document.querySelectorAll('.reference-item').length;
             const addBtn = document.getElementById('addRefBtn');
-            if (currentCount < MAX_REFS) {
+            if (addBtn && currentCount < MAX_REFS) {
                 addBtn.disabled = false;
             }
-            updateRemoveButtons();
+            window.updateRemoveButtons();
         }
     }
 
     function getAllReferences() {
         const inputs = document.querySelectorAll('.ref-input');
-        const refs = [];
-        inputs.forEach(input => {
-            const val = input.value.trim();
-            if (val !== "") {
-                refs.push(val);
-            }
-        });
+        const refs = {};
+        const totalSlots = 5; // Всегда 5 полей
+        
+        for (let i = 1; i <= totalSlots; i++) {
+            const input = inputs[i - 1];
+            const val = input ? input.value.trim() : "";
+            refs[`reference_${i}`] = val;
+        }
         return refs;
     }
 
@@ -503,13 +505,16 @@
             deadline_search: getValueOrEmpty('deadline_search'),
             deadline_editors: getValueOrEmpty('deadline_editors'),
             deadline_experts: getValueOrEmpty('deadline_experts'),
-            references_list: getAllReferences(),
             timestamp: new Date().toISOString()
         };
+
+        // Добавляем ссылки (всегда 5 полей, пустые как "")
+        const references = getAllReferences();
 
         if (currentMode === 'search') {
             return {
                 ...baseData,
+                ...references,
                 result_format: getValueOrEmpty('result_format'),
                 search_use_type: getValueOrEmpty('use_type_search'),
                 search_amount: getValueOrEmpty('amount_search'),
@@ -525,6 +530,7 @@
         } else {
             return {
                 ...baseData,
+                ...references,
                 result_format: getValueOrEmpty('result_format_audit'),
                 audit_use_type: getValueOrEmpty('use_type_audit'),
                 audit_highres: getValueOrEmpty('highres_audit'),
@@ -644,7 +650,7 @@
 
     // Инициализация
     toggleReferencesField();
-    updateRemoveButtons();
+    window.updateRemoveButtons();
 </script>
 </body>
 </html>
