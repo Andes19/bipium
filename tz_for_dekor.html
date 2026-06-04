@@ -29,10 +29,7 @@
             font-size: 1.75rem;
             font-weight: 600;
             letter-spacing: -0.01em;
-            background: linear-gradient(135deg, #1e293b, #2d3a4f);
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent;
+            color: #1e293b;
             margin-bottom: 1.25rem;
         }
         .toggle-group {
@@ -75,7 +72,7 @@
             gap: 0.5rem;
         }
         .field-group label {
-            font-weight: 500;
+            font-weight: 600;
             font-size: 0.85rem;
             text-transform: uppercase;
             letter-spacing: 0.02em;
@@ -170,6 +167,22 @@
             from { transform: translateX(100%); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
         }
+        .user-select-row {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .user-select-row select {
+            flex: 2;
+        }
+        .user-select-row input {
+            flex: 1;
+        }
+        hr {
+            margin: 0.5rem 0 1rem 0;
+            border-color: #e9eef3;
+        }
         @media (max-width: 760px) {
             .form-grid { grid-template-columns: 1fr; gap: 1.2rem; }
             .full-width { grid-column: span 1; }
@@ -186,7 +199,7 @@
 <div class="container">
     <div class="form-card">
         <div class="toggle-header">
-            <h1>📋 Техническое задание на производство декорации</h1>
+            <h1>🎨 Техническое задание на производство декорации</h1>
             <div class="toggle-group" id="versionToggle">
                 <button type="button" class="toggle-btn active" data-version="short">🎭 Короткая версия</button>
                 <button type="button" class="toggle-btn" data-version="full">🏛️ Полная версия</button>
@@ -202,14 +215,47 @@
                         <label>Название проекта *</label>
                         <input type="text" id="shortTitle" placeholder="Например: Открытие фестиваля «Свет Луны»">
                     </div>
+                    
+                    <!-- Постановщик (creatorId) -->
                     <div class="field-group">
-                        <label>ID постановщика (creatorId) *</label>
-                        <input type="number" id="shortCreatorId" placeholder="Ваш ID в Битрикс24">
+                        <label>Постановщик *</label>
+                        <div class="user-select-row">
+                            <select id="shortCreatorSelect">
+                                <option value="">-- Выберите сотрудника --</option>
+                                <option value="12">Андрей Большаков</option>
+                                <option value="60">Дмитрий Зобов</option>
+                                <option value="28">Денис Ляхов</option>
+                                <option value="76">Илья Панфилов</option>
+                                <option value="40">Кирилл Барамыков</option>
+                                <option value="1">Николай Людник</option>
+                                <option value="30">Сергей Смирнов</option>
+                                <option value="34">Татьяна Минакова</option>
+                                <option value="manual_short">✏️ Ввести ID вручную</option>
+                            </select>
+                            <input type="number" id="shortCreatorManual" placeholder="ID вручную" style="display: none;">
+                        </div>
                     </div>
+                    
+                    <!-- Исполнитель (responsibleId) -->
                     <div class="field-group">
-                        <label>ID исполнителя (responsibleId) *</label>
-                        <input type="number" id="shortResponsibleId" placeholder="ID сотрудника">
+                        <label>Исполнитель *</label>
+                        <div class="user-select-row">
+                            <select id="shortResponsibleSelect">
+                                <option value="">-- Выберите сотрудника --</option>
+                                <option value="12">Андрей Большаков</option>
+                                <option value="60">Дмитрий Зобов</option>
+                                <option value="28">Денис Ляхов</option>
+                                <option value="76">Илья Панфилов</option>
+                                <option value="40">Кирилл Барамыков</option>
+                                <option value="1">Николай Людник</option>
+                                <option value="30">Сергей Смирнов</option>
+                                <option value="34">Татьяна Минакова</option>
+                                <option value="manual_short_resp">✏️ Ввести ID вручную</option>
+                            </select>
+                            <input type="number" id="shortResponsibleManual" placeholder="ID вручную" style="display: none;">
+                        </div>
                     </div>
+
                     <div class="field-group">
                         <label>Количество (в случае тиражирования)</label>
                         <input type="text" id="shortQuantity" placeholder="шт., комплектов">
@@ -269,14 +315,47 @@
                         <label>Название проекта *</label>
                         <input type="text" id="fullTitle" placeholder="Например: Открытие фестиваля «Свет Луны»">
                     </div>
+
+                    <!-- Постановщик (creatorId) -->
                     <div class="field-group">
-                        <label>ID постановщика (creatorId) *</label>
-                        <input type="number" id="fullCreatorId" placeholder="Ваш ID в Битрикс24">
+                        <label>Постановщик *</label>
+                        <div class="user-select-row">
+                            <select id="fullCreatorSelect">
+                                <option value="">-- Выберите сотрудника --</option>
+                                <option value="12">Андрей Большаков</option>
+                                <option value="60">Дмитрий Зобов</option>
+                                <option value="28">Денис Ляхов</option>
+                                <option value="76">Илья Панфилов</option>
+                                <option value="40">Кирилл Барамыков</option>
+                                <option value="1">Николай Людник</option>
+                                <option value="30">Сергей Смирнов</option>
+                                <option value="34">Татьяна Минакова</option>
+                                <option value="manual_full">✏️ Ввести ID вручную</option>
+                            </select>
+                            <input type="number" id="fullCreatorManual" placeholder="ID вручную" style="display: none;">
+                        </div>
                     </div>
+                    
+                    <!-- Исполнитель (responsibleId) -->
                     <div class="field-group">
-                        <label>ID исполнителя (responsibleId) *</label>
-                        <input type="number" id="fullResponsibleId" placeholder="ID сотрудника">
+                        <label>Исполнитель *</label>
+                        <div class="user-select-row">
+                            <select id="fullResponsibleSelect">
+                                <option value="">-- Выберите сотрудника --</option>
+                                <option value="12">Андрей Большаков</option>
+                                <option value="60">Дмитрий Зобов</option>
+                                <option value="28">Денис Ляхов</option>
+                                <option value="76">Илья Панфилов</option>
+                                <option value="40">Кирилл Барамыков</option>
+                                <option value="1">Николай Людник</option>
+                                <option value="30">Сергей Смирнов</option>
+                                <option value="34">Татьяна Минакова</option>
+                                <option value="manual_full_resp">✏️ Ввести ID вручную</option>
+                            </select>
+                            <input type="number" id="fullResponsibleManual" placeholder="ID вручную" style="display: none;">
+                        </div>
                     </div>
+
                     <div class="field-group">
                         <label>Количество (в случае тиражирования)</label>
                         <input type="text" id="fullQuantity" placeholder="шт., комплектов">
@@ -323,7 +402,6 @@
                         </div>
                     </div>
 
-                    <!-- Дополнительные поля для полной версии -->
                     <div class="field-group">
                         <label>Тип декорации</label>
                         <input type="text" id="fullDecorationType" placeholder="например: объёмная буква, фотозона, арка">
@@ -394,18 +472,58 @@
 
 <script>
     // ============================================================
-    // НАСТРОЙКА: ВСТАВЬТЕ ВАШ URL ВЕБХУКА ОТСЮДА
-    // Пример: https://ваш_портал.bitrix24.ru/rest/1/ваш_секретный_код/
+    // НОВЫЙ ВЕБХУК ДЛЯ БИТРИКС24
     // ============================================================
-    const BITRIX24_WEBHOOK_URL = 'https://b24-qp6asm.bitrix24.ru/rest/1/7krcedsly67649oq/';
+    const BITRIX24_WEBHOOK_URL = 'https://dekortv.bitrix24.ru/rest/12/43ogzulnls1sxkdc/';
     // ============================================================
 
+    // --- Функции для работы с полями "Постановщик / Исполнитель" (ручной ввод) ---
+    function setupUserSelect(selectId, manualInputId) {
+        const select = document.getElementById(selectId);
+        const manualInput = document.getElementById(manualInputId);
+        if (!select || !manualInput) return;
+        
+        function updateVisibility() {
+            if (select.value === 'manual_short' || select.value === 'manual_short_resp' || 
+                select.value === 'manual_full' || select.value === 'manual_full_resp') {
+                manualInput.style.display = 'block';
+                manualInput.required = true;
+            } else {
+                manualInput.style.display = 'none';
+                manualInput.required = false;
+                manualInput.value = '';
+            }
+        }
+        
+        select.addEventListener('change', updateVisibility);
+        updateVisibility();
+    }
+    
+    function getUserId(selectId, manualInputId) {
+        const select = document.getElementById(selectId);
+        const manualInput = document.getElementById(manualInputId);
+        if (!select || !manualInput) return null;
+        
+        const selectedValue = select.value;
+        if (selectedValue === 'manual_short' || selectedValue === 'manual_short_resp' || 
+            selectedValue === 'manual_full' || selectedValue === 'manual_full_resp') {
+            return manualInput.value;
+        }
+        return selectedValue;
+    }
+    
+    // Настройка всех полей выбора сотрудников
+    setupUserSelect('shortCreatorSelect', 'shortCreatorManual');
+    setupUserSelect('shortResponsibleSelect', 'shortResponsibleManual');
+    setupUserSelect('fullCreatorSelect', 'fullCreatorManual');
+    setupUserSelect('fullResponsibleSelect', 'fullResponsibleManual');
+    
     // --- Переключение версий ---
     const shortDiv = document.getElementById('shortVersionForm');
     const fullDiv = document.getElementById('fullVersionForm');
     const toggleBtns = document.querySelectorAll('.toggle-btn');
     let currentVersion = 'short';
-
+    
     function setActiveVersion(version) {
         currentVersion = version;
         if (version === 'short') {
@@ -421,18 +539,18 @@
             else btn.classList.remove('active');
         });
     }
-
+    
     toggleBtns.forEach(btn => {
         btn.addEventListener('click', () => setActiveVersion(btn.getAttribute('data-version')));
     });
-
+    
     // --- Динамика для полной версии (подсветка) ---
     const fullLightingYesNo = document.querySelectorAll('input[name="fullHasLighting"]');
     const fullLightingSettingsDiv = document.getElementById('fullLightingSettings');
     const fullAutonomousFields = document.getElementById('fullAutonomousFields');
     const fullMainsFields = document.getElementById('fullMainsFields');
     const fullPowerTypeRadios = document.querySelectorAll('input[name="fullPowerType"]');
-
+    
     function toggleFullLightingBlock() {
         let isLighting = false;
         for (let radio of fullLightingYesNo) if (radio.checked && radio.value === 'Да') isLighting = true;
@@ -441,7 +559,7 @@
             else fullLightingSettingsDiv.classList.add('hidden');
         }
     }
-
+    
     function toggleFullPowerDetailFields() {
         if (!fullAutonomousFields || !fullMainsFields) return;
         let selectedType = null;
@@ -454,12 +572,12 @@
             fullMainsFields.classList.remove('hidden');
         }
     }
-
+    
     if (fullLightingYesNo.length) fullLightingYesNo.forEach(r => r.addEventListener('change', toggleFullLightingBlock));
     if (fullPowerTypeRadios.length) fullPowerTypeRadios.forEach(r => r.addEventListener('change', toggleFullPowerDetailFields));
     toggleFullLightingBlock();
     toggleFullPowerDetailFields();
-
+    
     // --- Функция показа уведомлений ---
     function showToast(message, isError = false) {
         const existingToast = document.querySelector('.toast');
@@ -470,22 +588,22 @@
         document.body.appendChild(toast);
         setTimeout(() => toast.remove(), 5000);
     }
-
+    
     // --- Функция отправки задачи в Битрикс24 ---
     async function createBitrixTask(taskTitle, taskDescription, creatorId, responsibleId) {
-        if (!BITRIX24_WEBHOOK_URL || BITRIX24_WEBHOOK_URL.includes('ваш_портал') || BITRIX24_WEBHOOK_URL.includes('ваш_секретный_код')) {
-            showToast('⚠️ Ошибка: не настроен URL вебхука. Укажите его в переменной BITRIX24_WEBHOOK_URL в коде страницы.', true);
+        if (!BITRIX24_WEBHOOK_URL || !BITRIX24_WEBHOOK_URL.includes('dekortv')) {
+            showToast('⚠️ Ошибка: не настроен URL вебхука.', true);
             return false;
         }
         if (!creatorId || !responsibleId) {
-            showToast('❌ Ошибка: укажите ID постановщика и исполнителя (цифровые ID сотрудников в Битрикс24)', true);
+            showToast('❌ Ошибка: укажите постановщика и исполнителя', true);
             return false;
         }
         if (!taskTitle || taskTitle.trim() === '') {
-            showToast('❌ Ошибка: укажите название проекта / задачи', true);
+            showToast('❌ Ошибка: укажите название проекта', true);
             return false;
         }
-
+        
         const url = `${BITRIX24_WEBHOOK_URL}tasks.task.add`;
         const payload = {
             fields: {
@@ -495,7 +613,7 @@
                 RESPONSIBLE_ID: parseInt(responsibleId)
             }
         };
-
+        
         try {
             const response = await fetch(url, {
                 method: 'POST',
@@ -509,7 +627,7 @@
                 return false;
             }
             const taskId = data.result?.task?.id || data.result?.id;
-            showToast(`✅ Задача успешно создана! ID задачи: ${taskId}. Откройте Битрикс24.`);
+            showToast(`✅ Задача успешно создана! ID задачи: ${taskId}`);
             return true;
         } catch (err) {
             showToast(`❌ Ошибка сети: ${err.message}`, true);
@@ -517,16 +635,16 @@
             return false;
         }
     }
-
+    
     // --- Сбор данных и создание задачи ---
     document.getElementById('demoSubmitBtn').addEventListener('click', async () => {
         let taskTitle = '';
         let taskDescription = '';
         let creatorId = '';
         let responsibleId = '';
-
+        
         if (currentVersion === 'short') {
-            // Короткая версия (декорация)
+            // Короткая версия
             const projectName = document.getElementById('shortTitle').value;
             const quantity = document.getElementById('shortQuantity').value;
             const address = document.getElementById('shortAddress').value;
@@ -538,11 +656,11 @@
             const has3d = document.querySelector('input[name="short3d"]:checked')?.value || '';
             const hasBrandbook = document.querySelector('input[name="shortBrandbook"]:checked')?.value || '';
             const requirements = document.getElementById('shortRequirements').value;
-
+            
             taskTitle = projectName ? `ТЗ: ${projectName}` : 'Техническое задание (декорация)';
-            creatorId = document.getElementById('shortCreatorId').value;
-            responsibleId = document.getElementById('shortResponsibleId').value;
-
+            creatorId = getUserId('shortCreatorSelect', 'shortCreatorManual');
+            responsibleId = getUserId('shortResponsibleSelect', 'shortResponsibleManual');
+            
             taskDescription = `📋 Техническое задание на производство декорации (короткая версия)\n\n`;
             if (projectName) taskDescription += `🏷️ Проект: ${projectName}\n`;
             if (quantity) taskDescription += `📦 Количество: ${quantity}\n`;
@@ -557,7 +675,7 @@
             if (requirements) taskDescription += `\n⚠️ Спецтребования:\n${requirements}\n`;
         } 
         else {
-            // Полная версия (декорация)
+            // Полная версия
             const projectName = document.getElementById('fullTitle').value;
             const quantity = document.getElementById('fullQuantity').value;
             const address = document.getElementById('fullAddress').value;
@@ -579,11 +697,11 @@
             const cableLength = document.getElementById('fullCableLength')?.value || '';
             const cableColor = document.getElementById('fullCableColor')?.value || '';
             const requirements = document.getElementById('fullRequirements').value;
-
+            
             taskTitle = projectName ? `ТЗ (полная): ${projectName}` : 'Техническое задание на декорацию (полная версия)';
-            creatorId = document.getElementById('fullCreatorId').value;
-            responsibleId = document.getElementById('fullResponsibleId').value;
-
+            creatorId = getUserId('fullCreatorSelect', 'fullCreatorManual');
+            responsibleId = getUserId('fullResponsibleSelect', 'fullResponsibleManual');
+            
             taskDescription = `🏛️ Техническое задание на производство декорации (полная версия)\n\n`;
             if (projectName) taskDescription += `🏷️ Проект: ${projectName}\n`;
             if (quantity) taskDescription += `📦 Количество: ${quantity}\n`;
@@ -610,7 +728,7 @@
             }
             if (requirements) taskDescription += `\n⚠️ Спецтребования:\n${requirements}\n`;
         }
-
+        
         await createBitrixTask(taskTitle, taskDescription, creatorId, responsibleId);
     });
 </script>
