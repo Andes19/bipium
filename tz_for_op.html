@@ -444,15 +444,19 @@
     let currentMode = 'search';
 
     function toggleReferencesField() {
+        // Блок ссылок на референсы теперь виден ВСЕГДА
+        // Скрываем только дублирующиеся блоки выбора результата
         if (currentMode === 'audit') {
-            if (referencesGroup) referencesGroup.style.display = 'none';
-            if (referencesTitle) referencesTitle.style.display = 'none';
+            // Для аудита: скрываем общий блок результата (у него есть свой внутри секции аудита)
             if (resultFormatGroup) resultFormatGroup.style.display = 'none';
+            if (referencesTitle) referencesTitle.style.display = 'none';
         } else {
-            if (referencesGroup) referencesGroup.style.display = 'block';
-            if (referencesTitle) referencesTitle.style.display = 'block';
+            // Для подбора: показываем общий блок результата
             if (resultFormatGroup) resultFormatGroup.style.display = 'block';
+            if (referencesTitle) referencesTitle.style.display = 'block';
         }
+        // Блок ссылок (referencesGroup) теперь всегда виден
+        if (referencesGroup) referencesGroup.style.display = 'block';
     }
 
     modeBtns.forEach(btn => {
