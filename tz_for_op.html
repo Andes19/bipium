@@ -278,9 +278,16 @@
                 </div>
             </div>
 
-            <div class="field-group">
-                <label>🔗 Ссылка на подобранные материалы</label>
-                <input type="url" id="materials_link" placeholder="https://...">
+            <!-- БЛОК ССЫЛОК НА ПОДОБРАННЫЕ МАТЕРИАЛЫ (для Аудита, до 5) -->
+            <div class="field-group" id="materialsLinksGroup">
+                <label>🔗 Ссылки на подобранные материалы</label>
+                <div id="materialsLinksContainer">
+                    <div class="reference-item" id="mat_ref_0">
+                        <input type="url" class="materials-ref-input" placeholder="https://...">
+                        <button type="button" class="remove-ref-btn" onclick="removeMaterialLink(0)">🗑️ Удалить</button>
+                    </div>
+                </div>
+                <button type="button" id="addMaterialLinkBtn" class="add-ref-btn" onclick="addMaterialLinkField()">+ Добавить ссылку</button>
             </div>
             
             <!-- ЗАГОЛОВОК ДЛЯ АУДИТА -->
@@ -310,7 +317,7 @@
             </select>
         </div>
 
-        <!-- БЛОК ССЫЛОК НА РЕФЕРЕНСЫ (до 5) -->
+        <!-- БЛОК ССЫЛОК НА РЕФЕРЕНСЫ (только для Подбора, до 5) -->
         <div class="field-group" id="referencesGroup">
             <label>🔗 Ссылка на референсы</label>
             <div id="referencesContainer">
@@ -364,12 +371,12 @@
     // ========== ВАШ URL ОТ GOOGLE APPS SCRIPT ==========
     const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycby5zWxhvzCMkAIXCWvQAqQeTQDNECgZZ5d-zrCO3SPvtTiCh6nB6fiq4kqSUErlU9Z7Ew/exec";
 
-    // ========== УПРАВЛЕНИЕ ССЫЛКАМИ ==========
+    // ========== УПРАВЛЕНИЕ ССЫЛКАМИ НА РЕФЕРЕНСЫ (ПОДБОР) ==========
     let refCounter = 1;
     const MAX_REFS = 5;
 
     window.updateRemoveButtons = function() {
-        const refItems = document.querySelectorAll('.reference-item');
+        const refItems = document.querySelectorAll('#referencesContainer .reference-item');
         refItems.forEach(item => {
             const btn = item.querySelector('.remove-ref-btn');
             if (refItems.length === 1) {
@@ -382,7 +389,7 @@
 
     window.addReferenceField = function() {
         const container = document.getElementById('referencesContainer');
-        const currentCount = document.querySelectorAll('.reference-item').length;
+        const currentCount = document.querySelectorAll('#referencesContainer .reference-item').length;
         
         if (currentCount >= MAX_REFS) {
             const addBtn = document.getElementById('addRefBtn');
@@ -412,7 +419,7 @@
         const item = document.getElementById(`ref_${id}`);
         if (item) {
             item.remove();
-            const currentCount = document.querySelectorAll('.reference-item').length;
+            const currentCount = document.querySelectorAll('#referencesContainer .reference-item').length;
             const addBtn = document.getElementById('addRefBtn');
             if (addBtn && currentCount < MAX_REFS) {
                 addBtn.disabled = false;
@@ -424,12 +431,82 @@
     function getAllReferences() {
         const inputs = document.querySelectorAll('.ref-input');
         const refs = {};
-        const totalSlots = 5; // Всегда 5 полей
+        const totalSlots = 5;
         
         for (let i = 1; i <= totalSlots; i++) {
             const input = inputs[i - 1];
             const val = input ? input.value.trim() : "";
             refs[`reference_${i}`] = val;
+        }
+        return refs;
+    }
+
+    // ========== УПРАВЛЕНИЕ ССЫЛКАМИ НА ПОДОБРАННЫЕ МАТЕРИАЛЫ (АУДИТ) ==========
+    let materialRefCounter = 1;
+    const MAX_MATERIAL_REFS = 5;
+
+    window.updateMaterialRemoveButtons = function() {
+        const refItems = document.querySelectorAll('#materialsLinksContainer .reference-item');
+        refItems.forEach(item => {
+            const btn = item.querySelector('.remove-ref-btn');
+            if (refItems.length === 1) {
+                if (btn) btn.style.display = 'none';
+            } else {
+                if (btn) btn.style.display = 'block';
+            }
+        });
+    }
+
+    window.addMaterialLinkField = function() {
+        const container = document.getElementById('materialsLinksContainer');
+        const currentCount = document.querySelectorAll('#materialsLinksContainer .reference-item').length;
+        
+        if (currentCount >= MAX_MATERIAL_REFS) {
+            const addBtn = document.getElementById('addMaterialLinkBtn');
+            if (addBtn) addBtn.disabled = true;
+            return;
+        }
+        
+        const newId = materialRefCounter++;
+        const newItem = document.createElement('div');
+        newItem.className = 'reference-item';
+        newItem.id = `mat_ref_${newId}`;
+        newItem.innerHTML = `
+            <input type="url" class="materials-ref-input" placeholder="https://...">
+            <button type="button" class="remove-ref-btn" onclick="removeMaterialLink(${newId})">🗑️ Удалить</button>
+        `;
+        container.appendChild(newItem);
+        
+        const addBtn = document.getElementById('addMaterialLinkBtn');
+        if (currentCount + 1 >= MAX_MATERIAL_REFS) {
+            addBtn.disabled = true;
+        }
+        
+        window.updateMaterialRemoveButtons();
+    }
+
+    window.removeMaterialLink = function(id) {
+        const item = document.getElementById(`mat_ref_${id}`);
+        if (item) {
+            item.remove();
+            const currentCount = document.querySelectorAll('#materialsLinksContainer .reference-item').length;
+            const addBtn = document.getElementById('addMaterialLinkBtn');
+            if (addBtn && currentCount < MAX_MATERIAL_REFS) {
+                addBtn.disabled = false;
+            }
+            window.updateMaterialRemoveButtons();
+        }
+    }
+
+    function getAllMaterialLinks() {
+        const inputs = document.querySelectorAll('.materials-ref-input');
+        const refs = {};
+        const totalSlots = 5;
+        
+        for (let i = 1; i <= totalSlots; i++) {
+            const input = inputs[i - 1];
+            const val = input ? input.value.trim() : "";
+            refs[`materials_link_${i}`] = val;
         }
         return refs;
     }
@@ -444,19 +521,17 @@
     let currentMode = 'search';
 
     function toggleReferencesField() {
-        // Блок ссылок на референсы теперь виден ВСЕГДА
-        // Скрываем только дублирующиеся блоки выбора результата
         if (currentMode === 'audit') {
-            // Для аудита: скрываем общий блок результата (у него есть свой внутри секции аудита)
-            if (resultFormatGroup) resultFormatGroup.style.display = 'none';
+            // Для аудита: скрываем блоки, которые относятся только к подбору
+            if (referencesGroup) referencesGroup.style.display = 'none';
             if (referencesTitle) referencesTitle.style.display = 'none';
+            if (resultFormatGroup) resultFormatGroup.style.display = 'none';
         } else {
-            // Для подбора: показываем общий блок результата
-            if (resultFormatGroup) resultFormatGroup.style.display = 'block';
+            // Для подбора: показываем
+            if (referencesGroup) referencesGroup.style.display = 'block';
             if (referencesTitle) referencesTitle.style.display = 'block';
+            if (resultFormatGroup) resultFormatGroup.style.display = 'block';
         }
-        // Блок ссылок (referencesGroup) теперь всегда виден
-        if (referencesGroup) referencesGroup.style.display = 'block';
     }
 
     modeBtns.forEach(btn => {
@@ -512,10 +587,8 @@
             timestamp: new Date().toISOString()
         };
 
-        // Добавляем ссылки (всегда 5 полей, пустые как "")
-        const references = getAllReferences();
-
         if (currentMode === 'search') {
+            const references = getAllReferences();
             return {
                 ...baseData,
                 ...references,
@@ -532,15 +605,15 @@
                 search_dramaturgy: getValueOrEmpty('dramaturgy')
             };
         } else {
+            const materialLinks = getAllMaterialLinks();
             return {
                 ...baseData,
-                ...references,
+                ...materialLinks,
                 result_format: getValueOrEmpty('result_format_audit'),
                 audit_use_type: getValueOrEmpty('use_type_audit'),
                 audit_highres: getValueOrEmpty('highres_audit'),
                 audit_experts: getValueOrEmpty('experts_audit'),
-                audit_material_type: getValueOrEmpty('material_type_audit'),
-                audit_materials_link: getValueOrEmpty('materials_link')
+                audit_material_type: getValueOrEmpty('material_type_audit')
             };
         }
     }
@@ -655,6 +728,7 @@
     // Инициализация
     toggleReferencesField();
     window.updateRemoveButtons();
+    window.updateMaterialRemoveButtons();
 </script>
 </body>
 </html>
