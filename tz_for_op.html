@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>ТЗ на подбор материалов</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
     <style>
         /* Дополнительные стили для читаемости подсказок */
         .page-header .info {
@@ -23,6 +22,47 @@
         }
         .field-group label {
             color: #1f2a3e;
+        }
+        /* Стили для динамических ссылок */
+        .reference-item {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+        .reference-item input {
+            flex: 1;
+        }
+        .remove-ref-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.2s;
+        }
+        .remove-ref-btn:hover {
+            background: #dc2626;
+        }
+        .add-ref-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            margin-top: 8px;
+            transition: all 0.2s;
+        }
+        .add-ref-btn:hover {
+            background: #2563eb;
+        }
+        .add-ref-btn:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
         }
     </style>
 </head>
@@ -270,9 +310,16 @@
             </select>
         </div>
 
+        <!-- БЛОК ССЫЛОК НА РЕФЕРЕНСЫ (до 5) -->
         <div class="field-group" id="referencesGroup">
             <label>🔗 Ссылка на референсы</label>
-            <input type="url" id="references" placeholder="https://...">
+            <div id="referencesContainer">
+                <div class="reference-item" id="ref_0">
+                    <input type="url" class="ref-input" placeholder="https://...">
+                    <button type="button" class="remove-ref-btn" onclick="removeReference(0)">🗑️ Удалить</button>
+                </div>
+            </div>
+            <button type="button" id="addRefBtn" class="add-ref-btn">+ Добавить ссылку</button>
         </div>
 
         <div class="field-group">
@@ -298,10 +345,12 @@
             <input type="date" id="deadline_experts">
         </div>
 
-        <!-- Cloudflare Turnstile -->
+        <!-- Turnstile временно отключён -->
+        <!--
         <div style="display: flex; justify-content: center; margin: 10px 0;">
             <div class="cf-turnstile" data-sitekey="0x4AAAAAADdnWhFDC656qeAi" data-theme="light"></div>
         </div>
+        -->
 
         <button type="button" class="submit-btn" id="submitBtn">✈️ Отправить ТЗ</button>
         <div id="resultMessage" class="message" style="display: none;"></div>
@@ -315,6 +364,75 @@
     // ========== ВАШ URL ОТ GOOGLE APPS SCRIPT ==========
     const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycby5zWxhvzCMkAIXCWvQAqQeTQDNECgZZ5d-zrCO3SPvtTiCh6nB6fiq4kqSUErlU9Z7Ew/exec";
 
+    // ========== УПРАВЛЕНИЕ ССЫЛКАМИ ==========
+    let refCounter = 1; // следующая доступная позиция (0 уже занята)
+    const MAX_REFS = 5;
+
+    function updateRemoveButtons() {
+        const refItems = document.querySelectorAll('.reference-item');
+        refItems.forEach(item => {
+            const btn = item.querySelector('.remove-ref-btn');
+            if (refItems.length === 1) {
+                btn.style.display = 'none';
+            } else {
+                btn.style.display = 'block';
+            }
+        });
+    }
+
+    function addReferenceField() {
+        const container = document.getElementById('referencesContainer');
+        const currentCount = document.querySelectorAll('.reference-item').length;
+        
+        if (currentCount >= MAX_REFS) {
+            document.getElementById('addRefBtn').disabled = true;
+            return;
+        }
+        
+        const newId = refCounter++;
+        const newItem = document.createElement('div');
+        newItem.className = 'reference-item';
+        newItem.id = `ref_${newId}`;
+        newItem.innerHTML = `
+            <input type="url" class="ref-input" placeholder="https://...">
+            <button type="button" class="remove-ref-btn" onclick="removeReference(${newId})">🗑️ Удалить</button>
+        `;
+        container.appendChild(newItem);
+        
+        const addBtn = document.getElementById('addRefBtn');
+        if (currentCount + 1 >= MAX_REFS) {
+            addBtn.disabled = true;
+        }
+        
+        updateRemoveButtons();
+    }
+
+    function removeReference(id) {
+        const item = document.getElementById(`ref_${id}`);
+        if (item) {
+            item.remove();
+            const currentCount = document.querySelectorAll('.reference-item').length;
+            const addBtn = document.getElementById('addRefBtn');
+            if (currentCount < MAX_REFS) {
+                addBtn.disabled = false;
+            }
+            updateRemoveButtons();
+        }
+    }
+
+    function getAllReferences() {
+        const inputs = document.querySelectorAll('.ref-input');
+        const refs = [];
+        inputs.forEach(input => {
+            const val = input.value.trim();
+            if (val !== "") {
+                refs.push(val);
+            }
+        });
+        return refs;
+    }
+
+    // ========== ОСТАЛЬНОЙ КОД ==========
     const modeBtns = document.querySelectorAll('.mode-btn');
     const searchSection = document.getElementById('searchSection');
     const auditSection = document.getElementById('auditSection');
@@ -325,12 +443,10 @@
 
     function toggleReferencesField() {
         if (currentMode === 'audit') {
-            // Для аудита: скрываем общие поля результата и референсы
             if (referencesGroup) referencesGroup.style.display = 'none';
             if (referencesTitle) referencesTitle.style.display = 'none';
             if (resultFormatGroup) resultFormatGroup.style.display = 'none';
         } else {
-            // Для подбора: показываем общие поля результата и референсы
             if (referencesGroup) referencesGroup.style.display = 'block';
             if (referencesTitle) referencesTitle.style.display = 'block';
             if (resultFormatGroup) resultFormatGroup.style.display = 'block';
@@ -387,6 +503,7 @@
             deadline_search: getValueOrEmpty('deadline_search'),
             deadline_editors: getValueOrEmpty('deadline_editors'),
             deadline_experts: getValueOrEmpty('deadline_experts'),
+            references_list: getAllReferences(),
             timestamp: new Date().toISOString()
         };
 
@@ -394,7 +511,6 @@
             return {
                 ...baseData,
                 result_format: getValueOrEmpty('result_format'),
-                references: getValueOrEmpty('references'),
                 search_use_type: getValueOrEmpty('use_type_search'),
                 search_amount: getValueOrEmpty('amount_search'),
                 search_orientation: getValueOrEmpty('orientation_search'),
@@ -459,13 +575,8 @@
     }
 
     submitBtn.addEventListener("click", async () => {
-        // Получаем токен Turnstile
-        const turnstileToken = document.querySelector('[name="cf-turnstile-response"]')?.value;
-        
-        if (!turnstileToken) {
-            showMessage("Пожалуйста, подтвердите, что вы не робот (капча)", "error");
-            return;
-        }
+        // Turnstile временно отключён
+        const turnstileToken = "disabled";
 
         // Проверка обязательных полей
         const topic = document.getElementById('topic').value.trim();
@@ -529,15 +640,11 @@
 
         submitBtn.innerHTML = originalText;
         submitBtn.disabled = false;
-        
-        // Сброс Turnstile после отправки
-        if (typeof turnstile !== 'undefined') {
-            turnstile.reset();
-        }
     });
 
     // Инициализация
     toggleReferencesField();
+    updateRemoveButtons();
 </script>
 </body>
 </html>
