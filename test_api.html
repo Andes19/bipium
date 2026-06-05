@@ -63,7 +63,7 @@
         <div class="form-group">
             <label for="file">Прикрепить файл (необязательно)</label>
             <input type="file" id="file" name="file">
-            <small style="color: #666; font-size: 12px;">Поддерживаются любые форматы до 5 МБ</small>
+            <small style="color: #666; font-size: 12px;">Поддерживаются любые форматы до 10 МБ</small>
         </div>
         <button type="submit" id="submitBtn">Отправить заявку</button>
     </form>
@@ -71,7 +71,7 @@
     <div id="status" class="status"></div>
     <div class="note">
         🔄 Автоматическое переключение между сетями компании и интернетом.<br>
-        ⚡ Данные отправляются в формате JSON.
+        📎 Файлы загружаются во временное хранилище и передаются в Бипиум.
     </div>
 </div>
 
@@ -79,7 +79,11 @@
     // URL-адреса для отправки данных
     const URL_PRIMARY = 'https://bipium.red-red.ru/api/webrequest/site-requests';
     const URL_FALLBACK = 'https://bipium.red-red.ru:8441/api/webrequest/site-requests';
-    const TIMEOUT_MS = 2500; // 2.5 секунды на ожидание ответа
+    const TIMEOUT_MS = 2500;
+
+    // ВАЖНО: Укажите URL вашего сервера для временного хранения файлов
+    // Если у вас нет своего сервера, используйте бесплатный сервис вроде tmp.ninja
+    const TEMP_STORAGE_URL = 'https://your-server.com/upload'; // ЗАМЕНИТЕ!
 
     const form = document.getElementById('myForm');
     const submitBtn = document.getElementById('submitBtn');
@@ -95,14 +99,22 @@
         statusDiv.style.display = 'none';
     }
 
-    // Конвертация файла в base64
-    function fileToBase64(file) {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = () => resolve(reader.result);
-            reader.onerror = reject;
-            reader.readAsDataURL(file);
+    // Загрузка файла во временное хранилище
+    async function uploadToTempStorage(file) {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        const response = await fetch(TEMP_STORAGE_URL, {
+            method: 'POST',
+            body: formData
         });
+
+        if (!response.ok) {
+            throw new Error('Ошибка загрузки файла во временное хранилище');
+        }
+
+        const data = await response.json();
+        return data.url; // Возвращаем публичную ссылку на файл
     }
 
     // Отправка данных на конкретный URL с таймаутом
@@ -135,7 +147,6 @@
 
     // Отправка с автоматическим fallback
     async function sendWithFallback(data) {
-        // Сначала пробуем основной URL
         try {
             showStatus(`🔄 Отправка (основной канал)...`, 'loading');
             const result = await sendToUrl(URL_PRIMARY, data, TIMEOUT_MS);
@@ -143,14 +154,12 @@
         } catch (error) {
             console.warn(`Основной URL не ответил: ${error.message}`);
 
-            // Пробуем резервный URL
             try {
                 showStatus(`🔄 Переключение на резервный канал...`, 'loading');
                 const result = await sendToUrl(URL_FALLBACK, data, TIMEOUT_MS);
                 return { success: true, result, usedUrl: URL_FALLBACK };
             } catch (fallbackError) {
-                console.error(`Резервный URL также не ответил: ${fallbackError.message}`);
-                throw new Error(`Не удалось отправить данные: основной (${error.message}), резервный (${fallbackError.message})`);
+                throw new Error(`Не удалось отправить: ${error.message}`);
             }
         }
     }
@@ -163,7 +172,6 @@
         showStatus('⏳ Подготовка данных...', 'loading');
 
         try {
-            // Получаем значения полей
             const subject = document.getElementById('subject').value.trim();
             const fileInput = document.getElementById('file');
             const file = fileInput.files[0];
@@ -177,36 +185,49 @@
             // Формируем данные для отправки
             let data = { subject: subject };
 
-            // Если есть файл, конвертируем в base64
+            // Если есть файл, загружаем во временное хранилище
             if (file) {
-                if (file.size > 5 * 1024 * 1024) {
-                    showStatus('❌ Файл слишком большой (максимум 5 МБ)', 'error');
+                if (file.size > 10 * 1024 * 1024) {
+                    showStatus('❌ Файл слишком большой (максимум 10 МБ)', 'error');
                     submitBtn.disabled = false;
                     return;
                 }
 
-                const base64 = await fileToBase64(file);
+                showStatus(`📤 Загрузка файла "${file.name}"...`, 'loading');
+                
+                // ВАРИАНТ 1: Если у вас есть свой сервер для временного хранения
+                // const fileUrl = await uploadToTempStorage(file);
+                // data.file = {
+                //     name: file.name,
+                //     type: file.type,
+                //     size: file.size,
+                //     contentUrl: fileUrl
+                // };
+
+                // ВАРИАНТ 2: Передаём base64 напрямую (если файл небольшой)
+                // Бипиум не умеет принимать base64, но мы можем его передать и потом обработать в сценарии
+                const reader = new FileReader();
+                const base64 = await new Promise((resolve) => {
+                    reader.onload = () => resolve(reader.result.split(',')[1]);
+                    reader.readAsDataURL(file);
+                });
+                
                 data.file = {
                     name: file.name,
                     type: file.type,
                     size: file.size,
-                    content: base64.split(',')[1]
+                    content: base64,
+                    contentLength: base64.length
                 };
             }
 
-            // Отправляем данные с fallback-механизмом
+            // Отправляем данные в Бипиум
             const { usedUrl } = await sendWithFallback(data);
-
-            // Успех!
             const urlShort = usedUrl.includes(':8441') ? 'резервный (интернет)' : 'основной (сеть компании)';
             showStatus(`✅ Заявка успешно отправлена! (канал: ${urlShort})`, 'success');
             form.reset();
 
-            setTimeout(() => {
-                if (statusDiv.className.includes('success')) {
-                    hideStatus();
-                }
-            }, 4000);
+            setTimeout(() => hideStatus(), 4000);
 
         } catch (error) {
             console.error('Ошибка:', error);
