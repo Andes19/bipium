@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Отправка данных и файлов в Бипиум</title>
+    <style>
+        body { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; max-width: 600px; margin: 50px auto; padding: 20px; background: #f5f7fb; }
+        .card { background: white; border-radius: 16px; padding: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; color: #1e293b; }
+        input[type="text"], input[type="file"] { width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 16px; }
+        button { background: #3b82f6; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; width: 100%; }
+        button:disabled { background: #94a3b8; cursor: not-allowed; }
+        .status { margin-top: 20px; padding: 12px; border-radius: 8px; background: #f1f5f9; font-family: monospace; font-size: 14px; white-space: pre-wrap; word-break: break-all; }
+        .error { background: #fee2e2; color: #991b1b; }
+        .success { background: #dcfce7; color: #166534; }
+        .loading { background: #e0e7ff; color: #1e40af; }
+        hr { margin: 20px 0; border: none; border-top: 1px solid #e2e8f0; }
+        h2 { margin-top: 0; color: #0f172a; }
+        .note { font-size: 13px; color: #64748b; margin-top: 5px; }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h2>📤 Отправить заявку в Бипиум</h2>
+    <div class="form-group">
+        <label>Тема обращения *</label>
+        <input type="text" id="subject" placeholder="Введите тему..." autocomplete="off">
+    </div>
+    <div class="form-group">
+        <label>Прикрепить файл</label>
+        <input type="file" id="fileInput">
+        <div class="note">Поддерживаются любые форматы: изображения, PDF, документы</div>
+    </div>
+    <button id="submitBtn">Отправить</button>
+    <div id="status" class="status" style="display: none;"></div>
+    <hr>
+    <div style="font-size: 13px; color: #475569;">
+        ⚙️ <strong>Перед отправкой:</strong> укажите настройки API в JavaScript коде ниже.
+    </div>
+</div>
+
+<script>
+    // ----------------------------------------------------------------------
+    // 🔧 НАСТРОЙКИ, КОТОРЫЕ ВАМ НУЖНО ЗАПОЛНИТЬ
+    // ----------------------------------------------------------------------
+    const BPIUM_CONFIG = {
+        domain: 'https://bipium.red-red.ru/',   // Пример: https://company.bpium.ru
+        catalogId: '52',               // ID каталога, куда сохранять записи
+        fieldSubjectId: '2',   // ID поля "Тема"
+        fieldFileId: '4'             // ID поля типа "Файл"
+    };
+    
+    // ----------------------------------------------------------------------
+    // Логика отправки (не меняйте, если не уверены)
+    // ----------------------------------------------------------------------
+    const submitBtn = document.getElementById('submitBtn');
+    const statusDiv = document.getElementById('status');
+    
+    function showStatus(message, type = 'info') {
+        statusDiv.style.display = 'block';
+        statusDiv.textContent = message;
+        statusDiv.className = `status ${type}`;
+        if (type === 'error') console.error(message);
+        else console.log(message);
+    }
+    
+    function setLoading(isLoading) {
+        submitBtn.disabled = isLoading;
+        submitBtn.textContent = isLoading ? 'Отправка...' : 'Отправить';
+    }
+    
+    // Шаг 1: Создаем запись (пока без файла) и получаем её ID
+    async function createRecord(subjectText) {
+        const url = `${BPIUM_CONFIG.domain}/api/v1/catalogs/${BPIUM_CONFIG.catalogId}/records`;
+        const payload = {
+            values: {
+                [BPIUM_CONFIG.fieldSubjectId]: subjectText
+            }
+        };
+        
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Ошибка создания записи (${response.status}): ${errorText}`);
+        }
+        
+        const data = await response.json();
+        return data.id; // возвращаем ID созданной записи
+    }
+    
+    // Шаг 2.1: Получаем ключи для загрузки файла в хранилище Бипиума
+    async function getFileUploadKeys(fileName, fileSize, fileType, catalogId, recordId, fieldId) {
+        const url = `${BPIUM_CONFIG.domain}/api/v1/files/`;
+        const payload = {
+            catalogId: catalogId,
+            recordId: recordId,
+            fieldId: fieldId,
+            name: fileName,
+            size: fileSize,
+            mimeType: fileType,
+            typeStorage: "remoteStorage"
+        };
+        
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Ошибка получения ключей загрузки (${response.status}): ${errorText}`);
+        }
+        
+        return await response.json();
+    }
+    
+    // Шаг 2.2: Загружаем файл в AWS S3 хранилище Бипиума
+    async function uploadFileToStorage(uploadUrl, fileKey, awsKey, policy, signature, file, mimeType) {
+        const formData = new FormData();
+        formData.append('key', fileKey);
+        formData.append('acl', 'private');
+        formData.append('AWSAccessKeyId', awsKey);
+        formData.append('Policy', policy);
+        formData.append('Signature', signature);
+        formData.append('Content-Type', mimeType);
+        formData.append('file', file);
+        
+        const response = await fetch(uploadUrl, {
+            method: 'POST',
+            body: formData
+        });
+        
+        if (response.status !== 204) {
+            const errorText = await response.text();
+            throw new Error(`Ошибка загрузки файла в хранилище (${response.status}): ${errorText}`);
+        }
+        return true;
+    }
+    
+    // Шаг 2.3: Подтверждаем загрузку файла на сервере Бипиума
+    async function confirmFileUpload(fileId, fileName, fileSize, mimeType, fileUrl) {
+        const url = `${BPIUM_CONFIG.domain}/api/v1/files/${fileId}`;
+        const payload = {
+            fileId: Number(fileId),
+            name: fileName,
+            size: fileSize,
+            mimeType: mimeType,
+            url: fileUrl
+        };
+        
+        const response = await fetch(url, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Ошибка подтверждения файла (${response.status}): ${errorText}`);
+        }
+        
+        return await response.json();
+    }
+    
+    // Шаг 3: Обновляем запись, привязывая к ней ID загруженного файла
+    async function attachFileToRecord(recordId, fileId) {
+        const url = `${BPIUM_CONFIG.domain}/api/v1/catalogs/${BPIUM_CONFIG.catalogId}/records/${recordId}`;
+        const payload = {
+            values: {
+                [BPIUM_CONFIG.fieldFileId]: [{ id: Number(fileId) }]
+            }
+        };
+        
+        const response = await fetch(url, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Ошибка привязки файла к записи (${response.status}): ${errorText}`);
+        }
+        
+        return true;
+    }
+    
+    // Главная функция отправки
+    async function submitToBpium(subject, file) {
+        // Шаг 1: Создаем запись (без файла)
+        showStatus('📝 Создаём запись в Бипиум...', 'loading');
+        const recordId = await createRecord(subject);
+        showStatus(`✅ Запись создана, ID: ${recordId}`, 'success');
+        
+        // Если файл не передан — на этом останавливаемся
+        if (!file) {
+            showStatus(`🎉 Готово! Запись №${recordId} создана без файла.`, 'success');
+            return;
+        }
+        
+        // Шаг 2.1: Получаем ключи для загрузки файла
+        showStatus('🔑 Получаем ключи доступа для файла...', 'loading');
+        const uploadData = await getFileUploadKeys(
+            file.name, file.size, file.type,
+            BPIUM_CONFIG.catalogId, recordId, BPIUM_CONFIG.fieldFileId
+        );
+        
+        // Шаг 2.2: Загружаем файл в хранилище
+        showStatus(`📤 Загружаем файл "${file.name}" (${Math.round(file.size/1024)} КБ)...`, 'loading');
+        await uploadFileToStorage(
+            uploadData.uploadUrl, uploadData.fileKey, uploadData.AWSAccessKeyId,
+            uploadData.police, uploadData.signature, file, file.type
+        );
+        
+        // Шаг 2.3: Подтверждаем загрузку
+        showStatus('✅ Подтверждаем загрузку на сервере...', 'loading');
+        const confirmedFile = await confirmFileUpload(
+            uploadData.fileId, file.name, file.size, file.type, uploadData.fileKey
+        );
+        
+        // Шаг 3: Привязываем файл к записи
+        showStatus('🔗 Привязываем файл к записи...', 'loading');
+        await attachFileToRecord(recordId, confirmedFile.id);
+        
+        showStatus(`🎉 ВСЕ ГОТОВО! Запись №${recordId} создана, файл "${file.name}" прикреплён.`, 'success');
+    }
+    
+    // Обработчик кнопки
+    submitBtn.addEventListener('click', async () => {
+        const subject = document.getElementById('subject').value.trim();
+        const fileInput = document.getElementById('fileInput');
+        const file = fileInput.files[0];
+        
+        if (!subject) {
+            showStatus('❌ Пожалуйста, заполните поле "Тема обращения"', 'error');
+            return;
+        }
+        
+        // Простая валидация настроек
+        if (BPIUM_CONFIG.domain === 'https://ВАШ_ДОМЕН.bpium.ru' || 
+            BPIUM_CONFIG.catalogId === 'ID_КАТАЛОГА') {
+            showStatus('⚠️ Сначала заполните настройки API в коде страницы (BPIUM_CONFIG)', 'error');
+            return;
+        }
+        
+        setLoading(true);
+        statusDiv.style.display = 'block';
+        
+        try {
+            await submitToBpium(subject, file);
+        } catch (err) {
+            showStatus(`❌ Ошибка: ${err.message}`, 'error');
+        } finally {
+            setLoading(false);
+        }
+    });
+</script>
+</body>
+</html>
