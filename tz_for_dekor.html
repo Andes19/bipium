@@ -181,7 +181,7 @@
         .user-select-row input { flex: 1; }
         hr { margin: 0.5rem 0 1rem 0; border-color: #e9eef3; }
 
-        /* Стили для загрузки файлов */
+        /* ----- Стили для файлов в стиле Windows (плитки) ----- */
         .file-drop-area {
             border: 2px dashed #cbd5e1;
             border-radius: 20px;
@@ -206,58 +206,91 @@
             cursor: pointer;
             margin-top: 0.5rem;
         }
+        /* Сетка файлов — как в проводнике */
         .file-list {
-            margin-top: 1rem;
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-            max-height: 300px;
-            overflow-y: auto;
+            margin-top: 1.2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 160px));
+            gap: 1rem;
+            justify-content: start;
         }
-        .file-item {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            background: #f1f5f9;
-            padding: 0.6rem;
-            border-radius: 12px;
-            font-size: 0.85rem;
+        /* Карточка файла */
+        .file-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 0.75rem;
+            transition: all 0.2s;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+            position: relative;
+            text-align: center;
         }
-        .file-preview {
-            width: 48px;
-            height: 48px;
-            border-radius: 8px;
-            object-fit: cover;
-            background: #e2e8f0;
+        .file-card:hover {
+            border-color: #cbd5e1;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        /* Крестик удаления — в правом верхнем углу */
+        .file-delete {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            background: rgba(255,255,255,0.9);
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            font-size: 14px;
+            cursor: pointer;
+            color: #e11d48;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
+            transition: 0.1s;
+            font-weight: bold;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
         }
-        .file-info {
-            flex: 1;
-            text-align: left;
-            word-break: break-all;
+        .file-delete:hover {
+            background: #fee2e2;
+            transform: scale(1.05);
+        }
+        /* Превью (квадратное, 120x120) */
+        .file-preview {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 10px;
+            border-radius: 12px;
+            object-fit: cover;
+            background: #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            overflow: hidden;
+        }
+        .file-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 12px;
         }
         .file-name {
+            font-size: 0.75rem;
             font-weight: 500;
+            color: #1e293b;
+            word-break: break-all;
+            margin-top: 0.25rem;
+            line-height: 1.3;
         }
         .file-size {
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             color: #64748b;
-        }
-        .file-item-remove {
-            background: none;
-            border: none;
-            color: #e11d48;
-            cursor: pointer;
-            font-size: 1.2rem;
-            padding: 0 0.5rem;
+            margin-top: 0.2rem;
         }
         .file-limit-warning {
             color: #e11d48;
             font-size: 0.75rem;
-            margin-top: 0.5rem;
+            margin-top: 0.75rem;
+            text-align: left;
         }
         .progress-container {
             margin-top: 1rem;
@@ -289,6 +322,14 @@
             .submit-area { flex-direction: column; }
             .btn-submit { width: 100%; }
             .toast { left: 1rem; right: 1rem; bottom: 1rem; text-align: center; }
+            .file-list {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 130px));
+                gap: 0.75rem;
+            }
+            .file-preview {
+                width: 100px;
+                height: 100px;
+            }
         }
     </style>
 </head>
@@ -401,7 +442,7 @@
                         <textarea id="shortRequirements" placeholder="Ограничения по высоте, материалам, требования пожарной безопасности..."></textarea>
                     </div>
 
-                    <!-- БЛОК ЗАГРУЗКИ ФАЙЛОВ -->
+                    <!-- Файлы (короткая версия) -->
                     <div class="field-group full-width">
                         <label>📎 Прикрепить файлы (до 5 шт.)</label>
                         <div id="shortFileDropArea" class="file-drop-area">
@@ -570,7 +611,7 @@
                         <textarea id="fullRequirements" placeholder="Ограничения по высоте, материалам, требования пожарной безопасности, крепления..."></textarea>
                     </div>
 
-                    <!-- БЛОК ЗАГРУЗКИ ФАЙЛОВ для полной версии -->
+                    <!-- Файлы (полная версия) -->
                     <div class="field-group full-width">
                         <label>📎 Прикрепить файлы (до 5 шт.)</label>
                         <div id="fullFileDropArea" class="file-drop-area">
@@ -605,7 +646,6 @@
     const MAX_FILE_SIZE_MB = 10;
     // ============================================================
 
-    // --- УПРАВЛЕНИЕ ФАЙЛАМИ С ПРЕДПРОСМОТРОМ ---
     let currentFiles = { short: [], full: [] };
 
     function formatFileSize(bytes) {
@@ -623,41 +663,6 @@
         return '📄';
     }
 
-    function createFilePreviewElement(file, index, version) {
-        const fileItem = document.createElement('div');
-        fileItem.className = 'file-item';
-        
-        // Превью для изображений
-        let previewHtml = '';
-        if (file.type.startsWith('image/')) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const img = document.createElement('img');
-                img.src = e.target.result;
-                img.className = 'file-preview';
-                img.style.objectFit = 'cover';
-                const previewDiv = fileItem.querySelector('.file-preview');
-                if (previewDiv) previewDiv.replaceWith(img);
-            };
-            reader.readAsDataURL(file);
-            previewHtml = `<div class="file-preview"></div>`;
-        } else {
-            const icon = getFileIcon(file.type, file.name);
-            previewHtml = `<div class="file-preview" style="font-size: 1.8rem;">${icon}</div>`;
-        }
-        
-        fileItem.innerHTML = `
-            ${previewHtml}
-            <div class="file-info">
-                <div class="file-name">${escapeHtml(file.name)}</div>
-                <div class="file-size">${formatFileSize(file.size)}</div>
-            </div>
-            <button class="file-item-remove" data-index="${index}">✖</button>
-        `;
-        
-        return fileItem;
-    }
-
     function escapeHtml(str) {
         if (!str) return '';
         return str.replace(/[&<>]/g, function(m) {
@@ -668,27 +673,70 @@
         });
     }
 
+    // Создание карточки файла (плитка)
+    function createFileCard(file, index, version) {
+        const card = document.createElement('div');
+        card.className = 'file-card';
+        card.setAttribute('data-index', index);
+
+        // Превью
+        const previewDiv = document.createElement('div');
+        previewDiv.className = 'file-preview';
+
+        if (file.type.startsWith('image/')) {
+            const img = document.createElement('img');
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                img.src = e.target.result;
+                img.alt = file.name;
+                previewDiv.innerHTML = '';
+                previewDiv.appendChild(img);
+            };
+            reader.readAsDataURL(file);
+            previewDiv.innerHTML = '<div style="background:#e2e8f0; width:100%; height:100%; border-radius:12px;"></div>';
+        } else {
+            const icon = getFileIcon(file.type, file.name);
+            previewDiv.innerHTML = `<div style="font-size:3rem;">${icon}</div>`;
+        }
+
+        // Имя файла
+        const nameDiv = document.createElement('div');
+        nameDiv.className = 'file-name';
+        nameDiv.title = file.name;
+        nameDiv.textContent = file.name.length > 30 ? file.name.slice(0, 27) + '...' : file.name;
+
+        // Размер
+        const sizeDiv = document.createElement('div');
+        sizeDiv.className = 'file-size';
+        sizeDiv.textContent = formatFileSize(file.size);
+
+        // Крестик удаления
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className = 'file-delete';
+        deleteBtn.innerHTML = '✖';
+        deleteBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            currentFiles[version].splice(index, 1);
+            updateFileList(version);
+            updateLimitWarning(version);
+        });
+
+        card.appendChild(deleteBtn);
+        card.appendChild(previewDiv);
+        card.appendChild(nameDiv);
+        card.appendChild(sizeDiv);
+        return card;
+    }
+
     function updateFileList(version) {
-        const fileListDiv = document.getElementById(`${version}FileList`);
+        const container = document.getElementById(`${version}FileList`);
+        if (!container) return;
+        container.innerHTML = '';
         const files = currentFiles[version];
-        fileListDiv.innerHTML = '';
-        
-        files.forEach((file, index) => {
-            const fileItem = createFilePreviewElement(file, index, version);
-            fileListDiv.appendChild(fileItem);
+        files.forEach((file, idx) => {
+            const card = createFileCard(file, idx, version);
+            container.appendChild(card);
         });
-        
-        // обработчики удаления
-        document.querySelectorAll(`#${version}FileList .file-item-remove`).forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const idx = parseInt(btn.dataset.index);
-                currentFiles[version].splice(idx, 1);
-                updateFileList(version);
-                updateLimitWarning(version);
-            });
-        });
-        
-        updateLimitWarning(version);
     }
 
     function updateLimitWarning(version) {
@@ -705,7 +753,6 @@
         const remaining = MAX_FILES - currentFiles[version].length;
         const validFiles = [];
         const oversizedFiles = [];
-        
         for (const file of newFiles) {
             if (file.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
                 oversizedFiles.push(`${file.name} (${formatFileSize(file.size)})`);
@@ -713,15 +760,13 @@
                 validFiles.push(file);
             }
         }
-        
         if (oversizedFiles.length > 0) {
             showToast(`❌ Файлы превышают ${MAX_FILE_SIZE_MB} МБ: ${oversizedFiles.join(', ')}`, true);
         }
-        
         const toAdd = validFiles.slice(0, remaining);
         currentFiles[version] = [...currentFiles[version], ...toAdd];
         updateFileList(version);
-        
+        updateLimitWarning(version);
         if (toAdd.length < validFiles.length) {
             showToast(`⚠️ Добавлено только ${toAdd.length} из ${validFiles.length} файлов (лимит ${MAX_FILES})`, true);
         }
@@ -730,12 +775,13 @@
     function setupFileManager(version) {
         const fileInput = document.getElementById(`${version}FileInput`);
         const dropArea = document.getElementById(`${version}FileDropArea`);
-        
+        if (!fileInput || !dropArea) return;
+
         fileInput.addEventListener('change', (e) => {
             addFiles(version, Array.from(e.target.files));
             fileInput.value = '';
         });
-        
+
         dropArea.addEventListener('dragover', (e) => {
             e.preventDefault();
             dropArea.classList.add('drag-over');
@@ -752,17 +798,16 @@
             if (e.target !== dropArea && !e.target.classList.contains('file-input-label')) return;
             fileInput.click();
         });
-        
+
         updateFileList(version);
+        updateLimitWarning(version);
     }
-    
+
     function setProgress(version, current, total, fileName) {
         const container = document.getElementById(`${version}ProgressContainer`);
         const fill = document.getElementById(`${version}ProgressFill`);
         const text = document.getElementById(`${version}ProgressText`);
-        
         if (!container || !fill || !text) return;
-        
         if (total > 0) {
             container.classList.remove('hidden');
             const percent = (current / total) * 100;
@@ -778,7 +823,7 @@
     setupFileManager('short');
     setupFileManager('full');
 
-    // --- Функции для работы с полями "Постановщик / Исполнитель" ---
+    // --- Работа с полями Постановщик/Исполнитель ---
     function setupUserSelect(selectId, manualInputId) {
         const select = document.getElementById(selectId);
         const manualInput = document.getElementById(manualInputId);
@@ -886,23 +931,19 @@
         setTimeout(() => toast.remove(), 5000);
     }
 
-    // --- ЗАГРУЗКА ФАЙЛА НА ДИСК БИТРИКС24 ---
+    // --- Загрузка файлов и создание задачи ---
     async function uploadFileToDisk(file, version, currentIndex, totalCount) {
         return new Promise(async (resolve, reject) => {
             try {
                 setProgress(version, currentIndex, totalCount, file.name);
-                
                 const reader = new FileReader();
                 reader.onload = async function(e) {
                     const base64 = e.target.result.split(',')[1];
-                    const fileName = file.name;
-                    
                     const payload = {
                         id: DISK_FOLDER_ID,
-                        data: { NAME: fileName },
-                        fileContent: [fileName, base64]
+                        data: { NAME: file.name },
+                        fileContent: [file.name, base64]
                     };
-                    
                     const url = `${BITRIX24_WEBHOOK_URL}disk.folder.uploadfile`;
                     const response = await fetch(url, {
                         method: 'POST',
@@ -924,10 +965,8 @@
         });
     }
 
-    // --- СОЗДАНИЕ ЗАДАЧИ С ФАЙЛАМИ ---
     async function createTaskWithFiles(taskTitle, taskDescription, creatorId, responsibleId, files, version) {
         const uploadedFileIds = [];
-        
         if (files && files.length > 0) {
             for (let i = 0; i < files.length; i++) {
                 try {
@@ -950,36 +989,26 @@
             CREATED_BY: parseInt(creatorId),
             RESPONSIBLE_ID: parseInt(responsibleId)
         };
-        
         if (uploadedFileIds.length > 0) {
             taskFields.UF_TASK_WEBDAV_FILES = uploadedFileIds;
         }
-        
         const payload = { fields: taskFields };
-        
-        try {
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-            const data = await response.json();
-            if (data.error) {
-                throw new Error(data.error_description || data.error);
-            }
-            const taskId = data.result?.task?.id || data.result?.id;
-            return { success: true, taskId };
-        } catch (err) {
-            throw new Error(`Ошибка создания задачи: ${err.message}`);
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        const data = await response.json();
+        if (data.error) {
+            throw new Error(data.error_description || data.error);
         }
+        const taskId = data.result?.task?.id || data.result?.id;
+        return { success: true, taskId };
     }
 
-    // --- СБОР ДАННЫХ И СОЗДАНИЕ ЗАДАЧИ ---
+    // --- Сбор данных и отправка ---
     document.getElementById('demoSubmitBtn').addEventListener('click', async () => {
-        let taskTitle = '';
-        let taskDescription = '';
-        let creatorId = '';
-        let responsibleId = '';
+        let taskTitle = '', taskDescription = '', creatorId = '', responsibleId = '';
         let filesToUpload = [];
         
         if (currentVersion === 'short') {
@@ -994,12 +1023,10 @@
             const has3d = document.querySelector('input[name="short3d"]:checked')?.value || '';
             const hasBrandbook = document.querySelector('input[name="shortBrandbook"]:checked')?.value || '';
             const requirements = document.getElementById('shortRequirements').value;
-            
             taskTitle = projectName ? `ТЗ: ${projectName}` : 'Техническое задание (декорация)';
             creatorId = getUserId('shortCreatorSelect', 'shortCreatorManual');
             responsibleId = getUserId('shortResponsibleSelect', 'shortResponsibleManual');
             filesToUpload = currentFiles.short;
-            
             taskDescription = `📋 Техническое задание на производство декорации (короткая версия)\n\n`;
             if (projectName) taskDescription += `🏷️ Проект: ${projectName}\n`;
             if (quantity) taskDescription += `📦 Количество: ${quantity}\n`;
@@ -1034,12 +1061,10 @@
             const cableLength = document.getElementById('fullCableLength')?.value || '';
             const cableColor = document.getElementById('fullCableColor')?.value || '';
             const requirements = document.getElementById('fullRequirements').value;
-            
             taskTitle = projectName ? `ТЗ (полная): ${projectName}` : 'Техническое задание на декорацию (полная версия)';
             creatorId = getUserId('fullCreatorSelect', 'fullCreatorManual');
             responsibleId = getUserId('fullResponsibleSelect', 'fullResponsibleManual');
             filesToUpload = currentFiles.full;
-            
             taskDescription = `🏛️ Техническое задание на производство декорации (полная версия)\n\n`;
             if (projectName) taskDescription += `🏷️ Проект: ${projectName}\n`;
             if (quantity) taskDescription += `📦 Количество: ${quantity}\n`;
@@ -1071,7 +1096,7 @@
             showToast('❌ Ошибка: укажите постановщика и исполнителя', true);
             return;
         }
-        if (!taskTitle || taskTitle.trim() === '') {
+        if (!taskTitle.trim()) {
             showToast('❌ Ошибка: укажите название проекта', true);
             return;
         }
@@ -1088,9 +1113,11 @@
                 if (currentVersion === 'short') {
                     currentFiles.short = [];
                     updateFileList('short');
+                    updateLimitWarning('short');
                 } else {
                     currentFiles.full = [];
                     updateFileList('full');
+                    updateLimitWarning('full');
                 }
             }
         } catch (err) {
