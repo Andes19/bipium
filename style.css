@@ -4,13 +4,13 @@
     /* Светлая тема (по умолчанию) */
     --bg-primary: #f5f7fa;
     --bg-secondary: #ffffff;
-    --bg-card: rgba(255, 255, 255, 0.95);
+    --bg-card: rgba(255, 255, 255, 0.85);
     --bg-header: linear-gradient(135deg, #1a2a3a 0%, #0f1a24 100%);
     --text-primary: #1e293b;
     --text-secondary: #64748b;
     --text-light: #ffffff;
     --border-color: rgba(0, 0, 0, 0.08);
-    --input-bg: #ffffff;
+    --input-bg: rgba(255, 255, 255, 0.95);
     --input-border: #e2e8f0;
     --shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.1);
     --accent: #3b82f6;
@@ -22,24 +22,24 @@
     --error-text: #b91c1c;
     --info-bg: #eef2ff;
     --info-text: #1e3a8a;
-    --mode-switch-bg: #f8fafc;
+    --mode-switch-bg: rgba(248, 250, 252, 0.8);
     --mode-btn-bg: white;
     --mode-btn-border: #cbd5e1;
-    --aurora-1: rgba(34, 197, 94, 0.15);
-    --aurora-2: rgba(59, 130, 246, 0.1);
-    --aurora-3: rgba(139, 92, 246, 0.08);
+    --aurora-1: rgba(34, 197, 94, 0.2);
+    --aurora-2: rgba(59, 130, 246, 0.15);
+    --aurora-3: rgba(139, 92, 246, 0.1);
 }
 
 [data-theme="dark"] {
     --bg-primary: #0f172a;
     --bg-secondary: #1e293b;
-    --bg-card: rgba(30, 41, 59, 0.9);
+    --bg-card: rgba(30, 41, 59, 0.75);
     --bg-header: linear-gradient(135deg, #0f172a 0%, #020617 100%);
     --text-primary: #f1f5f9;
     --text-secondary: #94a3b8;
     --text-light: #f1f5f9;
     --border-color: rgba(148, 163, 184, 0.15);
-    --input-bg: rgba(15, 23, 42, 0.8);
+    --input-bg: rgba(15, 23, 42, 0.85);
     --input-border: rgba(148, 163, 184, 0.2);
     --shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.4);
     --accent: #22c55e;
@@ -51,12 +51,12 @@
     --error-text: #f87171;
     --info-bg: rgba(59, 130, 246, 0.15);
     --info-text: #60a5fa;
-    --mode-switch-bg: rgba(30, 41, 59, 0.8);
+    --mode-switch-bg: rgba(30, 41, 59, 0.7);
     --mode-btn-bg: rgba(15, 23, 42, 0.8);
     --mode-btn-border: rgba(148, 163, 184, 0.3);
-    --aurora-1: rgba(34, 197, 94, 0.2);
-    --aurora-2: rgba(59, 130, 246, 0.15);
-    --aurora-3: rgba(139, 92, 246, 0.1);
+    --aurora-1: rgba(34, 197, 94, 0.25);
+    --aurora-2: rgba(59, 130, 246, 0.2);
+    --aurora-3: rgba(139, 92, 246, 0.15);
 }
 
 * {
@@ -75,35 +75,46 @@ body {
     position: relative;
 }
 
-/* Эффект северного сияния на фоне */
-body::before {
-    content: '';
+/* Эффект северного сияния — на всю страницу, без обрезки */
+.aurora-bg {
     position: fixed;
     top: 0;
     left: 0;
+    right: 0;
+    bottom: 0;
     width: 100%;
     height: 100%;
-    background: 
-        radial-gradient(ellipse at 20% 40%, var(--aurora-1) 0%, transparent 50%),
-        radial-gradient(ellipse at 80% 60%, var(--aurora-2) 0%, transparent 50%),
-        radial-gradient(ellipse at 50% 80%, var(--aurora-3) 0%, transparent 60%);
     z-index: 0;
     pointer-events: none;
-    animation: auroraShift 15s ease-in-out infinite;
+    overflow: hidden;
+}
+
+.aurora-bg::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: 
+        radial-gradient(ellipse at 20% 40%, var(--aurora-1) 0%, transparent 40%),
+        radial-gradient(ellipse at 80% 60%, var(--aurora-2) 0%, transparent 40%),
+        radial-gradient(ellipse at 50% 80%, var(--aurora-3) 0%, transparent 50%);
+    animation: auroraShift 12s ease-in-out infinite;
 }
 
 @keyframes auroraShift {
     0%, 100% {
         transform: translate(0, 0) scale(1);
-        opacity: 0.6;
+        opacity: 0.7;
     }
     33% {
-        transform: translate(-2%, 1%) scale(1.05);
-        opacity: 0.8;
+        transform: translate(-2%, 1%) scale(1.08);
+        opacity: 1;
     }
     66% {
-        transform: translate(1%, -1%) scale(0.98);
-        opacity: 0.7;
+        transform: translate(1%, -1%) scale(0.96);
+        opacity: 0.8;
     }
 }
 
@@ -118,10 +129,11 @@ body::before {
     border-radius: 40px;
     padding: 10px 18px;
     cursor: pointer;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(15px);
     font-size: 1.1rem;
     transition: all 0.3s ease;
     box-shadow: var(--shadow);
+    color: var(--text-primary);
 }
 
 .theme-toggle:hover {
@@ -149,8 +161,8 @@ body::before {
 
 @keyframes floatParticle {
     0% { transform: translateY(100vh) scale(0); opacity: 0; }
-    10% { opacity: 0.5; }
-    90% { opacity: 0.5; }
+    10% { opacity: 0.4; }
+    90% { opacity: 0.4; }
     100% { transform: translateY(-10vh) scale(1); opacity: 0; }
 }
 
@@ -216,7 +228,7 @@ body::before {
     max-width: 900px;
     margin: 0 auto;
     background: var(--bg-card);
-    backdrop-filter: blur(20px);
+    backdrop-filter: blur(15px);
     border-radius: 32px;
     box-shadow: var(--shadow);
     overflow: hidden;
@@ -336,12 +348,12 @@ body::before {
     animation: fieldFade 0.5s ease-out both;
 }
 
-.field-group:nth-child(1) { animation-delay: 0.1s; }
-.field-group:nth-child(2) { animation-delay: 0.15s; }
-.field-group:nth-child(3) { animation-delay: 0.2s; }
-.field-group:nth-child(4) { animation-delay: 0.25s; }
-.field-group:nth-child(5) { animation-delay: 0.3s; }
-.field-group:nth-child(6) { animation-delay: 0.35s; }
+.field-group:nth-child(1) { animation-delay: 0.05s; }
+.field-group:nth-child(2) { animation-delay: 0.1s; }
+.field-group:nth-child(3) { animation-delay: 0.15s; }
+.field-group:nth-child(4) { animation-delay: 0.2s; }
+.field-group:nth-child(5) { animation-delay: 0.25s; }
+.field-group:nth-child(6) { animation-delay: 0.3s; }
 
 @keyframes fieldFade {
     from { opacity: 0; transform: translateX(-15px); }
@@ -372,7 +384,7 @@ label .hint {
 .input-wrapper textarea,
 .input-wrapper select {
     width: 100%;
-    padding: 12px 16px;
+    padding: 14px 18px;
     font-size: 0.95rem;
     border: 1.5px solid var(--input-border);
     border-radius: 16px;
@@ -413,7 +425,6 @@ textarea {
 
 select {
     cursor: pointer;
-    background: var(--input-bg);
     appearance: none;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2364748b' viewBox='0 0 16 16'%3E%3Cpath d='M1.5 5.5l6.5 6.5 6.5-6.5' stroke='%2364748b' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
@@ -515,7 +526,7 @@ select {
     background: var(--accent);
     color: white;
     border: none;
-    padding: 14px;
+    padding: 16px;
     font-size: 1.1rem;
     font-weight: 600;
     border-radius: 40px;
@@ -647,7 +658,7 @@ select {
     align-items: center;
 }
 
-.reference-item input {
+.reference-item .input-wrapper {
     flex: 1;
 }
 
@@ -685,16 +696,6 @@ select {
 .add-ref-btn:disabled {
     background: #9ca3af;
     cursor: not-allowed;
-}
-
-/* Футер */
-.footer {
-    text-align: center;
-    margin-top: 24px;
-    padding: 16px;
-    color: var(--text-secondary);
-    font-size: 0.75rem;
-    border-top: 1px solid var(--border-color);
 }
 
 /* Адаптивность */
