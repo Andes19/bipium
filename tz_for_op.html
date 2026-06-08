@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -14,59 +14,16 @@
         .page-header .info strong {
             color: white !important;
         }
-        .hint, label .hint {
-            color: #94a3b8 !important;
-            font-weight: normal;
-            font-size: 0.8rem;
-            margin-left: 5px;
-        }
-        .field-group label {
-            color: #1f2a3e;
-        }
-        /* Стили для динамических ссылок */
-        .reference-item {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 10px;
-            align-items: center;
-        }
-        .reference-item input {
-            flex: 1;
-        }
-        .remove-ref-btn {
-            background: #ef4444;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.8rem;
-            transition: all 0.2s;
-        }
-        .remove-ref-btn:hover {
-            background: #dc2626;
-        }
-        .add-ref-btn {
-            background: #3b82f6;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            margin-top: 8px;
-            transition: all 0.2s;
-        }
-        .add-ref-btn:hover {
-            background: #2563eb;
-        }
-        .add-ref-btn:disabled {
-            background: #9ca3af;
-            cursor: not-allowed;
-        }
     </style>
 </head>
 <body>
+
+<!-- Кнопка переключения темы -->
+<button class="theme-toggle" id="themeToggle">🌙</button>
+
+<!-- Фоновые слои для анимации -->
+<div class="bg-layer"></div>
+<div class="particles" id="particles"></div>
 
 <div class="header-nav">
     <a href="tz_for_op.html" class="logo">🏔️ <span>Bipium</span> Очистка прав</a>
@@ -352,13 +309,6 @@
             <input type="date" id="deadline_experts">
         </div>
 
-        <!-- Turnstile временно отключён -->
-        <!--
-        <div style="display: flex; justify-content: center; margin: 10px 0;">
-            <div class="cf-turnstile" data-sitekey="0x4AAAAAADdnWhFDC656qeAi" data-theme="light"></div>
-        </div>
-        -->
-
         <button type="button" class="submit-btn" id="submitBtn">✈️ Отправить ТЗ</button>
         <div id="resultMessage" class="message" style="display: none;"></div>
         <div class="info">
@@ -370,6 +320,57 @@
 <script>
     // ========== ВАШ URL ОТ GOOGLE APPS SCRIPT ==========
     const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycby5zWxhvzCMkAIXCWvQAqQeTQDNECgZZ5d-zrCO3SPvtTiCh6nB6fiq4kqSUErlU9Z7Ew/exec";
+
+    // ========== ТЕМА (светлая/тёмная) ==========
+    function toggleTheme() {
+        const html = document.documentElement;
+        const currentTheme = html.getAttribute('data-theme');
+        const btn = document.getElementById('themeToggle');
+        
+        if (currentTheme === 'dark') {
+            html.removeAttribute('data-theme');
+            btn.innerHTML = '🌙';
+            localStorage.setItem('theme', 'light');
+        } else {
+            html.setAttribute('data-theme', 'dark');
+            btn.innerHTML = '☀️';
+            localStorage.setItem('theme', 'dark');
+        }
+    }
+
+    // Загрузка сохранённой темы
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        const btn = document.getElementById('themeToggle');
+        if (btn) btn.innerHTML = '☀️';
+    }
+
+    document.getElementById('themeToggle')?.addEventListener('click', toggleTheme);
+
+    // ========== ПЛАВАЮЩИЕ ЧАСТИЦЫ ==========
+    (function createParticles() {
+        const container = document.getElementById('particles');
+        if (!container) return;
+        const colors = [
+            'rgba(34,197,94,0.4)',
+            'rgba(59,130,246,0.3)',
+            'rgba(139,92,246,0.3)',
+            'rgba(234,179,8,0.2)'
+        ];
+        for (let i = 0; i < 30; i++) {
+            const p = document.createElement('div');
+            p.className = 'particle';
+            const size = Math.random() * 4 + 2;
+            p.style.width = size + 'px';
+            p.style.height = size + 'px';
+            p.style.left = Math.random() * 100 + '%';
+            p.style.background = colors[Math.floor(Math.random() * colors.length)];
+            p.style.animationDuration = (Math.random() * 15 + 10) + 's';
+            p.style.animationDelay = (Math.random() * 10) + 's';
+            container.appendChild(p);
+        }
+    })();
 
     // ========== УПРАВЛЕНИЕ ССЫЛКАМИ НА РЕФЕРЕНСЫ (ПОДБОР) ==========
     let refCounter = 1;
@@ -522,12 +523,10 @@
 
     function toggleReferencesField() {
         if (currentMode === 'audit') {
-            // Для аудита: скрываем блоки, которые относятся только к подбору
             if (referencesGroup) referencesGroup.style.display = 'none';
             if (referencesTitle) referencesTitle.style.display = 'none';
             if (resultFormatGroup) resultFormatGroup.style.display = 'none';
         } else {
-            // Для подбора: показываем
             if (referencesGroup) referencesGroup.style.display = 'block';
             if (referencesTitle) referencesTitle.style.display = 'block';
             if (resultFormatGroup) resultFormatGroup.style.display = 'block';
@@ -658,10 +657,8 @@
     }
 
     submitBtn.addEventListener("click", async () => {
-        // Turnstile временно отключён
         const turnstileToken = "disabled";
 
-        // Проверка обязательных полей
         const topic = document.getElementById('topic').value.trim();
         const project = document.getElementById('project').value.trim();
         const author = document.getElementById('author').value.trim();
@@ -691,7 +688,6 @@
             return;
         }
 
-        // Валидация выпадающих списков
         let selectValid = true;
 
         if (currentMode === 'search') {
