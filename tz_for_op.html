@@ -18,7 +18,7 @@
 </head>
 <body>
 
-<!-- Кнопка переключения темы -->
+<!-- Кнопка переключения темы (фиксирована внизу справа) -->
 <button class="theme-toggle" id="themeToggle">🌙</button>
 
 <!-- Фоновые слои для анимации -->
@@ -47,50 +47,74 @@
         
         <div class="field-group">
             <label>🏷️ Тема ТЗ <span style="color: #e53e3e;">*</span></label>
-            <input type="text" id="topic" placeholder="Введите тему технического задания" required>
+            <div class="input-wrapper">
+                <input type="text" id="topic" placeholder="Введите тему технического задания" required>
+                <div class="input-glow"></div>
+            </div>
         </div>
         
         <div class="row-2">
             <div class="field-group">
                 <label>📅 Дата задания <span style="color: #e53e3e;">*</span></label>
-                <input type="date" id="task_date" required>
+                <div class="input-wrapper">
+                    <input type="date" id="task_date" required>
+                    <div class="input-glow"></div>
+                </div>
             </div>
             <div class="field-group">
                 <label>🏗️ Проект <span style="color: #e53e3e;">*</span> <span class="hint">Например, Музей Крыма и Новороссии</span></label>
-                <input type="text" id="project" placeholder="Введите название проекта" required>
+                <div class="input-wrapper">
+                    <input type="text" id="project" placeholder="Введите название проекта" required>
+                    <div class="input-glow"></div>
+                </div>
             </div>
         </div>
 
         <div class="row-2">
             <div class="field-group">
                 <label>👥 Потребитель <span style="color: #e53e3e;">*</span></label>
-                <select id="consumer">
-                    <option value="">-- Выберите --</option>
-                    <option value="Редакция">Редакция</option>
-                    <option value="Отдел контента">Отдел контента</option>
-                    <option value="Другое">Другое</option>
-                </select>
+                <div class="input-wrapper">
+                    <select id="consumer">
+                        <option value="">-- Выберите --</option>
+                        <option value="Редакция">Редакция</option>
+                        <option value="Отдел контента">Отдел контента</option>
+                        <option value="Другое">Другое</option>
+                    </select>
+                    <div class="input-glow"></div>
+                </div>
             </div>
             <div class="field-group">
                 <label>✍️ Автор ТЗ <span style="color: #e53e3e;">*</span> <span class="hint">К кому обращаться с вопросами</span></label>
-                <input type="text" id="author" placeholder="ФИО, должность" required>
+                <div class="input-wrapper">
+                    <input type="text" id="author" placeholder="ФИО, должность" required>
+                    <div class="input-glow"></div>
+                </div>
             </div>
         </div>
 
         <div class="row-2">
             <div class="field-group">
                 <label>🏛️ Зал</label>
-                <input type="text" id="hall" placeholder="Название зала">
+                <div class="input-wrapper">
+                    <input type="text" id="hall" placeholder="Название зала">
+                    <div class="input-glow"></div>
+                </div>
             </div>
             <div class="field-group">
                 <label>🖼️ Экспонат <span class="hint">Например, Ротонда с проекциями</span></label>
-                <input type="text" id="exhibit" placeholder="Название экспоната">
+                <div class="input-wrapper">
+                    <input type="text" id="exhibit" placeholder="Название экспоната">
+                    <div class="input-glow"></div>
+                </div>
             </div>
         </div>
 
         <div class="field-group">
             <label>🔢 Код контента <span class="hint">Например, C712</span></label>
-            <input type="text" id="content_code" placeholder="Введите код контента">
+            <div class="input-wrapper">
+                <input type="text" id="content_code" placeholder="Введите код контента">
+                <div class="input-glow"></div>
+            </div>
         </div>
 
         <!-- ПЕРЕКЛЮЧАТЕЛЬ РЕЖИМОВ -->
@@ -110,86 +134,116 @@
             <div class="row-2">
                 <div class="field-group">
                     <label>Вид использования в контенте <span style="color: #e53e3e;">*</span></label>
-                    <select id="use_type_search">
-                        <option value="">-- Выберите --</option>
-                        <option value="Полиграфия">Полиграфия</option>
-                        <option value="Мультимедиа">Мультимедиа</option>
-                        <option value="Бутафория">Бутафория</option>
-                        <option value="Аудио">Аудио</option>
-                    </select>
+                    <div class="input-wrapper">
+                        <select id="use_type_search">
+                            <option value="">-- Выберите --</option>
+                            <option value="Полиграфия">Полиграфия</option>
+                            <option value="Мультимедиа">Мультимедиа</option>
+                            <option value="Бутафория">Бутафория</option>
+                            <option value="Аудио">Аудио</option>
+                        </select>
+                        <div class="input-glow"></div>
+                    </div>
                 </div>
                 <div class="field-group">
                     <label>Сколько примерно нужно материалов <span style="color: #e53e3e;">*</span></label>
-                    <select id="amount_search">
-                        <option value="">-- Выберите --</option>
-                        <option value="Минимум 20">Минимум 20</option>
-                        <option value="Оптимум 50">Оптимум 50</option>
-                        <option value="Максимум 100">Максимум 100</option>
-                    </select>
+                    <div class="input-wrapper">
+                        <select id="amount_search">
+                            <option value="">-- Выберите --</option>
+                            <option value="Минимум 20">Минимум 20</option>
+                            <option value="Оптимум 50">Оптимум 50</option>
+                            <option value="Максимум 100">Максимум 100</option>
+                        </select>
+                        <div class="input-glow"></div>
+                    </div>
                 </div>
             </div>
 
             <div class="row-2">
                 <div class="field-group">
                     <label>Ориентация <span style="color: #e53e3e;">*</span></label>
-                    <select id="orientation_search">
-                        <option value="">-- Выберите --</option>
-                        <option value="вертикальная">Вертикальная</option>
-                        <option value="горизонтальная">Горизонтальная</option>
-                        <option value="не важно">Не важно</option>
-                    </select>
+                    <div class="input-wrapper">
+                        <select id="orientation_search">
+                            <option value="">-- Выберите --</option>
+                            <option value="вертикальная">Вертикальная</option>
+                            <option value="горизонтальная">Горизонтальная</option>
+                            <option value="не важно">Не важно</option>
+                        </select>
+                        <div class="input-glow"></div>
+                    </div>
                 </div>
                 <div class="field-group">
                     <label>Цветность <span style="color: #e53e3e;">*</span></label>
-                    <select id="color_search">
-                        <option value="">-- Выберите --</option>
-                        <option value="ЧБ">Ч/Б</option>
-                        <option value="цветное">Цветное</option>
-                        <option value="не важно">Не важно</option>
-                    </select>
+                    <div class="input-wrapper">
+                        <select id="color_search">
+                            <option value="">-- Выберите --</option>
+                            <option value="ЧБ">Ч/Б</option>
+                            <option value="цветное">Цветное</option>
+                            <option value="не важно">Не важно</option>
+                        </select>
+                        <div class="input-glow"></div>
+                    </div>
                 </div>
             </div>
 
             <div class="row-2">
                 <div class="field-group">
                     <label>Нужны материалы в хайрезах <span style="color: #e53e3e;">*</span></label>
-                    <select id="highres_search">
-                        <option value="">-- Выберите --</option>
-                        <option value="да">Да, нужны</option>
-                        <option value="нет">Нет</option>
-                        <option value="не важно">Не важно</option>
-                    </select>
+                    <div class="input-wrapper">
+                        <select id="highres_search">
+                            <option value="">-- Выберите --</option>
+                            <option value="да">Да, нужны</option>
+                            <option value="нет">Нет</option>
+                            <option value="не важно">Не важно</option>
+                        </select>
+                        <div class="input-glow"></div>
+                    </div>
                 </div>
                 <div class="field-group">
                     <label>Согласование с экспертами <span style="color: #e53e3e;">*</span></label>
-                    <select id="experts_search">
-                        <option value="">-- Выберите --</option>
-                        <option value="Не требуется">Не требуется</option>
-                        <option value="Требуется">Требуется</option>
-                    </select>
+                    <div class="input-wrapper">
+                        <select id="experts_search">
+                            <option value="">-- Выберите --</option>
+                            <option value="Не требуется">Не требуется</option>
+                            <option value="Требуется">Требуется</option>
+                        </select>
+                        <div class="input-glow"></div>
+                    </div>
                 </div>
             </div>
 
             <div class="field-group">
                 <label>📁 Тип материалов <span style="color: #e53e3e;">*</span> <span class="hint">Фото, видео, аудио, рисунки, хроника, реконструкция и т.д.</span></label>
-                <input type="text" id="material_type_search" placeholder="Например: фото, видео" required>
+                <div class="input-wrapper">
+                    <input type="text" id="material_type_search" placeholder="Например: фото, видео" required>
+                    <div class="input-glow"></div>
+                </div>
             </div>
 
             <div class="section-subtitle">📖 Смысловая информация</div>
 
             <div class="field-group">
                 <label>📅 Исторический период <span class="hint">Например: С 1860 по 1918 года</span></label>
-                <input type="text" id="historical_period" placeholder="Укажите период">
+                <div class="input-wrapper">
+                    <input type="text" id="historical_period" placeholder="Укажите период">
+                    <div class="input-glow"></div>
+                </div>
             </div>
 
             <div class="field-group">
                 <label>🎯 Тематика нужных материалов</label>
-                <textarea id="topics" rows="5" placeholder="Например:&#10;- Пляжи Ялты того времени&#10;- Набережная Ялты&#10;- Известные Ялтинские санатории&#10;- Архитектура курорта"></textarea>
+                <div class="input-wrapper">
+                    <textarea id="topics" rows="5" placeholder="Например:&#10;- Пляжи Ялты того времени&#10;- Набережная Ялты&#10;- Известные Ялтинские санатории&#10;- Архитектура курорта"></textarea>
+                    <div class="input-glow"></div>
+                </div>
             </div>
 
             <div class="field-group">
                 <label>🎭 Драматургия <span class="hint">Что нужно передать, какая атмосфера</span></label>
-                <textarea id="dramaturgy" rows="2" placeholder="Например: подберите фотографии, отражающие отдых в Ялте до революции..."></textarea>
+                <div class="input-wrapper">
+                    <textarea id="dramaturgy" rows="2" placeholder="Например: подберите фотографии, отражающие отдых в Ялте до революции..."></textarea>
+                    <div class="input-glow"></div>
+                </div>
             </div>
         </div>
 
@@ -201,37 +255,49 @@
             <div class="row-2">
                 <div class="field-group">
                     <label>Вид использования в контенте <span style="color: #e53e3e;">*</span></label>
-                    <select id="use_type_audit">
-                        <option value="">-- Выберите --</option>
-                        <option value="Полиграфия">Полиграфия</option>
-                        <option value="Мультимедиа">Мультимедиа</option>
-                        <option value="Бутафория">Бутафория</option>
-                        <option value="Аудио">Аудио</option>
-                    </select>
+                    <div class="input-wrapper">
+                        <select id="use_type_audit">
+                            <option value="">-- Выберите --</option>
+                            <option value="Полиграфия">Полиграфия</option>
+                            <option value="Мультимедиа">Мультимедиа</option>
+                            <option value="Бутафория">Бутафория</option>
+                            <option value="Аудио">Аудио</option>
+                        </select>
+                        <div class="input-glow"></div>
+                    </div>
                 </div>
                 <div class="field-group">
                     <label>Нужны материалы в хайрезах <span style="color: #e53e3e;">*</span></label>
-                    <select id="highres_audit">
-                        <option value="">-- Выберите --</option>
-                        <option value="да">Да, нужны</option>
-                        <option value="нет">Нет</option>
-                        <option value="не важно">Не важно</option>
-                    </select>
+                    <div class="input-wrapper">
+                        <select id="highres_audit">
+                            <option value="">-- Выберите --</option>
+                            <option value="да">Да, нужны</option>
+                            <option value="нет">Нет</option>
+                            <option value="не важно">Не важно</option>
+                        </select>
+                        <div class="input-glow"></div>
+                    </div>
                 </div>
             </div>
 
             <div class="row-2">
                 <div class="field-group">
                     <label>Согласование с экспертами <span style="color: #e53e3e;">*</span></label>
-                    <select id="experts_audit">
-                        <option value="">-- Выберите --</option>
-                        <option value="Не требуется">Не требуется</option>
-                        <option value="Требуется">Требуется</option>
-                    </select>
+                    <div class="input-wrapper">
+                        <select id="experts_audit">
+                            <option value="">-- Выберите --</option>
+                            <option value="Не требуется">Не требуется</option>
+                            <option value="Требуется">Требуется</option>
+                        </select>
+                        <div class="input-glow"></div>
+                    </div>
                 </div>
                 <div class="field-group">
                     <label>📁 Тип материалов <span style="color: #e53e3e;">*</span> <span class="hint">Фото, видео, аудио, рисунки и т.д.</span></label>
-                    <input type="text" id="material_type_audit" placeholder="Например: фото, видео" required>
+                    <div class="input-wrapper">
+                        <input type="text" id="material_type_audit" placeholder="Например: фото, видео" required>
+                        <div class="input-glow"></div>
+                    </div>
                 </div>
             </div>
 
@@ -240,7 +306,10 @@
                 <label>🔗 Ссылки на подобранные материалы</label>
                 <div id="materialsLinksContainer">
                     <div class="reference-item" id="mat_ref_0">
-                        <input type="url" class="materials-ref-input" placeholder="https://...">
+                        <div class="input-wrapper" style="flex: 1;">
+                            <input type="url" class="materials-ref-input" placeholder="https://...">
+                            <div class="input-glow"></div>
+                        </div>
                         <button type="button" class="remove-ref-btn" onclick="removeMaterialLink(0)">🗑️ Удалить</button>
                     </div>
                 </div>
@@ -251,13 +320,16 @@
             <div class="section-title" id="auditResultTitle">📦 В каком виде нужен конечный результат? <span style="color: #e53e3e;">*</span></div>
             
             <div class="field-group" id="auditResultGroup">
-                <select id="result_format_audit">
-                    <option value="">-- Выберите --</option>
-                    <option value="Вид в БД (выгрузка — публичный)">Вид в БД (выгрузка — публичный)</option>
-                    <option value="Вид в БД (ссылка для авторизованного доступа)">Вид в БД (ссылка для авторизованного доступа)</option>
-                    <option value="Ссылка на папку в облачном хранилище">Ссылка на папку в облачном хранилище</option>
-                    <option value="Таблица с комментариями">Таблица с комментариями</option>
-                </select>
+                <div class="input-wrapper">
+                    <select id="result_format_audit">
+                        <option value="">-- Выберите --</option>
+                        <option value="Вид в БД (выгрузка — публичный)">Вид в БД (выгрузка — публичный)</option>
+                        <option value="Вид в БД (ссылка для авторизованного доступа)">Вид в БД (ссылка для авторизованного доступа)</option>
+                        <option value="Ссылка на папку в облачном хранилище">Ссылка на папку в облачном хранилище</option>
+                        <option value="Таблица с комментариями">Таблица с комментариями</option>
+                    </select>
+                    <div class="input-glow"></div>
+                </div>
             </div>
         </div>
 
@@ -265,13 +337,16 @@
         <div class="section-title" id="referencesTitle">📦 В каком виде нужен конечный результат? <span style="color: #e53e3e;">*</span></div>
         
         <div class="field-group" id="resultFormatGroup">
-            <select id="result_format">
-                <option value="">-- Выберите --</option>
-                <option value="Вид в БД (выгрузка — публичный)">Вид в БД (выгрузка — публичный)</option>
-                <option value="Вид в БД (ссылка для авторизованного доступа)">Вид в БД (ссылка для авторизованного доступа)</option>
-                <option value="Ссылка на папку в облачном хранилище">Ссылка на папку в облачном хранилище</option>
-                <option value="Таблица с комментариями">Таблица с комментариями</option>
-            </select>
+            <div class="input-wrapper">
+                <select id="result_format">
+                    <option value="">-- Выберите --</option>
+                    <option value="Вид в БД (выгрузка — публичный)">Вид в БД (выгрузка — публичный)</option>
+                    <option value="Вид в БД (ссылка для авторизованного доступа)">Вид в БД (ссылка для авторизованного доступа)</option>
+                    <option value="Ссылка на папку в облачном хранилище">Ссылка на папку в облачном хранилище</option>
+                    <option value="Таблица с комментариями">Таблица с комментариями</option>
+                </select>
+                <div class="input-glow"></div>
+            </div>
         </div>
 
         <!-- БЛОК ССЫЛОК НА РЕФЕРЕНСЫ (только для Подбора, до 5) -->
@@ -279,7 +354,10 @@
             <label>🔗 Ссылка на референсы</label>
             <div id="referencesContainer">
                 <div class="reference-item" id="ref_0">
-                    <input type="url" class="ref-input" placeholder="https://...">
+                    <div class="input-wrapper" style="flex: 1;">
+                        <input type="url" class="ref-input" placeholder="https://...">
+                        <div class="input-glow"></div>
+                    </div>
                     <button type="button" class="remove-ref-btn" onclick="removeReference(0)">🗑️ Удалить</button>
                 </div>
             </div>
@@ -288,7 +366,10 @@
 
         <div class="field-group">
             <label>📝 Любые другие примечания</label>
-            <textarea id="notes" rows="3" placeholder="Дополнительная информация..."></textarea>
+            <div class="input-wrapper">
+                <textarea id="notes" rows="3" placeholder="Дополнительная информация..."></textarea>
+                <div class="input-glow"></div>
+            </div>
         </div>
 
         <div class="section-title">⏰ Сроки</div>
@@ -296,17 +377,26 @@
         <div class="row-2">
             <div class="field-group">
                 <label>Срок сдачи подбора</label>
-                <input type="date" id="deadline_search">
+                <div class="input-wrapper">
+                    <input type="date" id="deadline_search">
+                    <div class="input-glow"></div>
+                </div>
             </div>
             <div class="field-group">
                 <label>Срок согласований (редакторы)</label>
-                <input type="date" id="deadline_editors">
+                <div class="input-wrapper">
+                    <input type="date" id="deadline_editors">
+                    <div class="input-glow"></div>
+                </div>
             </div>
         </div>
 
         <div class="field-group">
             <label>Срок согласований (эксперты)</label>
-            <input type="date" id="deadline_experts">
+            <div class="input-wrapper">
+                <input type="date" id="deadline_experts">
+                <div class="input-glow"></div>
+            </div>
         </div>
 
         <button type="button" class="submit-btn" id="submitBtn">✈️ Отправить ТЗ</button>
@@ -403,7 +493,10 @@
         newItem.className = 'reference-item';
         newItem.id = `ref_${newId}`;
         newItem.innerHTML = `
-            <input type="url" class="ref-input" placeholder="https://...">
+            <div class="input-wrapper" style="flex: 1;">
+                <input type="url" class="ref-input" placeholder="https://...">
+                <div class="input-glow"></div>
+            </div>
             <button type="button" class="remove-ref-btn" onclick="removeReference(${newId})">🗑️ Удалить</button>
         `;
         container.appendChild(newItem);
@@ -473,7 +566,10 @@
         newItem.className = 'reference-item';
         newItem.id = `mat_ref_${newId}`;
         newItem.innerHTML = `
-            <input type="url" class="materials-ref-input" placeholder="https://...">
+            <div class="input-wrapper" style="flex: 1;">
+                <input type="url" class="materials-ref-input" placeholder="https://...">
+                <div class="input-glow"></div>
+            </div>
             <button type="button" class="remove-ref-btn" onclick="removeMaterialLink(${newId})">🗑️ Удалить</button>
         `;
         container.appendChild(newItem);
