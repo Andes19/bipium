@@ -4,30 +4,33 @@
     <meta charset="UTF-8">
     <title>Отправка данных в Bpium</title>
     <style>
-        body { font-family: sans-serif; padding: 20px; max-width: 400px; }
+        body { font-family: sans-serif; padding: 20px; max-width: 400px; margin: 0 auto; }
         .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; }
-        input[type="text"], input[type="file"] { width: 100%; }
-        button { padding: 10px 20px; cursor: pointer; background: #007bff; color: white; border: none; }
-        button:disabled { background: #ccc; }
-        #status { margin-top: 15px; font-size: 0.9em; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input[type="text"], input[type="file"] { width: 100%; padding: 8px; box-sizing: border-box; }
+        button { padding: 10px 20px; cursor: pointer; background: #007bff; color: white; border: none; width: 100%; font-size: 16px; }
+        button:disabled { background: #ccc; cursor: not-allowed; }
+        #status { margin-top: 15px; font-size: 0.9em; padding: 10px; border-radius: 4px; display: none; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .info { background: #e2e3e5; color: #383d41; border: 1px solid #d6d8db; }
     </style>
 </head>
 <body>
 
-    <h2>Новая заявка</h2>
+    <h2>Новая заявка (Каталог 52)</h2>
     
     <div class="form-group">
-        <label>Текст (Поле 2):</label>
-        <input type="text" id="textField" placeholder="Введите текст...">
+        <label for="textField">Текст (Поле ID: 2):</label>
+        <input type="text" id="textField" placeholder="Введите текстовое значение...">
     </div>
 
     <div class="form-group">
-        <label>Файл (Поле 4):</label>
+        <label for="fileField">Файл (Поле ID: 4):</label>
         <input type="file" id="fileField">
     </div>
 
-    <button id="sendBtn">Отправить</button>
+    <button id="sendBtn">Отправить в Бипиум</button>
     <div id="status"></div>
 
 <script>
@@ -35,46 +38,68 @@ const CONFIG = {
     domain: 'https://bipium.red-red.ru',
     altDomain: 'https://bipium.red-red.ru:8441',
     catalogId: 52,
-    fields: { text: "2", file: "4" }
+    fields: { 
+        text: "2", 
+        file: "4" 
+    },
+    // Ваш сгенерированный токен Basic-авторизации
+    authString: 'cHJldmlldzpyM2RPd2wzJnlJZW0=' 
 };
 
-// Функция для выбора живого домена (с таймаутом 2 сек)
+// Функция для установки статусных сообщений
+function showStatus(text, type = 'info') {
+    const statusDiv = document.getElementById('status');
+    statusDiv.style.display = 'block';
+    statusDiv.className = type;
+    statusDiv.innerText = text;
+}
+
+// Функция формирования заголовков с авторизацией
+function getHeaders() {
+    return {
+        'Content-Type': 'application/json',
+        'Authorization': `Basic ${CONFIG.authString}`
+    };
+}
+
+// Проверка доступности портов / доменов (таймаут 2 секунды)
 async function getActiveDomain() {
     const controller = new AbortController();
     const id = setTimeout(() => controller.abort(), 2000);
     
     try {
+        // Проверяем альтернативный домен с портом :8441
         await fetch(CONFIG.altDomain + '/api/v1/', { mode: 'no-cors', signal: controller.signal });
         clearTimeout(id);
         return CONFIG.altDomain;
     } catch (e) {
+        // Если упал по таймауту или ошибке — используем стандартный
         return CONFIG.domain;
     }
 }
 
 document.getElementById('sendBtn').onclick = async function() {
     const btn = this;
-    const status = document.getElementById('status');
     const textVal = document.getElementById('textField').value;
     const fileInput = document.getElementById('fileField');
     
     btn.disabled = true;
-    status.innerText = "Определяем доступный сервер...";
+    showStatus("Проверка доступности сервера...", "info");
 
     const baseUrl = await getActiveDomain();
     
     try {
         let uploadedFileId = null;
 
-        // --- ШАГ 1: Если есть файл, загружаем его ---
+        // --- ШАГ 1: Загрузка файла (если он выбран) ---
         if (fileInput.files.length > 0) {
-            status.innerText = "Загрузка файла...";
+            showStatus("Запрашиваем у Бипиума ключи для загрузки файла...", "info");
             const file = fileInput.files[0];
 
-            // 1.1 Получаем параметры для загрузки
+            // 1.1 Регистрируем файл в системе Бипиум
             const ticketRes = await fetch(`${baseUrl}/api/v1/files`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: getHeaders(),
                 body: JSON.stringify({
                     catalogId: CONFIG.catalogId,
                     fieldId: CONFIG.fields.file,
@@ -83,49 +108,65 @@ document.getElementById('sendBtn').onclick = async function() {
                     mimeType: file.type
                 })
             });
-            const ticket = await ticketRes.json();
-            uploadedFileId = ticket.id;
 
-            // 1.2 Отправляем сам файл (бинарно) в хранилище по полученному адресу
+            if (!ticketRes.ok) {
+                const errText = await ticketRes.text();
+                throw new Error(`Не удалось создать тикет файла: ${errText}`);
+            }
+
+            const ticket = await ticketRes.json();
+            uploadedFileId = ticket.id; // Запоминаем ID файла для будущего связывания
+
+            showStatus("Отправляем тело файла в облако...", "info");
+
+            // 1.2 Загружаем бинарные данные на полученный uploadUrl
             const formData = new FormData();
-            // В зависимости от ответа Bpium, тут могут быть дополнительные поля (S3)
-            // Но чаще всего это POST на ticket.uploadUrl
             formData.append('file', file);
             
-            await fetch(ticket.uploadUrl, {
+            const uploadRes = await fetch(ticket.uploadUrl, {
                 method: 'POST',
                 body: formData
+                // Заголовки авторизации здесь обычно не нужны, так как URL содержит временную подпись
             });
+
+            if (!uploadRes.ok) {
+                throw new Error("Ошибка при физической передаче файла в хранилище.");
+            }
         }
 
-        // --- ШАГ 2: Создаем запись в каталоге ---
-        status.innerText = "Создание записи...";
+        // --- ШАГ 2: Создание записи в каталоге 52 ---
+        showStatus("Создаем запись в каталоге...", "info");
+        
         const recordData = {
             values: {
                 [CONFIG.fields.text]: textVal
             }
         };
 
-        // Если файл был загружен, прикрепляем его ID
+        // Если на предыдущем шаге мы успешно получили ID файла, прикрепляем его массивом
         if (uploadedFileId) {
-            recordData.values[CONFIG.fields.file] = [uploadedFileId];
+            recordData.values[CONFIG.fields.file] = [ uploadedFileId ];
         }
 
         const saveRes = await fetch(`${baseUrl}/api/v1/catalogs/${CONFIG.catalogId}/records`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: getHeaders(),
             body: JSON.stringify(recordData)
         });
 
         if (saveRes.ok) {
-            status.innerText = "✅ Успешно отправлено!";
+            showStatus("✅ Данные и файлы успешно улетели в Бипиум!", "success");
+            // Сбрасываем форму
+            document.getElementById('textField').value = '';
+            fileInput.value = '';
         } else {
-            throw new Error("Ошибка при сохранении записи");
+            const errData = await saveRes.text();
+            throw new Error(`Ошибка сохранения записи: ${errData}`);
         }
 
     } catch (err) {
         console.error(err);
-        status.innerText = "❌ Ошибка: " + err.message;
+        showStatus("❌ Ошибка: " + err.message, "error");
     } finally {
         btn.disabled = false;
     }
