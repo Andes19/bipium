@@ -2,240 +2,134 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Отправка заявки в Бипиум</title>
+    <title>Отправка данных в Bpium</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-        .card {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            max-width: 500px;
-            width: 100%;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-        }
-        h1 { color: #333; margin-bottom: 8px; font-size: 28px; }
-        .subtitle { color: #666; margin-bottom: 30px; font-size: 14px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
-        .form-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; font-weight: 600; color: #333; }
-        input[type="text"], input[type="file"] { width: 100%; padding: 12px 15px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 16px; transition: border-color 0.3s; }
-        input[type="text"]:focus { outline: none; border-color: #667eea; }
-        button {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        button:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
-        button:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
-        .status { margin-top: 20px; padding: 12px; border-radius: 10px; display: none; font-size: 14px; }
-        .status.success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-        .status.error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
-        .status.loading { background: #e0e7ff; color: #1e40af; border: 1px solid #c3dafe; }
-        .note { margin-top: 20px; padding: 10px; background: #f8f9fa; border-radius: 8px; font-size: 12px; color: #666; text-align: center; }
+        body { font-family: sans-serif; padding: 20px; max-width: 400px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; }
+        input[type="text"], input[type="file"] { width: 100%; }
+        button { padding: 10px 20px; cursor: pointer; background: #007bff; color: white; border: none; }
+        button:disabled { background: #ccc; }
+        #status { margin-top: 15px; font-size: 0.9em; }
     </style>
 </head>
 <body>
-<div class="card">
-    <h1>📝 Отправить заявку</h1>
-    <div class="subtitle">Заполните форму — данные отправятся в Бипиум</div>
 
-    <form id="myForm">
-        <div class="form-group">
-            <label for="subject">Тема обращения *</label>
-            <input type="text" id="subject" name="subject" placeholder="Введите тему..." required>
-        </div>
-        <div class="form-group">
-            <label for="file">Прикрепить файл (необязательно)</label>
-            <input type="file" id="file" name="file">
-            <small style="color: #666; font-size: 12px;">Поддерживаются любые форматы до 10 МБ</small>
-        </div>
-        <button type="submit" id="submitBtn">Отправить заявку</button>
-    </form>
-
-    <div id="status" class="status"></div>
-    <div class="note">
-        🔄 Автоматическое переключение между сетями компании и интернетом.<br>
-        📎 Файлы загружаются во временное хранилище и передаются в Бипиум.
+    <h2>Новая заявка</h2>
+    
+    <div class="form-group">
+        <label>Текст (Поле 2):</label>
+        <input type="text" id="textField" placeholder="Введите текст...">
     </div>
-</div>
+
+    <div class="form-group">
+        <label>Файл (Поле 4):</label>
+        <input type="file" id="fileField">
+    </div>
+
+    <button id="sendBtn">Отправить</button>
+    <div id="status"></div>
 
 <script>
-    // URL-адреса для отправки данных
-    const URL_PRIMARY = 'https://bipium.red-red.ru/api/webrequest/site-requests';
-    const URL_FALLBACK = 'https://bipium.red-red.ru:8441/api/webrequest/site-requests';
-    const TIMEOUT_MS = 2500;
+const CONFIG = {
+    domain: 'https://bipium.red-red.ru',
+    altDomain: 'https://bipium.red-red.ru:8441',
+    catalogId: 52,
+    fields: { text: "2", file: "4" }
+};
 
-    // ВАЖНО: Укажите URL вашего сервера для временного хранения файлов
-    // Если у вас нет своего сервера, используйте бесплатный сервис вроде tmp.ninja
-    const TEMP_STORAGE_URL = 'https://your-server.com/upload'; // ЗАМЕНИТЕ!
-
-    const form = document.getElementById('myForm');
-    const submitBtn = document.getElementById('submitBtn');
-    const statusDiv = document.getElementById('status');
-
-    function showStatus(message, type) {
-        statusDiv.textContent = message;
-        statusDiv.className = `status ${type}`;
-        statusDiv.style.display = 'block';
+// Функция для выбора живого домена (с таймаутом 2 сек)
+async function getActiveDomain() {
+    const controller = new AbortController();
+    const id = setTimeout(() => controller.abort(), 2000);
+    
+    try {
+        await fetch(CONFIG.altDomain + '/api/v1/', { mode: 'no-cors', signal: controller.signal });
+        clearTimeout(id);
+        return CONFIG.altDomain;
+    } catch (e) {
+        return CONFIG.domain;
     }
+}
 
-    function hideStatus() {
-        statusDiv.style.display = 'none';
-    }
+document.getElementById('sendBtn').onclick = async function() {
+    const btn = this;
+    const status = document.getElementById('status');
+    const textVal = document.getElementById('textField').value;
+    const fileInput = document.getElementById('fileField');
+    
+    btn.disabled = true;
+    status.innerText = "Определяем доступный сервер...";
 
-    // Загрузка файла во временное хранилище
-    async function uploadToTempStorage(file) {
-        const formData = new FormData();
-        formData.append('file', file);
+    const baseUrl = await getActiveDomain();
+    
+    try {
+        let uploadedFileId = null;
 
-        const response = await fetch(TEMP_STORAGE_URL, {
-            method: 'POST',
-            body: formData
-        });
-
-        if (!response.ok) {
-            throw new Error('Ошибка загрузки файла во временное хранилище');
-        }
-
-        const data = await response.json();
-        return data.url; // Возвращаем публичную ссылку на файл
-    }
-
-    // Отправка данных на конкретный URL с таймаутом
-    async function sendToUrl(url, data, timeoutMs) {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
-
-        try {
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data),
-                signal: controller.signal
-            });
-            clearTimeout(timeoutId);
-
-            if (!response.ok) {
-                const errorText = await response.text();
-                throw new Error(`Ошибка ${response.status}: ${errorText}`);
-            }
-            return await response.json();
-        } catch (error) {
-            clearTimeout(timeoutId);
-            if (error.name === 'AbortError') {
-                throw new Error('Таймаут');
-            }
-            throw error;
-        }
-    }
-
-    // Отправка с автоматическим fallback
-    async function sendWithFallback(data) {
-        try {
-            showStatus(`🔄 Отправка (основной канал)...`, 'loading');
-            const result = await sendToUrl(URL_PRIMARY, data, TIMEOUT_MS);
-            return { success: true, result, usedUrl: URL_PRIMARY };
-        } catch (error) {
-            console.warn(`Основной URL не ответил: ${error.message}`);
-
-            try {
-                showStatus(`🔄 Переключение на резервный канал...`, 'loading');
-                const result = await sendToUrl(URL_FALLBACK, data, TIMEOUT_MS);
-                return { success: true, result, usedUrl: URL_FALLBACK };
-            } catch (fallbackError) {
-                throw new Error(`Не удалось отправить: ${error.message}`);
-            }
-        }
-    }
-
-    // Обработчик отправки формы
-    form.addEventListener('submit', async (event) => {
-        event.preventDefault();
-
-        submitBtn.disabled = true;
-        showStatus('⏳ Подготовка данных...', 'loading');
-
-        try {
-            const subject = document.getElementById('subject').value.trim();
-            const fileInput = document.getElementById('file');
+        // --- ШАГ 1: Если есть файл, загружаем его ---
+        if (fileInput.files.length > 0) {
+            status.innerText = "Загрузка файла...";
             const file = fileInput.files[0];
 
-            if (!subject) {
-                showStatus('❌ Пожалуйста, заполните тему обращения', 'error');
-                submitBtn.disabled = false;
-                return;
-            }
-
-            // Формируем данные для отправки
-            let data = { subject: subject };
-
-            // Если есть файл, загружаем во временное хранилище
-            if (file) {
-                if (file.size > 10 * 1024 * 1024) {
-                    showStatus('❌ Файл слишком большой (максимум 10 МБ)', 'error');
-                    submitBtn.disabled = false;
-                    return;
-                }
-
-                showStatus(`📤 Загрузка файла "${file.name}"...`, 'loading');
-                
-                // ВАРИАНТ 1: Если у вас есть свой сервер для временного хранения
-                // const fileUrl = await uploadToTempStorage(file);
-                // data.file = {
-                //     name: file.name,
-                //     type: file.type,
-                //     size: file.size,
-                //     contentUrl: fileUrl
-                // };
-
-                // ВАРИАНТ 2: Передаём base64 напрямую (если файл небольшой)
-                // Бипиум не умеет принимать base64, но мы можем его передать и потом обработать в сценарии
-                const reader = new FileReader();
-                const base64 = await new Promise((resolve) => {
-                    reader.onload = () => resolve(reader.result.split(',')[1]);
-                    reader.readAsDataURL(file);
-                });
-                
-                data.file = {
+            // 1.1 Получаем параметры для загрузки
+            const ticketRes = await fetch(`${baseUrl}/api/v1/files`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    catalogId: CONFIG.catalogId,
+                    fieldId: CONFIG.fields.file,
                     name: file.name,
-                    type: file.type,
                     size: file.size,
-                    content: base64,
-                    contentLength: base64.length
-                };
-            }
+                    mimeType: file.type
+                })
+            });
+            const ticket = await ticketRes.json();
+            uploadedFileId = ticket.id;
 
-            // Отправляем данные в Бипиум
-            const { usedUrl } = await sendWithFallback(data);
-            const urlShort = usedUrl.includes(':8441') ? 'резервный (интернет)' : 'основной (сеть компании)';
-            showStatus(`✅ Заявка успешно отправлена! (канал: ${urlShort})`, 'success');
-            form.reset();
-
-            setTimeout(() => hideStatus(), 4000);
-
-        } catch (error) {
-            console.error('Ошибка:', error);
-            showStatus(`❌ Ошибка: ${error.message}`, 'error');
-        } finally {
-            submitBtn.disabled = false;
+            // 1.2 Отправляем сам файл (бинарно) в хранилище по полученному адресу
+            const formData = new FormData();
+            // В зависимости от ответа Bpium, тут могут быть дополнительные поля (S3)
+            // Но чаще всего это POST на ticket.uploadUrl
+            formData.append('file', file);
+            
+            await fetch(ticket.uploadUrl, {
+                method: 'POST',
+                body: formData
+            });
         }
-    });
+
+        // --- ШАГ 2: Создаем запись в каталоге ---
+        status.innerText = "Создание записи...";
+        const recordData = {
+            values: {
+                [CONFIG.fields.text]: textVal
+            }
+        };
+
+        // Если файл был загружен, прикрепляем его ID
+        if (uploadedFileId) {
+            recordData.values[CONFIG.fields.file] = [uploadedFileId];
+        }
+
+        const saveRes = await fetch(`${baseUrl}/api/v1/catalogs/${CONFIG.catalogId}/records`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(recordData)
+        });
+
+        if (saveRes.ok) {
+            status.innerText = "✅ Успешно отправлено!";
+        } else {
+            throw new Error("Ошибка при сохранении записи");
+        }
+
+    } catch (err) {
+        console.error(err);
+        status.innerText = "❌ Ошибка: " + err.message;
+    } finally {
+        btn.disabled = false;
+    }
+};
 </script>
 </body>
 </html>
